@@ -1,0 +1,2 @@
+.qwen/memory/*.db
+.qwen/memory/*.db-*

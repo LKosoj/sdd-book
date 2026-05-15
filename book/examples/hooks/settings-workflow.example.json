@@ -1,0 +1,70 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$QWEN_PROJECT_DIR/.qwen/hooks/inject_sdd_context.py",
+            "name": "sdd-context-session",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$QWEN_PROJECT_DIR/.qwen/hooks/inject_sdd_context.py",
+            "name": "sdd-context-prompt",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$QWEN_PROJECT_DIR/.qwen/hooks/pre_tool_guard.py",
+            "name": "bash-guard",
+            "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$QWEN_PROJECT_DIR/.qwen/hooks/log_tool_result.py",
+            "name": "tool-audit",
+            "async": true,
+            "timeout": 60000
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$QWEN_PROJECT_DIR/.qwen/hooks/log_tool_result.py",
+            "name": "tool-audit-failure",
+            "async": true,
+            "timeout": 60000
+          }
+        ]
+      }
+    ]
+  }
+}

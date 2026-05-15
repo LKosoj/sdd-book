@@ -1,0 +1,53 @@
+Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+для текста учебника (файлы *.md, GLOSSARY.md, README.md, CHANGELOG.md и т.п.)
+
+MIT License для кода примеров (всё в examples/ и любые *.py, *.js, *.ts, *.json файлы)
+
+================================================================================
+ТЕКСТ УЧЕБНИКА: CC BY-SA 4.0
+================================================================================
+
+Copyright (c) 2026 авторы учебника «Разработка по спецификациям с Qwen Code CLI»
+
+Текст учебника распространяется на условиях лицензии Creative Commons
+Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
+
+Вы можете:
+
+  - Делиться: копировать и распространять материал в любом носителе и формате.
+  - Адаптировать: переделывать, видоизменять и создавать новое на основе
+    материала, в том числе для коммерческого использования.
+
+При следующих условиях:
+
+  - Указание авторства: вы должны указать соответствующее авторство,
+    предоставить ссылку на лицензию и указать, были ли внесены изменения.
+  - С сохранением условий: если вы преобразуете или дополняете материал,
+    вы должны распространять ваш вклад на условиях той же лицензии, что и
+    оригинальный материал.
+
+Полный текст: https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+================================================================================
+ПРИМЕРЫ КОДА: MIT
+================================================================================
+
+Copyright (c) 2026 авторы учебника «Разработка по спецификациям с Qwen Code CLI»
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.

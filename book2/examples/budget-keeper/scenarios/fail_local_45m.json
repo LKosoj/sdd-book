@@ -1,0 +1,7 @@
+{
+  "down_tier": "local-coder",
+  "start": "11:00",
+  "duration_min": 45,
+  "queue": 20,
+  "manual_timeout_sec": 120
+}

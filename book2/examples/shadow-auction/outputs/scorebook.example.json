@@ -1,0 +1,99 @@
+{
+  "weights": {
+    "w_mttr": 0.5,
+    "w_early": 0.3,
+    "w_cov": 0.2,
+    "w_fp": 0.4
+  },
+  "incident_count": 20,
+  "candidates": [
+    {
+      "id": "shadow.p0.voice_handoff",
+      "version": "v1",
+      "feature_key": "voice_handoff_started",
+      "token_cost": 320,
+      "target_severity": "P0",
+      "source_ref": "postmortem:appointments-api-2026-02-11",
+      "matched_incidents": [
+        "INC-1801",
+        "INC-1802",
+        "INC-1803",
+        "INC-1804",
+        "INC-1805"
+      ],
+      "metrics": {
+        "mttr_gain": 0.7541,
+        "early_signal": 1.0,
+        "coverage": 0.25,
+        "false_escalation": 0.0
+      },
+      "score": 0.727
+    },
+    {
+      "id": "shadow.repeated_5xx_burst",
+      "version": "v1",
+      "feature_key": "repeated_5xx_burst",
+      "token_cost": 360,
+      "target_severity": "P1",
+      "source_ref": "incidents:gateway-2026-q1",
+      "matched_incidents": [
+        "INC-1802",
+        "INC-1808",
+        "INC-1809",
+        "INC-1810",
+        "INC-1816",
+        "INC-1817"
+      ],
+      "metrics": {
+        "mttr_gain": 0.4119,
+        "early_signal": 1.0,
+        "coverage": 0.3,
+        "false_escalation": 0.0
+      },
+      "score": 0.5659
+    },
+    {
+      "id": "shadow.dc.burn_smell_power_risk",
+      "version": "v1",
+      "feature_key": "onsite_burn_smell",
+      "token_cost": 280,
+      "target_severity": "P0",
+      "source_ref": "postmortem:dc-east-2025-11-04",
+      "matched_incidents": [
+        "INC-1804",
+        "INC-1806",
+        "INC-1807"
+      ],
+      "metrics": {
+        "mttr_gain": 0.4308,
+        "early_signal": 1.0,
+        "coverage": 0.15,
+        "false_escalation": 0.0
+      },
+      "score": 0.5454
+    },
+    {
+      "id": "shadow.alert.red_color_urgency",
+      "version": "v1",
+      "feature_key": "dashboard_red_color",
+      "token_cost": 220,
+      "target_severity": "P1",
+      "source_ref": "interview:on-call-team-2026-03",
+      "matched_incidents": [
+        "INC-1809",
+        "INC-1811",
+        "INC-1812",
+        "INC-1813",
+        "INC-1814",
+        "INC-1815"
+      ],
+      "metrics": {
+        "mttr_gain": -0.0696,
+        "early_signal": 0.0,
+        "coverage": 0.3,
+        "false_escalation": 0.8333
+      },
+      "score": -0.3081
+    }
+  ]
+}

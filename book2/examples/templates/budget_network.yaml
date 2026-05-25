@@ -1,0 +1,58 @@
+# Шаблон для главы 9 / book2/part-09-tier-budgeting.md
+# Расширенная версия budget_network.yaml с комментариями над каждым полем.
+# Скопируйте файл, замените значения под свой проект, проверьте сумму квот
+# и подключите к budget-keeper.
+
+# Суточный лимит токенов для всего SDD-конвейера.
+# Сумма всех phases.<name>.local-coder и phases.<name>.frontier-reviewer
+# должна равняться этому значению.
+daily_budget_tokens: 10000000
+
+phases:
+
+  # Triage: первичная сортировка алертов, нормализация, извлечение сервиса
+  # и severity. Самая массовая фаза, основная нагрузка на local-coder.
+  triage:
+    # Квота дешёвого tier на эту фазу.
+    local-coder: 3000000
+    # Резерв дорогого tier для случаев, когда triage сомневается.
+    frontier-reviewer: 120000
+    # 95-й перцентиль допустимого времени ответа.
+    sla_p95: 30s
+
+  # Classification: присвоение incident_type, blast radius, owner.
+  classification:
+    local-coder: 2000000
+    frontier-reviewer: 140000
+    sla_p95: 45s
+
+  # Diagnosis: оценка причины, корреляция событий, выбор гипотезы.
+  diagnosis:
+    local-coder: 1500000
+    frontier-reviewer: 180000
+    sla_p95: 90s
+
+  # Plan: формирование действий по ремедиации, проверка против конституции.
+  plan:
+    local-coder: 800000
+    frontier-reviewer: 120000
+    sla_p95: 120s
+
+  # Remediation: исполнение действий, контроль blast radius, наблюдение.
+  remediation:
+    local-coder: 700000
+    frontier-reviewer: 200000
+    sla_p95: 180s
+
+  # Postmortem: разбор инцидента, обновление спецификации, обновление
+  # genealogy.md и precedents.md.
+  postmortem:
+    local-coder: 300000
+    frontier-reviewer: 240000
+    sla_p95: 10m
+
+  # control_reserve не привязан к фазе и используется как страховочный
+  # слой при росте риска, очереди или неопределённости.
+  control_reserve:
+    local-coder: 700000
+    frontier-reviewer: 0

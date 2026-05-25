@@ -1,0 +1,32 @@
+spec_id: autoscale_v1
+scenario: incident-autoscale
+
+given:
+  cluster_id: required
+  current_replicas: integer_min_0
+  pod_cpu: number_positive
+  remaining_quota: integer_min_0
+  max_replicas: integer_min_1
+  max_actions_per_window: integer_min_1
+  clamp_policy: enum:hard_block,soft_clamp
+  dedup_window_seconds: integer_min_1
+
+when:
+  trigger: webhook_high_cpu
+  payload:
+    source_service: enum:pagerduty,grafana
+    scale_up_percent: integer_range_1_1000
+
+then:
+  assertion_id: allowed_delta_within_quota
+  rule: allowed_delta = min(requested_delta, floor(remaining_quota / pod_cpu), max_replicas - current_replicas)
+  invariants:
+    - target_replicas <= max_replicas
+    - executed_delta <= remaining_quota / pod_cpu
+    - actions_per_window <= max_actions_per_window
+    - duplicate_webhook_within_dedup_window_does_not_increase_executed_delta
+
+verdicts:
+  PASS: counterexample отклонён ожидаемым диагностическим кодом и halt_before совпал
+  FAIL: counterexample прошёл проверку или был отклонён с неожиданным кодом
+  DEFERRED: контрпример требует ручного арбитража из-за неполной спецификации

@@ -1,0 +1,42 @@
+{
+  "_comment": "Шаблон для главы 6 / book2/part-06-shadow-specs.md. Scorebook фиксирует формулу оценки кандидатов в shadow-spec аукционе, веса критериев, бюджет и пороги. Поле _comment не используется загрузчиком и предназначено только для разметки шаблона.",
+  "run_id": "<уникальный идентификатор прогона аукциона>",
+  "spec_version": "<версия shadow-spec, к которой относится прогон>",
+  "formula": "score = w_mttr*mttr_gain + w_early*early_signal + w_cov*coverage - w_fp*false_escalation",
+  "weights": {
+    "mttr_gain": 0.5,
+    "early_signal": 0.3,
+    "coverage": 0.2,
+    "false_escalation": 0.4
+  },
+  "budget_tokens": 200000,
+  "thresholds": {
+    "accept_min_score": 0.65,
+    "reject_max_score": 0.30,
+    "review_zone": [0.30, 0.65]
+  },
+  "candidates": [
+    {
+      "id": "<candidate id, например shadow-NR-01>",
+      "score": 0.0,
+      "components": {
+        "mttr_gain": 0.0,
+        "early_signal": 0.0,
+        "coverage": 0.0,
+        "false_escalation": 0.0
+      },
+      "decision": "review"
+    },
+    {
+      "id": "<candidate id, например shadow-NR-02>",
+      "score": 0.0,
+      "components": {
+        "mttr_gain": 0.0,
+        "early_signal": 0.0,
+        "coverage": 0.0,
+        "false_escalation": 0.0
+      },
+      "decision": "review"
+    }
+  ]
+}

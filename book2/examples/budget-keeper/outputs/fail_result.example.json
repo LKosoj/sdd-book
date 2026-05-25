@@ -1,0 +1,11 @@
+{
+  "down_tier": "local-coder",
+  "duration_min": 45,
+  "queue": 20,
+  "manual_timeout_sec": 120,
+  "failover_to_frontier": 5,
+  "degraded_queue": 15,
+  "manual_queue_after_120s": 15,
+  "token_health_min": 0.625,
+  "reserve_capacity_tasks": 5
+}

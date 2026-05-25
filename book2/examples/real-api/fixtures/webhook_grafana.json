@@ -1,0 +1,20 @@
+{
+  "source": "grafana",
+  "alert_name": "high_memory_usage",
+  "fingerprint": "HM-2026-05-17-01",
+  "labels": {
+    "service": "appointments-api",
+    "namespace": "prod",
+    "pod": "appointments-api-7c4d6f8b9-xq2lp",
+    "severity": "P1"
+  },
+  "annotations": {
+    "summary": "memory_percent > 90 sustained for 10m",
+    "dashboard": "grafana.internal/d/api-mem"
+  },
+  "values": {
+    "memory_percent": 93,
+    "window_minutes": 10
+  },
+  "starts_at": "2026-05-17T11:42:00Z"
+}

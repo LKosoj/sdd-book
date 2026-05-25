@@ -1,0 +1,53 @@
+{
+  "keep_threshold": 0.7,
+  "reject_threshold": 0.4,
+  "rejected": [
+    {
+      "id": "shadow.alert.red_color_urgency",
+      "version": "v1",
+      "score": -0.3081,
+      "token_cost": 220,
+      "metrics": {
+        "mttr_gain": -0.0696,
+        "early_signal": 0.0,
+        "coverage": 0.3,
+        "false_escalation": 0.8333
+      },
+      "source_ref": "interview:on-call-team-2026-03",
+      "status": "rejected",
+      "reason": "high_false_escalation"
+    }
+  ],
+  "disputed": [
+    {
+      "id": "shadow.repeated_5xx_burst",
+      "version": "v1",
+      "score": 0.5659,
+      "token_cost": 360,
+      "metrics": {
+        "mttr_gain": 0.4119,
+        "early_signal": 1.0,
+        "coverage": 0.3,
+        "false_escalation": 0.0
+      },
+      "source_ref": "incidents:gateway-2026-q1",
+      "status": "disputed",
+      "reason": "mid_score_needs_review"
+    },
+    {
+      "id": "shadow.dc.burn_smell_power_risk",
+      "version": "v1",
+      "score": 0.5454,
+      "token_cost": 280,
+      "metrics": {
+        "mttr_gain": 0.4308,
+        "early_signal": 1.0,
+        "coverage": 0.15,
+        "false_escalation": 0.0
+      },
+      "source_ref": "postmortem:dc-east-2025-11-04",
+      "status": "disputed",
+      "reason": "mid_score_needs_review"
+    }
+  ]
+}

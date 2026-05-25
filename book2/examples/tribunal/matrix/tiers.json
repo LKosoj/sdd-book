@@ -1,0 +1,39 @@
+{
+  "spec_id": "autoscale_v1",
+  "tiers": {
+    "local-coder": {
+      "impl_produces": "minimal_form",
+      "verif_recognizes": ["minimal_form"]
+    },
+    "frontier-reviewer": {
+      "impl_produces": "extended_form",
+      "verif_recognizes": ["minimal_form", "extended_form"]
+    }
+  },
+  "pairs": [
+    {
+      "id": "C1",
+      "impl": "local-coder",
+      "verifier": "frontier-reviewer",
+      "note": "слабый Имплементор + сильный Верификатор"
+    },
+    {
+      "id": "C2",
+      "impl": "frontier-reviewer",
+      "verifier": "local-coder",
+      "note": "сильный Имплементор + слабый Верификатор"
+    },
+    {
+      "id": "C3",
+      "impl": "local-coder",
+      "verifier": "local-coder",
+      "note": "симметричная локальная пара"
+    },
+    {
+      "id": "C4",
+      "impl": "frontier-reviewer",
+      "verifier": "frontier-reviewer",
+      "note": "симметричная дорогая пара"
+    }
+  ]
+}

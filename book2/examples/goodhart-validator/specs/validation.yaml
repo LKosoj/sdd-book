@@ -1,0 +1,41 @@
+# Минимальная спецификация anti-Goodhart правил для CI-шлюза.
+# Формат намеренно ограничен: каждое правило — это пара "metric/operator/threshold"
+# либо составной check, который применяется только при выполнении условия `when`.
+# Скрипты в этом примере читают только этот формат и не понимают произвольный YAML.
+
+version: 1
+mttr_seconds_red_button: 300
+
+invariants:
+  - name: manual_review_floor
+    metric: manual_review_rate
+    operator: ">="
+    threshold: 0.15
+
+  - name: silent_p0_cap
+    metric: silent_p0
+    operator: "<="
+    threshold: 0.05
+
+  - name: audit_trace_required
+    metric: audit_trace_coverage
+    operator: "=="
+    threshold: 1.0
+
+checks:
+  - name: red_button_mttr_blindness
+    when_metric: mttr_seconds
+    when_operator: "<"
+    when_threshold: 300
+    assert_invariants:
+      - manual_review_floor
+      - silent_p0_cap
+      - audit_trace_required
+    fail: CI_BLOCK
+
+  - name: network_consistency
+    mode: correlation_guard
+    drift_metric: edge_drift
+    operator: "<="
+    threshold: 0.12
+    fail: CI_BLOCK

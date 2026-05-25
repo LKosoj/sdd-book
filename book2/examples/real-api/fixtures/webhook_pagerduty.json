@@ -1,0 +1,12 @@
+{
+  "source": "pagerduty",
+  "incident_key": "HM-2026-05-17-01",
+  "service": {
+    "name": "appointments-api"
+  },
+  "urgency": "high",
+  "severity": "P1",
+  "status": "triggered",
+  "created_at": "2026-05-17T11:42:11Z",
+  "html_url": "https://pd.example.com/incidents/HM-2026-05-17-01"
+}

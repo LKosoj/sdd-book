@@ -1,0 +1,50 @@
+# Список shadow-кандидатов для аукциона.
+# Каждый кандидат имеет id, описание контекст/признак/эффект, цену токенов,
+# и наблюдения по историческим инцидентам (см. data/incidents.jsonl).
+# Формат намеренно простой: только ключ-значение и вложенные секции
+# в две колонки, без массивов в одну строку, без якорей YAML.
+
+candidates:
+  - id: shadow.p0.voice_handoff
+    version: v1
+    context: P0_appointments_cascade
+    signal: short_imperative_chat_then_voice_handoff
+    effect: faster_owner_engagement_within_5min
+    token_cost: 320
+    feature_key: voice_handoff_started
+    target_severity: P0
+    source_ref: postmortem:appointments-api-2026-02-11
+    note: winner_candidate_from_part6
+
+  - id: shadow.alert.red_color_urgency
+    version: v1
+    context: any_severity_dashboard_view
+    signal: red_color_in_alert_panel
+    effect: operator_escalates_to_P1
+    token_cost: 220
+    feature_key: dashboard_red_color
+    target_severity: P1
+    source_ref: interview:on-call-team-2026-03
+    note: known_loser_high_false_positive
+
+  - id: shadow.dc.burn_smell_power_risk
+    version: v1
+    context: onsite_datacenter_inspection
+    signal: burn_smell_or_heat_near_rack
+    effect: power_degradation_within_15min
+    token_cost: 280
+    feature_key: onsite_burn_smell
+    target_severity: P0
+    source_ref: postmortem:dc-east-2025-11-04
+    note: rare_high_value_signal
+
+  - id: shadow.repeated_5xx_burst
+    version: v1
+    context: api_gateway_window_60s
+    signal: three_or_more_5xx_bursts_same_route
+    effect: upstream_failure_confirmed_within_10min
+    token_cost: 360
+    feature_key: repeated_5xx_burst
+    target_severity: P1
+    source_ref: incidents:gateway-2026-q1
+    note: mid_tier_candidate

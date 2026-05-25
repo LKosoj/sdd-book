@@ -1,0 +1,16 @@
+{
+  "session_id": "tribunal-2026-05-17",
+  "window": "last_30_days",
+  "false_escalation_rate": 0.032,
+  "silent_p0_ratio": 0.0,
+  "rollback_flapping_per_hour": 1.4,
+  "audit_trace_coverage": 0.97,
+  "mttr_p95_minutes": 4.6,
+  "thresholds": {
+    "false_escalation_rate_max": 0.05,
+    "silent_p0_ratio_max": 0.0,
+    "rollback_flapping_per_hour_max": 3.0,
+    "audit_trace_coverage_min": 0.95,
+    "mttr_p95_minutes_max": 6.0
+  }
+}

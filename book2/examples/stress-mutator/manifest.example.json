@@ -1,0 +1,105 @@
+{
+  "seed": 20260517,
+  "base_spec_id": "appointment_latency_spike",
+  "operators": [
+    "Nullify",
+    "FutureTime",
+    "EscalationCycle",
+    "PriorityContradiction"
+  ],
+  "mutations": [
+    {
+      "mutation_id": "m_20260517_nullify_855e4297f7",
+      "operator": "Nullify",
+      "target_step": "Given:incident_received",
+      "json_schema_rule": "$.properties.severity.minLength",
+      "diff": {
+        "before": {
+          "severity": "P1"
+        },
+        "after": {
+          "severity": ""
+        }
+      }
+    },
+    {
+      "mutation_id": "m_20260517_futuretime_1668a8b184",
+      "operator": "FutureTime",
+      "target_step": "When:evaluate_sla_window",
+      "json_schema_rule": "$.properties.response_timestamp.format+maximum(now)",
+      "diff": {
+        "before": {
+          "response_timestamp": "2026-05-17T12:04:00Z"
+        },
+        "after": {
+          "response_timestamp": "2099-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "mutation_id": "m_20260517_escalationcycle_379e83e6c3",
+      "operator": "EscalationCycle",
+      "target_step": "When:route_escalation",
+      "json_schema_rule": "$defs.escalation_graph.no_cycles",
+      "diff": {
+        "before": {
+          "edges": [
+            [
+              "appointments_oncall",
+              "sre_lead"
+            ],
+            [
+              "sre_lead",
+              "sre_commander"
+            ]
+          ]
+        },
+        "after": {
+          "edges": [
+            [
+              "appointments_oncall",
+              "sre_lead"
+            ],
+            [
+              "sre_lead",
+              "sre_commander"
+            ],
+            [
+              "sre_commander",
+              "appointments_oncall"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "mutation_id": "m_20260517_prioritycontradiction_c43dcf691a",
+      "operator": "PriorityContradiction",
+      "target_step": "When:resolve_priority",
+      "json_schema_rule": "$defs.priority_rules.tie_breaker_required",
+      "diff": {
+        "before": {
+          "priority_rules": [
+            {
+              "from": "P1",
+              "to": "P1",
+              "tie_breaker": "blast_radius"
+            }
+          ]
+        },
+        "after": {
+          "priority_rules": [
+            {
+              "from": "P1",
+              "to": "P2"
+            },
+            {
+              "from": "P2",
+              "to": "P1"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

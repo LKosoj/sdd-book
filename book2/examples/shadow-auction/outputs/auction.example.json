@@ -1,0 +1,24 @@
+{
+  "budget_tokens": 2000,
+  "budget_used": 320,
+  "budget_left": 1680,
+  "keep_threshold": 0.7,
+  "reject_threshold": 0.4,
+  "winners": [
+    {
+      "id": "shadow.p0.voice_handoff",
+      "version": "v1",
+      "score": 0.727,
+      "token_cost": 320,
+      "metrics": {
+        "mttr_gain": 0.7541,
+        "early_signal": 1.0,
+        "coverage": 0.25,
+        "false_escalation": 0.0
+      },
+      "source_ref": "postmortem:appointments-api-2026-02-11",
+      "status": "winner",
+      "budget_after": 1680
+    }
+  ]
+}

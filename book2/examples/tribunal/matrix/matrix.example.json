@@ -1,0 +1,106 @@
+{
+  "spec_id": "autoscale_v1",
+  "total_pairs": 4,
+  "summary": {
+    "signal": "tier_dependent_spec",
+    "pass_pairs": [
+      "C1",
+      "C3",
+      "C4"
+    ],
+    "fail_pairs": [
+      "C2"
+    ],
+    "diverging": true
+  },
+  "pairs": [
+    {
+      "pair_id": "C1",
+      "impl": "local-coder",
+      "verifier": "frontier-reviewer",
+      "note": "слабый Имплементор + сильный Верификатор",
+      "verdict": "PASS",
+      "cases": [
+        {
+          "counterexample_id": "autoscale_counter_200pct",
+          "evidence_format": "minimal_form",
+          "verdict": "PASS",
+          "reasons": []
+        },
+        {
+          "counterexample_id": "duplicate_webhook_within_dedup_window",
+          "evidence_format": "minimal_form",
+          "verdict": "PASS",
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "pair_id": "C2",
+      "impl": "frontier-reviewer",
+      "verifier": "local-coder",
+      "note": "сильный Имплементор + слабый Верификатор",
+      "verdict": "FAIL",
+      "cases": [
+        {
+          "counterexample_id": "autoscale_counter_200pct",
+          "evidence_format": "extended_form",
+          "verdict": "FAIL",
+          "reasons": [
+            "verifier doesn't recognize evidence_format='extended_form', knows only ['minimal_form']"
+          ]
+        },
+        {
+          "counterexample_id": "duplicate_webhook_within_dedup_window",
+          "evidence_format": "extended_form",
+          "verdict": "FAIL",
+          "reasons": [
+            "verifier doesn't recognize evidence_format='extended_form', knows only ['minimal_form']"
+          ]
+        }
+      ]
+    },
+    {
+      "pair_id": "C3",
+      "impl": "local-coder",
+      "verifier": "local-coder",
+      "note": "симметричная локальная пара",
+      "verdict": "PASS",
+      "cases": [
+        {
+          "counterexample_id": "autoscale_counter_200pct",
+          "evidence_format": "minimal_form",
+          "verdict": "PASS",
+          "reasons": []
+        },
+        {
+          "counterexample_id": "duplicate_webhook_within_dedup_window",
+          "evidence_format": "minimal_form",
+          "verdict": "PASS",
+          "reasons": []
+        }
+      ]
+    },
+    {
+      "pair_id": "C4",
+      "impl": "frontier-reviewer",
+      "verifier": "frontier-reviewer",
+      "note": "симметричная дорогая пара",
+      "verdict": "PASS",
+      "cases": [
+        {
+          "counterexample_id": "autoscale_counter_200pct",
+          "evidence_format": "extended_form",
+          "verdict": "PASS",
+          "reasons": []
+        },
+        {
+          "counterexample_id": "duplicate_webhook_within_dedup_window",
+          "evidence_format": "extended_form",
+          "verdict": "PASS",
+          "reasons": []
+        }
+      ]
+    }
+  ]
+}

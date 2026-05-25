@@ -1,0 +1,17 @@
+version: 1
+immutable_principles:
+  - id: IMM-AUDIT
+    statement: "Любое автоматическое действие оставляет полный аудит-след: trace_id, prompt_hash, decision."
+  - id: IMM-SILENT-P0
+    statement: "Закрывать P0-инцидент без обоснования восстановления запрещено: silent_p0_rate <= 1%."
+  - id: IMM-BLAST
+    statement: "Запрещено расширять blast radius выше квоты, заявленной в спецификации фичи."
+
+mutable_rules:
+  - id: MUT-RESTART-POD
+    description: "Агенту разрешено перезапустить под, если RSS > 90% дольше 5 минут и есть guard на 5xx."
+    applies_to: "high_memory_usage"
+    ttl: "2026-08-15"
+    rollback_condition: "silent_p0_rate > 0.02 in 24h"
+    owner: "sre-team"
+    evidence_ref: "validation.md#restart-pod-happy-path"

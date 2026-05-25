@@ -1,0 +1,14 @@
+{
+  "label": "good_release",
+  "mttr_seconds": 420,
+  "silent_p0": 0.02,
+  "manual_review_rate": 0.19,
+  "audit_trace_coverage": 1.0,
+  "escalation_rate": 0.13,
+  "edge_correlations": {
+    "mttr__silent_p0": 0.60,
+    "manual_review_rate__mttr": -0.49,
+    "audit_trace_coverage__silent_p0": -0.72,
+    "escalation_rate__manual_review_rate": -0.43
+  }
+}

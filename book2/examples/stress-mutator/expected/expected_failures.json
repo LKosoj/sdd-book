@@ -1,0 +1,25 @@
+{
+  "by_operator": {
+    "Nullify": {
+      "diagnostic_code": "EMPTY_REQUIRED_FIELD",
+      "halt_before": "When:evaluate_sla_window"
+    },
+    "FutureTime": {
+      "diagnostic_code": "INVALID_TIME_ANCHOR",
+      "halt_before": "When:evaluate_sla_window"
+    },
+    "EscalationCycle": {
+      "diagnostic_code": "CYCLE_ESCALATION",
+      "halt_before": "When:route_escalation"
+    },
+    "PriorityContradiction": {
+      "diagnostic_code": "PRIORITY_REVERSAL",
+      "halt_before": "When:resolve_priority"
+    }
+  },
+  "thresholds": {
+    "strict_reject_rate_min": 0.98,
+    "depth_of_diagnostics_min": 3,
+    "recovery_time_p95_ms_max": 1200
+  }
+}

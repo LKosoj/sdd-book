@@ -1,0 +1,33 @@
+# Калибровочный вариант бюджета на 5M токенов.
+# Пропорции совпадают с budget_network.yaml: 90% local-coder, 10% frontier-reviewer.
+
+daily_budget_tokens: 5000000
+
+phases:
+  triage:
+    local-coder: 1500000
+    frontier-reviewer: 60000
+    sla_p95: 30s
+  classification:
+    local-coder: 1000000
+    frontier-reviewer: 70000
+    sla_p95: 45s
+  diagnosis:
+    local-coder: 750000
+    frontier-reviewer: 90000
+    sla_p95: 90s
+  plan:
+    local-coder: 400000
+    frontier-reviewer: 60000
+    sla_p95: 120s
+  remediation:
+    local-coder: 350000
+    frontier-reviewer: 100000
+    sla_p95: 180s
+  postmortem:
+    local-coder: 150000
+    frontier-reviewer: 120000
+    sla_p95: 10m
+  control_reserve:
+    local-coder: 350000
+    frontier-reviewer: 0

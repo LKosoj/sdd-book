@@ -1,0 +1,29 @@
+{
+  "counterexample_id": "autoscale_counter_200pct",
+  "assertion_id": "allowed_delta_within_quota",
+  "given_snapshot": {
+    "cluster_id": "prod-eu-1",
+    "current_replicas": 12,
+    "pod_cpu": 1,
+    "remaining_quota": 3,
+    "max_replicas": 15,
+    "max_actions_per_window": 4,
+    "clamp_policy": "soft_clamp",
+    "dedup_window_seconds": 2
+  },
+  "when_payload": {
+    "source_service": "grafana",
+    "scale_up_percent": 200
+  },
+  "minimality_trace": [
+    "scale_up_percent=200 даёт requested_delta=24",
+    "remaining_quota=3 при pod_cpu=1 ограничивает прибавку до 3",
+    "max_replicas-current_replicas=3, оба лимита совпадают, любое значение >3 ломает Then"
+  ],
+  "expected_failure": {
+    "verdict": "PASS",
+    "diagnostic_code": "QUOTA_EXCEEDED_AFTER_CLAMP",
+    "halt_before": "execute_scale_action",
+    "executed_delta_upper_bound": 3
+  }
+}

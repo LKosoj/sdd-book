@@ -1,0 +1,20 @@
+{
+  "incident_id": "HM-2026-05-17-01",
+  "stateful": false,
+  "scores": {
+    "spec": 5,
+    "implementation": 5,
+    "verification": 3,
+    "process": 4,
+    "security": 5
+  },
+  "checks": {
+    "audit_trace_coverage": 0.7,
+    "backup_verified": true,
+    "rollback_condition_present": true,
+    "blast_radius_known": true,
+    "human_review_for_first_run": false
+  },
+  "pre_approved_action": "restart_pod",
+  "notes": "audit_trace_coverage недостаточный, часть событий без prompt_hash."
+}

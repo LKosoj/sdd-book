@@ -1,0 +1,20 @@
+{
+  "incident_id": "DB-2026-05-17-02",
+  "stateful": true,
+  "scores": {
+    "spec": 5,
+    "implementation": 5,
+    "verification": 5,
+    "process": 4,
+    "security": 5
+  },
+  "checks": {
+    "audit_trace_coverage": 1.0,
+    "backup_verified": false,
+    "rollback_condition_present": true,
+    "blast_radius_known": true,
+    "human_review_for_first_run": true
+  },
+  "pre_approved_action": "restart_db_pod",
+  "notes": "stateful workload, бэкап не подтверждён — блок без права обхода."
+}

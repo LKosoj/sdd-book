@@ -1,0 +1,64 @@
+{
+  "_comment": "Шаблон для главы 10 / book2/part-10-goodhart-metrics.md. Сеть метрик: узлы — KPI и инварианты, рёбра — направление взаимного влияния. Поле _comment не используется загрузчиком.",
+  "version": "<версия snapshot, например 2026-05-17.1>",
+  "computed_at": "<YYYY-MM-DDThh:mm:ssZ>",
+  "spec_version": "<версия incident-spec, для которой собрана сеть>",
+  "nodes": [
+    {
+      "id": "MTTR",
+      "kind": "kpi",
+      "baseline": 300,
+      "current": 0,
+      "unit": "seconds"
+    },
+    {
+      "id": "silent_p0",
+      "kind": "invariant",
+      "baseline": 0.02,
+      "current": 0.0,
+      "unit": "ratio"
+    },
+    {
+      "id": "manual_review_rate",
+      "kind": "invariant",
+      "baseline": 0.18,
+      "current": 0.0,
+      "unit": "ratio"
+    },
+    {
+      "id": "escalation_rate",
+      "kind": "kpi",
+      "baseline": 0.12,
+      "current": 0.0,
+      "unit": "ratio"
+    },
+    {
+      "id": "postmortem_regression",
+      "kind": "invariant",
+      "baseline": 0.05,
+      "current": 0.0,
+      "unit": "ratio"
+    },
+    {
+      "id": "audit_trace_coverage",
+      "kind": "invariant",
+      "baseline": 1.0,
+      "current": 0.0,
+      "unit": "ratio"
+    }
+  ],
+  "edges": [
+    {"from": "silent_p0", "to": "MTTR", "sign": "positive", "weight": 0.4},
+    {"from": "escalation_rate", "to": "MTTR", "sign": "positive", "weight": 0.3},
+    {"from": "manual_review_rate", "to": "MTTR", "sign": "negative", "weight": 0.2},
+    {"from": "manual_review_rate", "to": "escalation_rate", "sign": "negative", "weight": 0.2},
+    {"from": "audit_trace_coverage", "to": "escalation_rate", "sign": "negative", "weight": 0.1},
+    {"from": "audit_trace_coverage", "to": "silent_p0", "sign": "negative", "weight": 0.3},
+    {"from": "postmortem_regression", "to": "audit_trace_coverage", "sign": "positive", "weight": 0.2},
+    {"from": "postmortem_regression", "to": "manual_review_rate", "sign": "negative", "weight": 0.1}
+  ],
+  "drift_budget": {
+    "max_edge_drift": 0.12,
+    "max_baseline_deviation": 0.20
+  }
+}

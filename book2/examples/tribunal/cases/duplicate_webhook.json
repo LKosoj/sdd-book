@@ -1,0 +1,30 @@
+{
+  "counterexample_id": "duplicate_webhook_within_dedup_window",
+  "assertion_id": "allowed_delta_within_quota",
+  "given_snapshot": {
+    "cluster_id": "prod-eu-1",
+    "current_replicas": 10,
+    "pod_cpu": 1,
+    "remaining_quota": 5,
+    "max_replicas": 20,
+    "max_actions_per_window": 2,
+    "clamp_policy": "soft_clamp",
+    "dedup_window_seconds": 2
+  },
+  "when_payload": {
+    "source_service": "pagerduty",
+    "scale_up_percent": 50,
+    "duplicate_within_seconds": 1
+  },
+  "minimality_trace": [
+    "первый webhook увеличивает executed_delta до 5",
+    "повторный webhook через 1 секунду внутри dedup_window_seconds=2",
+    "если дедупликация отсутствует, executed_delta удваивается и нарушает Then"
+  ],
+  "expected_failure": {
+    "verdict": "PASS",
+    "diagnostic_code": "DUPLICATE_WEBHOOK_DEDUPED",
+    "halt_before": "execute_scale_action",
+    "executed_delta_upper_bound": 5
+  }
+}

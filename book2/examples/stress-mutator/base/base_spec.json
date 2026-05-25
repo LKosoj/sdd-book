@@ -1,0 +1,19 @@
+{
+  "spec_id": "appointment_latency_spike",
+  "service_id": "appointments-api",
+  "severity": "P1",
+  "sla_minutes": 10,
+  "event_received_at": "2026-05-17T12:00:00Z",
+  "response_timestamp": "2026-05-17T12:04:00Z",
+  "now": "2026-05-17T12:05:00Z",
+  "escalation_graph": {
+    "nodes": ["appointments_oncall", "sre_lead", "sre_commander"],
+    "edges": [
+      ["appointments_oncall", "sre_lead"],
+      ["sre_lead", "sre_commander"]
+    ]
+  },
+  "priority_rules": [
+    {"from": "P1", "to": "P1", "tie_breaker": "blast_radius"}
+  ]
+}

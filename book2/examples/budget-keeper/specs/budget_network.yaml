@@ -1,0 +1,35 @@
+# Бюджет токенов SDD-конвейера на сутки.
+# Формат соответствует фрагменту из book2/part-09-tier-budgeting.md.
+# Парсер ожидает плоскую структуру: ключ:значение для скаляров,
+# двухуровневые ключи для фаз, числа без подчёркиваний и кавычек.
+
+daily_budget_tokens: 10000000
+
+phases:
+  triage:
+    local-coder: 3000000
+    frontier-reviewer: 120000
+    sla_p95: 30s
+  classification:
+    local-coder: 2000000
+    frontier-reviewer: 140000
+    sla_p95: 45s
+  diagnosis:
+    local-coder: 1500000
+    frontier-reviewer: 180000
+    sla_p95: 90s
+  plan:
+    local-coder: 800000
+    frontier-reviewer: 120000
+    sla_p95: 120s
+  remediation:
+    local-coder: 700000
+    frontier-reviewer: 200000
+    sla_p95: 180s
+  postmortem:
+    local-coder: 300000
+    frontier-reviewer: 240000
+    sla_p95: 10m
+  control_reserve:
+    local-coder: 700000
+    frontier-reviewer: 0

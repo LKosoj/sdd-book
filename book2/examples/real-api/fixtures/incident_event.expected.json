@@ -1,0 +1,15 @@
+{
+  "incident_id": "HM-2026-05-17-01",
+  "service": "appointments-api",
+  "namespace": "prod",
+  "pod": "appointments-api-7c4d6f8b9-xq2lp",
+  "severity": "P1",
+  "window_minutes": 10,
+  "metric_context": {
+    "memory_percent": 93
+  },
+  "source_refs": [
+    "grafana.internal/d/api-mem",
+    "https://pd.example.com/incidents/HM-2026-05-17-01"
+  ]
+}

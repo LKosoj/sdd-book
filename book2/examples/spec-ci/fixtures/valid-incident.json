@@ -1,0 +1,7 @@
+{
+  "incident_id": "INC-2026-001",
+  "severity": "P1",
+  "service": "appointments-api",
+  "source": "grafana",
+  "received_at": "2026-05-17T12:00:00Z"
+}

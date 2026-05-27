@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Observability: Мониторинг LLM в продакшне</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1 class="course-title">LLM Observability</h1>
+        <p class="course-subtitle">Мониторинг LLM в продакшне</p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="progress-text" id="progress-text">0 / 7 уроков</span>
+      </div>
+      <nav class="lesson-nav" id="lesson-nav"></nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-review" id="btn-review" disabled>📝 Финальный тест</button>
+      </div>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="welcome" id="welcome">
+        <div class="welcome-inner">
+          <span class="welcome-icon">🔍</span>
+          <h2>LLM Observability: Мониторинг LLM в продакшне</h2>
+          <p class="welcome-desc">Комплексный подход к наблюдаемости LLM-приложений: от базовых метрик до production-ready стека с Langfuse, LangSmith и Phoenix.</p>
+          <div class="welcome-stats">
+            <div class="stat"><span class="stat-num">7</span><span class="stat-label">уроков</span></div>
+            <div class="stat"><span class="stat-num">21</span><span class="stat-label">карточка</span></div>
+            <div class="stat"><span class="stat-num">14</span><span class="stat-label">квизов</span></div>
+          </div>
+          <h3>Чему вы научитесь</h3>
+          <ul class="welcome-objectives">
+            <li>Настраивать трейсинг LLM-вызовов с OpenTelemetry</li>
+            <li>Отслеживать latency, токены и стоимость в реальном времени</li>
+            <li>Выбирать и развёртывать observability-платформу</li>
+            <li>Обнаруживать галлюцинации и дрейф качества</li>
+          </ul>
+          <button class="btn btn-start" id="btn-start">Начать обучение →</button>
+        </div>
+      </div>
+
+      <div class="lesson-view hidden" id="lesson-view">
+        <header class="lesson-header">
+          <span class="lesson-badge" id="lesson-badge">Урок 1</span>
+          <h2 class="lesson-title" id="lesson-title"></h2>
+        </header>
+        <section class="section objectives-section">
+          <h3>🎯 Цели урока</h3>
+          <ul class="objectives-list" id="objectives-list"></ul>
+        </section>
+        <section class="section content-section" id="content-section"></section>
+        <section class="section flashcards-section">
+          <h3>🃏 Флэш-карточки</h3>
+          <div class="flashcards" id="flashcards"></div>
+        </section>
+        <section class="section quiz-section">
+          <h3>✅ Проверка знаний</h3>
+          <div class="quiz" id="quiz"></div>
+        </section>
+        <section class="section sources-section" id="sources-section">
+          <h3>📚 Источники</h3>
+          <div class="sources" id="sources"></div>
+        </section>
+        <div class="lesson-nav-buttons">
+          <button class="btn btn-prev" id="btn-prev">← Назад</button>
+          <button class="btn btn-next" id="btn-next">Далее →</button>
+        </div>
+      </div>
+
+      <div class="review-view hidden" id="review-view">
+        <header class="lesson-header">
+          <span class="lesson-badge">Финал</span>
+          <h2 class="lesson-title">Итоговый тест</h2>
+        </header>
+        <p class="review-desc">Проверьте свои знания по всему курсу. 8 вопросов из всех уроков.</p>
+        <div class="quiz" id="final-quiz"></div>
+        <div class="review-result hidden" id="review-result">
+          <h3 id="review-score"></h3>
+          <p id="review-message"></p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-2-SQL: от вопроса к запросу</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">SQL</div>
+                <h2 class="course-title">Text-2-SQL: от вопроса к запросу</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="progress-text" id="progressText">0 / 8 уроков</span>
+            </div>
+            <nav class="lesson-nav" id="lessonNav"></nav>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-icon">&#x1F5C4;</div>
+                <h1>Text-2-SQL</h1>
+                <h2 style="font-weight:400;color:var(--muted);margin-top:-8px;">От вопроса на русском к SQL-запросу</h2>
+                <p class="welcome-desc">Полный путь от постановки задачи до production-ready Text-2-SQL системы: schema linking, промпт-инжиниринг, safety, evaluation и advanced паттерны.</p>
+                <div class="welcome-stats">
+                    <div class="stat"><span class="stat-num">8</span><span class="stat-label">уроков</span></div>
+                    <div class="stat"><span class="stat-num">~4ч</span><span class="stat-label">время</span></div>
+                    <div class="stat"><span class="stat-num">24</span><span class="stat-label">flashcards</span></div>
+                </div>
+                <button class="btn-start" id="btnStart">Начать курс</button>
+            </div>
+
+            <div class="lesson-view hidden" id="lessonView">
+                <div class="lesson-header">
+                    <span class="lesson-badge" id="lessonBadge"></span>
+                    <h1 class="lesson-title" id="lessonTitle"></h1>
+                    <p class="lesson-goal" id="lessonGoal"></p>
+                </div>
+                <div class="objectives-block" id="objectivesBlock">
+                    <h3>&#x1F3AF; Цели урока</h3>
+                    <ul id="objectivesList"></ul>
+                </div>
+                <div class="lesson-body" id="lessonBody"></div>
+                <div class="flashcards-section" id="flashcardsSection">
+                    <h3>&#x1F4CB; Flashcards</h3>
+                    <div class="flashcards-grid" id="flashcardsGrid"></div>
+                </div>
+                <div class="quiz-section" id="quizSection">
+                    <h3>&#x2705; Проверь себя</h3>
+                    <div id="quizContainer"></div>
+                </div>
+                <div class="sources-section" id="sourcesSection">
+                    <h3>&#x1F4DA; Источники и ссылки</h3>
+                    <div class="sources-grid" id="sourcesGrid"></div>
+                </div>
+                <div class="lesson-nav-buttons">
+                    <button class="btn-nav" id="btnPrev">&#x2190; Назад</button>
+                    <button class="btn-nav btn-complete" id="btnComplete">Завершить урок &#x2713;</button>
+                    <button class="btn-nav" id="btnNext">Далее &#x2192;</button>
+                </div>
+            </div>
+
+            <div class="final-review hidden" id="finalReview">
+                <div class="welcome-icon">&#x1F3C6;</div>
+                <h1>Курс завершён!</h1>
+                <p class="welcome-desc">Вы освоили разработку Text-2-SQL систем от прототипа до продакшена.</p>
+                <div id="reviewContent"></div>
+                <button class="btn-start" id="btnRestart">Пройти заново</button>
+            </div>
+        </main>
+
+        <button class="mobile-menu" id="mobileMenu">&#x2630;</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

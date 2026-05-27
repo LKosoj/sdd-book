@@ -1229,7 +1229,10 @@ function init() {
     updateProgress();
     $('#btnStart').addEventListener('click', () => openLesson(0));
     $('#btnPrev').addEventListener('click', () => openLesson(currentLesson - 1));
-    $('#btnNext').addEventListener('click', () => openLesson(currentLesson + 1));
+    $('#btnNext').addEventListener('click', () => {
+        if (currentLesson === COURSE.length - 1) showFinalReview();
+        else openLesson(currentLesson + 1);
+    });
     $('#btnComplete').addEventListener('click', toggleComplete);
     $('#btnRestart').addEventListener('click', restart);
     $('#mobileMenu').addEventListener('click', () => {
@@ -1277,9 +1280,6 @@ function openLesson(idx) {
 
     $('#btnPrev').style.visibility = idx === 0 ? 'hidden' : 'visible';
     $('#btnNext').textContent = idx === COURSE.length - 1 ? '\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u043A\u0443\u0440\u0441' : '\u0414\u0430\u043B\u0435\u0435 \u2192';
-    $('#btnNext').onclick = idx === COURSE.length - 1
-        ? () => showFinalReview()
-        : () => openLesson(idx + 1);
 
     const isCompleted = completedLessons.has(idx);
     $('#btnComplete').textContent = isCompleted ? '\u0417\u0430\u0432\u0435\u0440\u0448\u0435\u043D\u043E \u2713' : '\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u0442\u044C \u0443\u0440\u043E\u043A \u2713';

@@ -1082,7 +1082,10 @@ function init() {
 
     $('#btnStart').addEventListener('click', () => openLesson(0));
     $('#btnPrev').addEventListener('click', () => openLesson(currentLesson - 1));
-    $('#btnNext').addEventListener('click', () => openLesson(currentLesson + 1));
+    $('#btnNext').addEventListener('click', () => {
+        if (currentLesson === COURSE.length - 1) showFinalReview();
+        else openLesson(currentLesson + 1);
+    });
     $('#btnComplete').addEventListener('click', toggleComplete);
     $('#btnRestart').addEventListener('click', restart);
     $('#mobileMenu').addEventListener('click', () => {
@@ -1143,9 +1146,6 @@ function openLesson(idx) {
     // Nav buttons
     $('#btnPrev').style.visibility = idx === 0 ? 'hidden' : 'visible';
     $('#btnNext').textContent = idx === COURSE.length - 1 ? 'Завершить курс' : 'Далее \u2192';
-    $('#btnNext').onclick = idx === COURSE.length - 1
-        ? () => showFinalReview()
-        : () => openLesson(idx + 1);
 
     const isCompleted = completedLessons.has(idx);
     $('#btnComplete').textContent = isCompleted ? 'Завершено \u2713' : 'Завершить урок \u2713';

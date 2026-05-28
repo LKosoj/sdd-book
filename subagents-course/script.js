@@ -1758,7 +1758,7 @@ When given a topic:
     sources: [
       { title: "The Lethal Trifecta for AI Agents (Simon Willison)", url: "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/", icon: "✍️" },
       { title: "Agents Rule of Two (Meta)", url: "https://ai.meta.com/blog/practical-ai-agent-security/", icon: "🤖" },
-      { title: "Replit AI Deletes Production Database — Incident Report", url: "https://www.theregister.com/2025/07/21/replit_ai_deletes_database/", icon: "🔗" }
+      { title: "Replit AI Deletes Production Database — Incident Report", url: "https://www.theregister.com/2025/07/21/replit_saastr_vibe_coding_incident/", icon: "🔗" }
     ]
   },
   {
@@ -2139,7 +2139,7 @@ description: Audit code for CVEs, secrets and the lethal trifecta. Use before an
       }
     ],
     sources: [
-      { title: "Agent Skills (Anthropic)", url: "https://www.anthropic.com/news/agent-skills", icon: "🤖" },
+      { title: "Agent Skills (Anthropic)", url: "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills", icon: "🤖" },
       { title: "Cross-LLM Sub-Agent Orchestration Skills", url: "https://github.com/shinpr/sub-agents-skills", icon: "🐙" },
       { title: "GitHub Spec Kit — Spec-Driven Development", url: "https://github.com/github/spec-kit", icon: "🐙" }
     ]

@@ -366,7 +366,45 @@ body {
 .final-task p {
   color: var(--text);
   font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 12px;
   overflow-wrap: anywhere;
+}
+
+.content-section h4 {
+  color: var(--primary);
+  font-size: 1.04rem;
+  font-weight: 700;
+  margin: 22px 0 10px;
+}
+
+.content-section h4:first-child {
+  margin-top: 0;
+}
+
+.content-section ul {
+  margin: 8px 0 16px 20px;
+  color: var(--text);
+  font-size: 0.93rem;
+  line-height: 1.65;
+}
+
+.content-section li {
+  margin-bottom: 6px;
+}
+
+.key-concept {
+  margin: 16px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.key-concept p:last-child,
+.key-concept ul:last-child {
+  margin-bottom: 0;
 }
 
 .concept-card {

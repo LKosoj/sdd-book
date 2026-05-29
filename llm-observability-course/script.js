@@ -1105,6 +1105,7 @@ gen_ai.conversation.id   # ID многошаговой сессии</code></pre>
     goal: "Освоить специфику observability для агентных систем: session-level метрики, trajectory-визуализация, multi-framework debugging.",
     objectives: [
       "Различать request-level и session-level метрики",
+      "Сохранять prompt/context snapshots для воспроизводимого debugging",
       "Использовать AgentOps для multi-framework debugging",
       "Понимать ключевые agent eval-метрики (resolution rate, goal completion)"
     ],
@@ -1144,6 +1145,22 @@ Tool: create_pr(title="Fix auth race")
 ↓
 Response: «PR #42 создан»</code></pre>
 
+      <h4>Prompt/context snapshots</h4>
+      <p>Trajectory отвечает на вопрос «какие шаги были выполнены». Для воспроизведения нужен ещё один слой: какой именно prompt, system-инструкции, tool-схемы и накопленный контекст увидела модель на конкретном шаге. Без такого snapshot команда часто спорит о поведении агента по памяти, а не по факту.</p>
+
+      <pre><code>{
+  "trace_id": "trc-2026-05-29-0042",
+  "span": "llm.plan_next_action",
+  "model": "qwen-coder",
+  "system_prompt_hash": "sha256:8b1c...",
+  "tool_schema_names": ["search_code", "read_file", "run_tests"],
+  "context_token_count": 18342,
+  "prompt_excerpt": "Найди auth-баг и предложи минимальный фикс",
+  "redaction": "pii-and-secrets-applied"
+}</code></pre>
+
+      <p>Сохраняйте snapshot как диагностический артефакт, а не как полный дамп всего подряд: секреты и PII должны редактироваться, большие tool-ответы — ссылаться на отдельный артефакт, а стабильные системные промпты — храниться по hash/version. Тогда один trace можно воспроизвести локально и сравнить после смены модели или tool-схемы.</p>
+
       <h4>Native-адаптеры в фреймворках</h4>
       <ul>
         <li><strong>LangGraph</strong> — нативный trace в LangSmith с визуализацией узлов и переходов</li>
@@ -1172,6 +1189,7 @@ Response: «PR #42 создан»</code></pre>
       { front: "Request-level vs session-level метрики", back: "Request: latency, tokens, faithfulness одного вызова. Session: resolution rate, goal completion, trajectory length всей сессии агента. Для агентов session-метрики важнее." },
       { front: "Resolution rate", back: "% сессий, в которых агент достиг цели пользователя. Главная метрика качества агента. Меряется через goal-checker (rule-based или LLM-judge)." },
       { front: "Trajectory trace", back: "Путь агента от запроса до ответа: последовательность LLM-call, tool-call, memory access. Визуализируется как граф с временной осью. Основа debugging агентов." },
+      { front: "Prompt/context snapshot", back: "Снимок того, что реально увидела модель: prompt excerpt, system_prompt_hash, tool_schema_names, context_token_count, model и trace_id. Нужен для воспроизведения багов." },
       { front: "AgentOps — главное преимущество", back: "Native-поддержка 20+ фреймворков (LangChain, CrewAI, AutoGen, OpenAI Agents). Unified trajectory view независимо от стека. Сильнейший в multi-framework debugging." },
       { front: "Loop detection", back: "Паттерн «повтор tool-call с похожими аргументами 5+ раз в сессии». Один из главных agent-антипаттернов: бесконечный цикл, который жжёт деньги. Алерт обязателен." },
       { front: "Tool argument validity", back: "Корректность переданных в tool аргументов. Главная причина 38% production agent failures — malformed JSON. Метрика первой линии." },
@@ -1200,6 +1218,17 @@ Response: «PR #42 создан»</code></pre>
         ],
         correct: 1,
         explanation: "Loop: агент зациклился на повторяющемся вызове инструмента. Без detection — сжигает деньги (см. кейс $12K за неделю). AgentOps и LangSmith имеют встроенные детекторы."
+      },
+      {
+        question: "Что должен содержать prompt/context snapshot для agent debugging?",
+        options: [
+          "Только финальный ответ пользователю",
+          "trace_id, модель, hash системного промпта, доступные tool-схемы, размер контекста и безопасный excerpt промпта",
+          "Только HTTP status code",
+          "Полный дамп всех секретов окружения"
+        ],
+        correct: 1,
+        explanation: "Snapshot фиксирует фактический вход модели без опасного полного дампа. Hash/version системного промпта, tool-схемы и context_token_count позволяют воспроизвести конкретный шаг trajectory."
       },
       {
         question: "Команда использует 3 фреймворка (LangChain, CrewAI, custom). Какой observability выбрать?",

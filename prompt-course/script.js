@@ -974,6 +974,20 @@ C) Рынок: маленький. Конкуренция: низкая. MVP: 4 
 
     return thoughts[0]</code></pre>
 
+<h2>Graph-of-Thought (GoT)</h2>
+<p>Tree-of-Thought полезен, когда нужно быстро выбрать один лучший путь. Но в расследованиях, архитектурных решениях и policy-задачах слабая ветка может содержать важный сигнал. Graph-of-Thought сохраняет несколько гипотез, связывает их контрастами, уточняет слабые места и только потом синтезирует итог.</p>
+
+<pre><code>Root: "Почему выросла latency checkout?"
+├─ H1: деградация payment API
+├─ H2: новый индекс в orders
+├─ H3: рост retry из-за 429
+│
+├─ Contrast(H1, H3): retry может быть следствием payment API
+├─ Refine(H2 + H3): индекс не причина, но усиливает очередь
+└─ Synthesis: основной фактор payment API, индекс увеличивает хвост P99</code></pre>
+
+<div class="callout callout-tip"><strong>Практическое правило:</strong> ToT — когда нужен один победитель и ограничен budget. GoT — когда опасно рано выбросить слабые сигналы: incident response, code review, юридические или финансовые решения, архитектурный выбор.</div>
+
 <h2>Self-Consistency</h2>
 <p>Запустите одну задачу N раз с temperature > 0 и возьмите наиболее частый ответ. Это убирает «случайные» ошибки.</p>
 
@@ -1036,6 +1050,7 @@ result = executor.invoke({"input": user_query})</code></pre>
 <ul>
 <li><strong>Простой вопрос</strong> → Zero-shot или CoT</li>
 <li><strong>Задача с несколькими подходами</strong> → Tree-of-Thought</li>
+<li><strong>Несколько слабых сигналов, которые нужно объединить</strong> → Graph-of-Thought</li>
 <li><strong>Нужна максимальная надёжность</strong> → Self-Consistency (N=5-10)</li>
 <li><strong>Нужны внешние данные/инструменты</strong> → ReAct</li>
 <li><strong>Сложная multi-step задача</strong> → CoT + Self-Consistency</li>
@@ -1053,6 +1068,7 @@ result = executor.invoke({"input": user_query})</code></pre>
 </div>`,
     flashcards: [
       { front: "Tree-of-Thought vs Chain-of-Thought", back: "CoT: линейное рассуждение (один путь). ToT: на каждом шаге генерирует N вариантов, оценивает каждый, выбирает лучшие. Для задач с ветвлением, brainstorm, планированием. Дороже (N× вызовов)." },
+      { front: "Graph-of-Thought", back: "GoT не отбрасывает слабые ветки сразу: гипотезы связываются контрастами, уточняются и синтезируются. Подходит для incident response, review и архитектурных решений с несколькими причинами." },
       { front: "Self-Consistency", back: "Запустить задачу N раз с temperature > 0, взять majority vote (классификация) или медиану (числа). Убирает случайные ошибки reasoning. +10-20% accuracy при N=5-10. Цена: N API-вызовов." },
       { front: "ReAct (Reasoning + Acting)", back: "Паттерн: Thought → Action → Observation → Thought → ... Модель чередует рассуждение с использованием инструментов (search, API, calculator). Стандартный паттерн для AI-агентов." },
       { front: "Стоимость продвинутых техник reasoning", back: "ToT (3 ветки × 3 уровня): 9+ API-вызовов. Self-Consistency (N=5): 5 вызовов. ReAct: 2-5 вызовов на действие. Для real-time приложений оценивайте latency-бюджет перед выбором техники." },
@@ -1070,6 +1086,17 @@ result = executor.invoke({"input": user_query})</code></pre>
         ],
         correct: 2,
         explanation: "Архитектурные решения требуют исследования нескольких вариантов и их оценки по критериям — это именно то, для чего создан ToT. CoT даст один путь, Self-Consistency не применим к креативным задачам."
+      },
+      {
+        question: "Когда Graph-of-Thought лучше Tree-of-Thought?",
+        options: [
+          "Когда нужно как можно быстрее выбрать один путь и отбросить остальные",
+          "Когда слабые гипотезы могут содержать важные сигналы, которые нужно сохранить и объединить",
+          "Когда задача вообще не требует reasoning",
+          "Когда нельзя использовать внешние инструменты"
+        ],
+        correct: 1,
+        explanation: "ToT оптимален для выбора победителя. GoT нужен там, где раннее pruning опасно: несколько причин инцидента, спорное ревью, архитектурные компромиссы."
       },
       {
         question: "Self-Consistency дала результаты: [A, B, A, A, C, B, A, A]. Какой финальный ответ?",

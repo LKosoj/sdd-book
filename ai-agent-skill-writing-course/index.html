@@ -1,106 +1,138 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Написание скиллов для ИИ-агентов</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app">
-    <aside class="sidebar">
-      <div class="brand">
-        <div class="mark">SK</div>
-        <div><strong>Skill Authoring</strong><span>ИИ-агенты · курс</span></div>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h1 class="course-title">Skill Authoring</h1>
+        <p class="course-subtitle">Скиллы для ИИ-агентов</p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <span class="progress-text" id="progress-text">0 / 12 уроков</span>
       </div>
-      <div class="progress-card">
-        <div class="progress-top"><span>Прогресс</span><b id="progressText">0/8</b></div>
-        <div class="bar"><i id="progressBar"></i></div>
+      <nav class="lesson-nav" id="lesson-nav"></nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-review" id="btn-sources">Источники</button>
+        <button class="btn btn-review" id="btn-review" disabled>Финальный тест</button>
       </div>
-      <nav id="lessonNav" class="lesson-nav"></nav>
-      <button id="reviewBtn" class="ghost">Финальный обзор</button>
     </aside>
 
-    <main class="main">
-      <section id="hero" class="hero">
-        <p class="eyebrow">Deep research course · 2026</p>
-        <h1 id="courseTitle"></h1>
-        <p id="courseDescription" class="lead"></p>
-        <div class="hero-actions">
-          <button id="startBtn" class="primary">Начать урок 1</button>
-          <button id="sourcesBtn" class="secondary">Источники исследования</button>
+    <main class="main" id="main">
+      <div class="welcome" id="welcome">
+        <div class="welcome-inner">
+          <span class="welcome-icon">SK</span>
+          <h2 id="course-title"></h2>
+          <p class="welcome-desc" id="course-description"></p>
+          <div class="welcome-stats">
+            <div class="stat"><span class="stat-num">12</span><span class="stat-label">уроков</span></div>
+            <div class="stat"><span class="stat-num">84</span><span class="stat-label">карточки</span></div>
+            <div class="stat"><span class="stat-num">60</span><span class="stat-label">вопросов</span></div>
+          </div>
+          <h3>Чему вы научитесь</h3>
+          <ul class="welcome-objectives">
+            <li>Отличать reusable skill от промпта, памяти и проектного AGENTS.md</li>
+            <li>Писать <code>SKILL.md</code> с сильным frontmatter, workflow и проверками</li>
+            <li>Проектировать progressive disclosure через references, scripts и assets</li>
+            <li>Оценивать activation, tool calls, trajectory и regression rate</li>
+          </ul>
+          <div class="welcome-actions">
+            <button class="btn btn-start" id="btn-start">Начать обучение -></button>
+            <button class="btn" id="btn-welcome-sources">Источники исследования</button>
+          </div>
         </div>
-        <div class="principles">
-          <article><b>1</b><span>Скилл — это procedural memory, не «ещё один промпт».</span></article>
-          <article><b>2</b><span>Description — роутер активации, пишется для агента.</span></article>
-          <article><b>3</b><span>Оценивай trajectory и реальные tool calls, а не только красивый ответ.</span></article>
-        </div>
-      </section>
+      </div>
 
-      <section id="lesson" class="lesson hidden">
-        <div class="lesson-head">
-          <p id="lessonKicker" class="eyebrow"></p>
-          <h2 id="lessonTitle"></h2>
-          <p id="lessonSubtitle" class="subtitle"></p>
-        </div>
-        <div class="grid">
-          <article class="card wide">
-            <h3>Цель урока</h3>
-            <p id="lessonGoal"></p>
-          </article>
-          <article class="card">
-            <h3>Результаты</h3>
-            <ul id="objectives"></ul>
-          </article>
-        </div>
-        <article class="card">
+      <div class="lesson-view hidden" id="lesson-view">
+        <header class="lesson-header">
+          <span class="lesson-badge" id="lesson-badge">Урок 1</span>
+          <h2 class="lesson-title" id="lesson-title"></h2>
+          <p class="lesson-subtitle" id="lesson-subtitle"></p>
+        </header>
+
+        <section class="section objectives-section">
+          <h3>Цель урока</h3>
+          <p id="lesson-goal"></p>
+          <ul class="objectives-list" id="objectives-list"></ul>
+        </section>
+
+        <section class="section content-section">
           <h3>Ключевые идеи</h3>
-          <div id="concepts" class="concepts"></div>
-        </article>
-        <article class="card example">
+          <div id="concepts"></div>
+        </section>
+
+        <section class="section content-section">
           <h3>Пример</h3>
-          <pre id="exampleText"></pre>
-        </article>
-        <div class="grid">
-          <article class="card">
-            <h3>Практика</h3>
-            <p id="practiceText"></p>
-          </article>
-          <article class="card">
-            <h3>Флэш-карты</h3>
-            <div id="flashcards" class="flashcards"></div>
-          </article>
-        </div>
-        <article class="card">
-          <h3>Проверка понимания</h3>
-          <div id="quiz"></div>
-        </article>
-        <article class="card">
+          <pre id="example-text"></pre>
+        </section>
+
+        <section class="section content-section">
+          <h3>Практика</h3>
+          <p id="practice-text"></p>
+        </section>
+
+        <section class="section flashcards-section">
+          <h3>Флэш-карточки</h3>
+          <div class="flashcards" id="flashcards"></div>
+        </section>
+
+        <section class="section quiz-section">
+          <h3>Проверка знаний</h3>
+          <div class="quiz" id="quiz"></div>
+        </section>
+
+        <section class="section sources-section">
           <h3>Источники к уроку</h3>
-          <div id="lessonSources" class="sources"></div>
-        </article>
-        <div class="lesson-actions">
-          <button id="prevBtn" class="secondary">← Назад</button>
-          <button id="completeBtn" class="primary">Отметить и дальше →</button>
+          <div class="sources" id="lesson-sources"></div>
+        </section>
+
+        <div class="lesson-nav-buttons">
+          <button class="btn btn-prev" id="btn-prev"><- Назад</button>
+          <button class="btn btn-next" id="btn-next">Далее -></button>
         </div>
-      </section>
+      </div>
 
-      <section id="sourcesPanel" class="panel hidden">
-        <div class="panel-head"><h2>Источники исследования</h2><button class="ghost closePanel">Закрыть</button></div>
-        <p class="muted">Курс собран после deep research и двух дополнительных исследований: практики SKILL.md/Agent Skills и evaluation/SkillsBench.</p>
-        <div id="allSources" class="sources all"></div>
-      </section>
+      <div class="sources-view hidden" id="sources-view">
+        <header class="lesson-header">
+          <span class="lesson-badge">Исследование</span>
+          <h2 class="lesson-title">Источники курса</h2>
+        </header>
+        <p class="review-desc">Курс собран на основе deep research по Agent Skills, SKILL.md, Hermes Agent, AGENTS.md и evaluation агентных траекторий.</p>
+        <div class="sources all-sources" id="all-sources"></div>
+      </div>
 
-      <section id="review" class="panel hidden">
-        <div class="panel-head"><h2>Финальный чек-лист автора скиллов</h2><button class="ghost closePanel">Закрыть</button></div>
+      <div class="review-view hidden" id="review-view">
+        <header class="lesson-header">
+          <span class="lesson-badge">Финал</span>
+          <h2 class="lesson-title">Итоговый тест</h2>
+        </header>
+        <p class="review-desc">Проверьте знания по всему курсу. 12 вопросов: по одному на каждый урок.</p>
+        <div class="quiz" id="final-quiz"></div>
+        <div class="review-result hidden" id="review-result">
+          <h3 id="review-score"></h3>
+          <p id="review-message"></p>
+        </div>
+        <section class="section final-task">
+          <h3>Практический зачёт</h3>
+          <p>После теста проверьте свой skill как рабочий пакет, который можно передать другому агенту или команде.</p>
+        </section>
         <div class="checklist" id="checklist"></div>
-        <div class="final-quiz card">
+        <section class="section final-task">
           <h3>Финальное задание</h3>
-          <p>Создай один production-ready skill по реальной повторяющейся задаче. Минимальный комплект: <code>SKILL.md</code>, 10 eval queries, 1 verification checklist, 1 security note, 1 пример команды/скрипта.</p>
-        </div>
-      </section>
+          <p>Создайте один production-ready skill по реальной повторяющейся задаче. Минимальный комплект: <code>SKILL.md</code>, 10 eval queries, 1 verification checklist, 1 security note, 1 пример команды или скрипта.</p>
+        </section>
+      </div>
     </main>
   </div>
+
+  <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+
   <script src="script.js"></script>
 </body>
 </html>

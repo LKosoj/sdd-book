@@ -1,8 +1,8 @@
 # Разработка по спецификациям с Qwen Code CLI
 
-Сборник учебных материалов по разработке по спецификациям (SDD) и смежным навыкам работы с LLM на русском языке: два учебника и восемь интерактивных мини-курсов.
+Сборник учебных материалов по разработке по спецификациям (SDD) и смежным навыкам работы с LLM на русском языке: два учебника и девять интерактивных мини-курсов.
 
-Опирается на публичную документацию Qwen Code, GitHub Spec Kit, AWS Kiro, материалы по агентной памяти и открытые публикации по SDD. Лицензия: текст — CC BY-SA 4.0, код — MIT (см. [LICENSE](LICENSE)).
+Опирается на публичную документацию Qwen Code, GitHub Spec Kit, AWS Kiro, материалы по агентной памяти, Agent Skills/SKILL.md, evaluation и открытые публикации по SDD. Лицензия: текст — CC BY-SA 4.0, код — MIT (см. [LICENSE](LICENSE)).
 
 Истории изменений по томам: базовый — [CHANGELOG.md](CHANGELOG.md), прикладной — [book2/CHANGELOG.md](book2/CHANGELOG.md).
 
@@ -13,7 +13,7 @@
 
 ## Курсы
 
-Интерактивные мини-курсы на HTML/JS — открываются в браузере как локальная страница (`index.html`). У каждого курса свой прогресс-бар, flashcards и итоговый тест.
+Интерактивные мини-курсы на HTML/JS — открываются в браузере как локальная страница (`index.html`). Внутри — прогресс-бар, flashcards, источники и итоговая проверка или обзор.
 
 - **[ai-agents-course/](ai-agents-course/index.html) — AI Agents: Архитектура и Оркестрация.** 12 уроков о проектировании, построении и масштабировании AI-агентов: от single-agent систем до сложных multi-agent оркестраций, канонические паттерны Anthropic, reasoning-модели, экономика и устаревшие подходы.
 - **[prompt-course/](prompt-course/index.html) — Prompt Engineering: продвинутые техники.** 14 уроков об анатомии промпта, chain-of-thought, prompt caching, reasoning-моделях, context engineering, кириллице и токенах, защите от prompt injection, evaluation и A/B-тестах.
@@ -23,9 +23,10 @@
 - **[llm-observability-course/](llm-observability-course/index.html) — LLM Observability: мониторинг LLM в продакшне.** 12 уроков о наблюдаемости LLM-приложений: ключевые метрики (latency, токены, стоимость), трейсинг через OpenTelemetry GenAI Semantic Conventions, платформы Langfuse/LangSmith/Arize Phoenix, agent observability и trajectory traces, latency budgets и prompt caching, online LLM-as-judge и drift detection, privacy/PII redaction и self-hosted стек.
 - **[sdd-course/](sdd-course/index.html) — SDD на практике: Specification-Driven Development.** 13 уроков о написании AI-readable спецификаций: SDD-цикл Specify → Plan → Implement → Verify, EARS и Behavioral Contracts, Spec Kit изнутри, AWS Kiro и event-driven hooks, MCP для спецификаций, LLM-as-judge и мутационное тестирование, SDD vs Design-by-Contract и формальные методы (Dafny, DafnyPro), brownfield-сценарии и spec drift.
 - **[subagents-course/](subagents-course/index.html) — Субагенты в AI Coding Tools.** 15 уроков о мультиагентной оркестрации в CLI-инструментах разработки (Qwen Code, OpenAI Codex, Claude Code): эволюция AI-ассистентов и Harness Gap, модельный ландшафт Qwen 2026 (открытая Qwen3-Coder-Next и закрытый агентный флагман Qwen 3.7-Max), субагенты через PAL MCP и clink, Codex Subagent GA и sandbox-изоляция, Claude Code Agent Teams (Fan-Out/Fan-In), четыре паттерна оркестрации, context engineering (Write/Select/Compress/Isolate), протоколы межагентного взаимодействия (MCP/A2A/AGNTCY), таксономия отказов MAST и наблюдаемость траекторий, безопасность субагентов (lethal trifecta, Rule of Two, разбор инцидентов), оценка и бенчмарки (SWE-bench, MultiAgentBench), дебат single-agent vs multi-agent и экономика токенов, spec-driven оркестрация и переиспользуемые Skills.
+- **[ai-agent-skill-writing-course/](ai-agent-skill-writing-course/index.html) — Написание скиллов для ИИ-агентов.** 12 уроков о procedural memory и production-ready `SKILL.md`: границы между AGENTS.md/памятью/скиллами, frontmatter и description как роутер активации, progressive disclosure, workflow-дизайн, trust boundaries, trigger tests, trajectory evals, совместимость форматов, командный rollout, troubleshooting и maintenance после ошибок агента.
 
 ## С чего начать
 
 - Если только знакомитесь с SDD — начните с [базового тома](book/README.md), части 1–5, либо с интерактивного [sdd-course](sdd-course/index.html).
 - Если уже работаете по SDD и нужны production-практики — переходите к [прикладному тому](book2/README.md).
-- Если интересует один из смежных навыков (агенты, промпты, RAG, Text-2-SQL, evaluation, observability, субагенты и мультиагентная оркестрация) — открывайте соответствующий курс независимо от учебников.
+- Если интересует один из смежных навыков (агенты, промпты, RAG, Text-2-SQL, evaluation, observability, субагенты, мультиагентная оркестрация или написание скиллов) — открывайте соответствующий курс независимо от учебников.

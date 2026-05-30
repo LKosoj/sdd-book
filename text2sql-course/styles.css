@@ -345,3 +345,110 @@ body {
     .welcome-stats { gap: 20px; }
     .lesson-nav-buttons { flex-wrap: wrap; gap: 10px; }
 }
+
+/* Mobile overflow guards */
+body,
+.app {
+    overflow-x: hidden;
+}
+
+.lesson-btn-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+.main-content {
+    min-width: 0;
+}
+
+.welcome-screen h1,
+.final-review h1,
+.lesson-title,
+.lesson-body,
+.lesson-body p,
+.lesson-body li,
+.quiz-option,
+.source-title,
+.source-desc {
+    overflow-wrap: anywhere;
+}
+
+.lesson-body pre {
+    max-width: 100%;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.lesson-body table {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+}
+
+.flashcard {
+    height: 124px;
+}
+
+.flashcard-front,
+.flashcard-back {
+    overflow: auto;
+    overflow-wrap: anywhere;
+}
+
+.source-info {
+    min-width: 0;
+}
+
+@media (max-width: 900px) {
+    .app {
+        display: block;
+    }
+
+    .sidebar {
+        width: min(var(--sidebar-w), 86vw);
+        transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        width: 100%;
+        max-width: none;
+        margin-left: 0;
+        padding: 24px;
+    }
+
+    .mobile-menu {
+        display: flex;
+        right: 16px;
+        bottom: 16px;
+        left: auto;
+        top: auto;
+        width: 48px;
+        height: 48px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 8px 24px rgba(20, 83, 45, 0.18);
+    }
+
+    .welcome-stats,
+    .lesson-nav-buttons {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .flashcard {
+        height: 168px;
+    }
+
+    .btn-nav {
+        width: 100%;
+    }
+}

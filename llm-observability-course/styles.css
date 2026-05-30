@@ -341,3 +341,86 @@ body {
   .welcome-stats { gap: 20px; }
   .flashcards { grid-template-columns: 1fr; }
 }
+
+/* Mobile overflow guards */
+body,
+.app {
+  overflow-x: hidden;
+}
+
+.lesson-nav-item span:last-child,
+.lesson-title,
+.welcome h2,
+.content-section,
+.content-section p,
+.content-section li,
+.quiz-option,
+.source-title {
+  overflow-wrap: anywhere;
+}
+
+.main {
+  min-width: 0;
+}
+
+.content-section pre {
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.content-section table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.flashcard-front,
+.flashcard-back {
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+
+.source-card {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .app {
+    display: block;
+  }
+
+  .sidebar {
+    width: min(var(--sidebar-w), 86vw);
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    padding: 24px;
+  }
+
+  .welcome-stats,
+  .lesson-nav-buttons {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .lesson-nav-buttons .btn {
+    width: 100%;
+  }
+
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

@@ -77,6 +77,30 @@ body {
 
 .lesson-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
 
+.sidebar-footer {
+    padding: 16px 20px 24px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-action {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.16);
+    background: transparent;
+    color: rgba(255,255,255,0.72);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.sidebar-action.primary { background: rgba(255,255,255,0.10); color: #fff; }
+.sidebar-action:hover:not(:disabled) { background: rgba(255,255,255,0.08); color: #fff; }
+.sidebar-action:disabled { opacity: 0.4; cursor: not-allowed; }
+
 .lesson-btn {
     display: flex;
     align-items: center;
@@ -147,6 +171,17 @@ body {
     transition: background 0.2s;
 }
 .btn-start:hover { background: var(--accent-hover); }
+
+.review-result {
+    margin-top: 24px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.review-result h3 { margin-bottom: 8px; font-size: 22px; }
+.review-result p { color: var(--muted); }
 
 .lesson-header { margin-bottom: 32px; }
 

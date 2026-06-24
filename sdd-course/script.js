@@ -2281,6 +2281,7 @@ function bindEvents() {
   $("#btn-prev").addEventListener("click", prevLesson);
   $("#btn-next").addEventListener("click", nextLesson);
   $("#btn-review").addEventListener("click", showReview);
+  $("#btn-reset").addEventListener("click", resetProgress);
   $("#sidebar-toggle").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
   $("#lesson-nav").addEventListener("click", (e) => {
     const item = e.target.closest(".lesson-nav-item");
@@ -2401,6 +2402,18 @@ function updateProgress() {
   $("#progress-fill").style.width = pct + '%';
   $("#progress-text").textContent = state.completed.size + ' / ' + courseData.length + ' уроков';
   $("#btn-review").disabled = state.completed.size < courseData.length;
+}
+
+function resetProgress() {
+  state.currentLesson = -1;
+  state.completed.clear();
+  state.quizAnswered = {};
+  $("#welcome").classList.remove("hidden");
+  $("#lesson-view").classList.add("hidden");
+  $("#review-view").classList.add("hidden");
+  buildSidebar();
+  updateProgress();
+  window.scrollTo(0, 0);
 }
 
 document.addEventListener('DOMContentLoaded', init);

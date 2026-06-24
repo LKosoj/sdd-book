@@ -861,6 +861,163 @@ const COURSE = {
   ]
 };
 
+const FINAL_QUIZ = [
+  {
+    prompt: "В чем главная роль SDD в data engineering?",
+    options: [
+      "Ускорить написание SQL без дополнительных проверок.",
+      "Сделать grain, SLA, schema, ownership и compatibility явным контрактом до генерации кода.",
+      "Заменить dbt и CI одним промптом.",
+      "Хранить только текстовое описание пайплайна."
+    ],
+    correct: 1,
+    explain: "SDD нужен не ради документации самой по себе, а чтобы агент и команда работали от проверяемого контракта."
+  },
+  {
+    prompt: "Зачем data-репозиторию нужен AGENTS.md?",
+    options: [
+      "Чтобы описать стиль README.",
+      "Чтобы закрепить правила для агента: что можно менять, какие проверки обязательны и где лежит state.",
+      "Чтобы заменить спецификации.",
+      "Чтобы отключить вопросы перед breaking changes."
+    ],
+    correct: 1,
+    explain: "AGENTS.md задает рабочие границы: команды, запреты, gates, источники правды и правила escalations."
+  },
+  {
+    prompt: "Что правильно описывает Schema Manifest?",
+    options: [
+      "Финальный контракт, уже утвержденный владельцем данных.",
+      "Наблюдения по источнику: поля, типы, null rates, примеры и открытые вопросы до утверждения семантики.",
+      "Только список dbt-моделей.",
+      "BI-дашборд для конечных пользователей."
+    ],
+    correct: 1,
+    explain: "Manifest отделяет факты наблюдения от решений о бизнес-смысле, grain, PII и quality policy."
+  },
+  {
+    prompt: "Как лучше разделить ODCS, ODPS и dbt contract?",
+    options: [
+      "ODCS — схема и качество данных, ODPS — продукт и потребители, dbt contract — исполняемый контракт модели.",
+      "Все три стандарта описывают одно и то же, можно оставить любой.",
+      "ODPS нужен только для ML, dbt contract только для CSV.",
+      "dbt contract заменяет owner, SLA и consumer impact."
+    ],
+    correct: 0,
+    explain: "Эти артефакты закрывают разные уровни: dataset contract, data product contract и runtime enforcement."
+  },
+  {
+    prompt: "Какое изменение чаще всего считается backward compatible?",
+    options: [
+      "Удалить колонку из output dataset.",
+      "Поменять grain таблицы.",
+      "Добавить nullable колонку без изменения смысла существующих полей.",
+      "Переименовать business key."
+    ],
+    correct: 2,
+    explain: "Добавление nullable поля обычно не ломает consumers. Удаление, rename, grain change и stricter nullability требуют migration plan."
+  },
+  {
+    prompt: "Как должен выглядеть здоровый Qwen Code workflow для данных?",
+    options: [
+      "Один большой prompt: сразу переписать весь pipeline.",
+      "Короткая цепочка profile -> approve semantics -> contract -> build -> verify -> release.",
+      "Сначала code generation, потом при необходимости specs.",
+      "Только ручное редактирование без agent state."
+    ],
+    correct: 1,
+    explain: "Короткие явные этапы делают решения проверяемыми и показывают, где нужен human gate."
+  },
+  {
+    prompt: "Что должен делать human gate?",
+    options: [
+      "Утверждать бизнес-смысл, PII policy, breaking changes и unresolved approvals.",
+      "Форматировать SQL.",
+      "Автоматически принимать все рекомендации агента.",
+      "Запускать только prettier."
+    ],
+    correct: 0,
+    explain: "Агент может предложить варианты, но ответственность за semantic decisions остается у людей."
+  },
+  {
+    prompt: "Почему полезно разделять subagents в data-проекте?",
+    options: [
+      "Чтобы каждый subagent мог менять production без review.",
+      "Чтобы profiler, contract writer, dbt generator и reviewer имели разные полномочия и артефакты.",
+      "Чтобы скрыть решения от CI.",
+      "Чтобы заменить владельца данных."
+    ],
+    correct: 1,
+    explain: "Разделение ролей снижает смешение анализа, генерации и проверки, а reviewer может ловить drift."
+  },
+  {
+    prompt: "Что означает схема Adviser -> Gate -> Generator?",
+    options: [
+      "Генератор пишет код, а потом adviser придумывает контракт.",
+      "Adviser предлагает правила, gate утверждает смысл, generator меняет код только по approved state.",
+      "Gate нужен только для UI-фич.",
+      "Adviser всегда применяет patch автоматически."
+    ],
+    correct: 1,
+    explain: "Такой порядок не дает агенту превратить предположение в production behavior без утверждения."
+  },
+  {
+    prompt: "Что должно блокировать merge в SDD data workflow?",
+    options: [
+      "Любое изменение SQL.",
+      "Invalid contract YAML, failing dbt contract, DQ severity error, unapproved breaking change или PII exposure.",
+      "Отсутствие красивого changelog.",
+      "Наличие слишком подробной спецификации."
+    ],
+    correct: 1,
+    explain: "CI gate должен ловить контрактные и quality-регрессии, особенно там, где ломаются consumers или governance."
+  },
+  {
+    prompt: "Что такое PatchSpec в self-healing loop?",
+    options: [
+      "Свободный текст без связи с ошибкой.",
+      "Диагностированный patch plan: symptom, suspected contract drift, proposed change, checks и approval points.",
+      "Команда для удаления failing tests.",
+      "Автоматический merge после первой зеленой проверки."
+    ],
+    correct: 1,
+    explain: "PatchSpec делает repair проверяемым: видно, что чинится, почему, какими проверками и где нужен approval."
+  },
+  {
+    prompt: "Что должно входить в финальный verified PR?",
+    options: [
+      "Только SQL diff.",
+      "Spec diff, code diff, tests, verification output, reviewer report и approval notes.",
+      "Только новый dashboard.",
+      "Только ссылка на чат с агентом."
+    ],
+    correct: 1,
+    explain: "Итоговый PR должен связывать изменение контракта, реализацию, проверки и решения людей."
+  },
+  {
+    prompt: "Какую роль играет dbt contract в этом курсе?",
+    options: [
+      "Он заменяет ODCS и ODPS полностью.",
+      "Он делает часть model spec исполняемой: типы, constraints и on_schema_change становятся gate.",
+      "Он нужен только для документации.",
+      "Он отключает data quality checks."
+    ],
+    correct: 1,
+    explain: "dbt contract полезен как runtime enforcement модели, но не заменяет product-level и consumer-level контракт."
+  },
+  {
+    prompt: "Как понять, что курс внедрен не формально, а по-настоящему?",
+    options: [
+      "Агент генерирует больше строк кода за запуск.",
+      "Breaking changes видны до merge, agent работает по specs/state, а reviewer ловит contract drift.",
+      "Все approvals перенесены в устные договоренности.",
+      "Specs лежат отдельно и не участвуют в CI."
+    ],
+    correct: 1,
+    explain: "Успех измеряется предсказуемостью, проверяемостью и защитой consumers, а не объемом генерации."
+  }
+];
+
 /* ===================== App state ===================== */
 const STORAGE_KEY = "sdd_data_course_progress_v1";
 
@@ -922,8 +1079,10 @@ function updateProgressBar() {
   const done = state.completed.size;
   const fill = document.getElementById("progressFill");
   const count = document.getElementById("progressCount");
+  const reviewBtn = document.getElementById("reviewBtn");
   fill.style.width = (done / total * 100).toFixed(1) + "%";
   count.textContent = done + " / " + total;
+  if (reviewBtn) reviewBtn.disabled = done < total;
 }
 
 function renderLesson() {
@@ -1118,10 +1277,87 @@ function renderLesson() {
   }
 
   /* Nav buttons */
+  const nextBtn = document.getElementById("nextBtn");
   document.getElementById("prevBtn").disabled = state.currentLesson === 0;
-  document.getElementById("nextBtn").disabled = state.currentLesson === COURSE.lessons.length - 1;
+  nextBtn.textContent = state.currentLesson === COURSE.lessons.length - 1 ? "Финальный тест" : "Далее →";
 
   /* Scroll to top */
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function buildFinalQuiz() {
+  const quizEl = document.getElementById("finalQuiz");
+  const resultEl = document.getElementById("reviewResult");
+  if (!quizEl || !resultEl) return;
+
+  quizEl.innerHTML = "";
+  resultEl.hidden = true;
+  const finalAnswers = {};
+
+  FINAL_QUIZ.forEach(function (q, qi) {
+    const question = document.createElement("div");
+    question.className = "quiz-question";
+
+    const prompt = document.createElement("div");
+    prompt.className = "quiz-prompt";
+    prompt.textContent = (qi + 1) + ". " + q.prompt;
+    question.appendChild(prompt);
+
+    const opts = document.createElement("div");
+    opts.className = "quiz-options";
+    q.options.forEach(function (opt, oi) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "quiz-option";
+      btn.textContent = opt;
+      btn.addEventListener("click", function () {
+        if (finalAnswers[qi] !== undefined) return;
+        finalAnswers[qi] = oi;
+        opts.querySelectorAll(".quiz-option").forEach(function (other, idx) {
+          other.disabled = true;
+          if (idx === q.correct) other.classList.add("correct");
+          else if (idx === oi) other.classList.add("wrong");
+        });
+
+        const feedback = document.createElement("div");
+        feedback.className = "quiz-feedback " + (oi === q.correct ? "ok" : "bad");
+        feedback.textContent = (oi === q.correct ? "Верно. " : "Неверно. ") + q.explain;
+        question.appendChild(feedback);
+
+        if (Object.keys(finalAnswers).length === FINAL_QUIZ.length) {
+          const score = FINAL_QUIZ.filter(function (item, idx) {
+            return finalAnswers[idx] === item.correct;
+          }).length;
+          showFinalResult(score, FINAL_QUIZ.length);
+        }
+      });
+      opts.appendChild(btn);
+    });
+    question.appendChild(opts);
+    quizEl.appendChild(question);
+  });
+}
+
+function showFinalResult(score, total) {
+  const resultEl = document.getElementById("reviewResult");
+  const scoreEl = document.getElementById("reviewScore");
+  const messageEl = document.getElementById("reviewMessage");
+  if (!resultEl || !scoreEl || !messageEl) return;
+
+  const pct = Math.round(score / total * 100);
+  scoreEl.textContent = score + " / " + total + " (" + pct + "%)";
+  messageEl.textContent = pct >= 85
+    ? "Отлично: можно переносить SDD-подход в свой data product."
+    : pct >= 65
+      ? "База есть, но перед внедрением стоит пересмотреть вопросы с ошибками."
+      : "Лучше пройти ключевые уроки еще раз: пока есть риск формального внедрения без настоящих gates.";
+  resultEl.hidden = false;
+}
+
+function showReview() {
+  document.getElementById("lessonView").hidden = true;
+  document.getElementById("reviewView").hidden = false;
+  buildFinalQuiz();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -1137,6 +1373,8 @@ function escapeHtml(str) {
 function goToLesson(idx) {
   state.currentLesson = idx;
   saveProgress();
+  document.getElementById("reviewView").hidden = true;
+  document.getElementById("lessonView").hidden = false;
   renderNav();
   renderLesson();
   updateProgressBar();
@@ -1160,6 +1398,8 @@ function resetProgress() {
   state.quizAnswers = {};
   state.currentLesson = 0;
   saveProgress();
+  document.getElementById("reviewView").hidden = true;
+  document.getElementById("lessonView").hidden = false;
   renderNav();
   renderLesson();
   updateProgressBar();
@@ -1173,8 +1413,10 @@ function initApp() {
   });
   document.getElementById("nextBtn").addEventListener("click", function () {
     if (state.currentLesson < COURSE.lessons.length - 1) goToLesson(state.currentLesson + 1);
+    else showReview();
   });
   document.getElementById("markBtn").addEventListener("click", toggleCompleted);
+  document.getElementById("reviewBtn").addEventListener("click", showReview);
   document.getElementById("resetProgress").addEventListener("click", function (e) {
     e.preventDefault();
     resetProgress();
@@ -1191,6 +1433,7 @@ if (typeof document !== "undefined" && document.addEventListener) {
 /* Expose for debugging and smoke tests */
 if (typeof globalThis !== "undefined") {
   globalThis.COURSE = COURSE;
+  globalThis.FINAL_QUIZ = FINAL_QUIZ;
   globalThis.state = state;
   globalThis.goToLesson = goToLesson;
   globalThis.toggleCompleted = toggleCompleted;

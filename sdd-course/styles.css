@@ -148,6 +148,16 @@ body {
 
 .btn-review:hover:not(:disabled) { background: rgba(255,255,255,0.14); }
 
+.btn-reset {
+  width: 100%;
+  margin-top: 10px;
+  background: transparent;
+  color: rgba(255,255,255,0.72);
+  border-color: rgba(255,255,255,0.16);
+}
+
+.btn-reset:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
 .btn-prev { background: var(--surface); }
 .btn-next { background: var(--accent); color: #fff; border-color: var(--accent); }
 .btn-next:hover { background: #4f46e5; }

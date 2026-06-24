@@ -1941,6 +1941,7 @@ function init() {
   $("btn-sources").onclick = showSources;
   $("btn-welcome-sources").onclick = showSources;
   $("btn-review").onclick = showReview;
+  $("btn-reset").onclick = resetProgress;
   $("btn-prev").onclick = () => showLesson(Math.max(0, active - 1));
   $("btn-next").onclick = completeCurrentLesson;
   $("sidebar-toggle").onclick = () => $("sidebar").classList.toggle("open");
@@ -2130,6 +2131,16 @@ function showOnly(id) {
 function saveDone() {
   localStorage.setItem("skillCourseDone", JSON.stringify([...done]));
   updateProgress();
+}
+
+function resetProgress() {
+  done.clear();
+  active = 0;
+  localStorage.removeItem("skillCourseDone");
+  renderNav();
+  updateProgress();
+  showOnly("welcome");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function updateProgress() {

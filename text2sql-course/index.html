@@ -18,6 +18,10 @@
                 <span class="progress-text" id="progressText">0 / 15 уроков</span>
             </div>
             <nav class="lesson-nav" id="lessonNav"></nav>
+            <div class="sidebar-footer">
+                <button class="sidebar-action primary" id="btnReview" disabled>Финальный тест</button>
+                <button class="sidebar-action" id="btnReset">Сбросить прогресс</button>
+            </div>
         </aside>
 
         <main class="main-content" id="mainContent">
@@ -66,10 +70,13 @@
 
             <div class="final-review hidden" id="finalReview">
                 <div class="welcome-icon">&#x1F3C6;</div>
-                <h1>Курс завершён!</h1>
-                <p class="welcome-desc">Вы освоили разработку Text-2-SQL систем от прототипа до продакшена.</p>
-                <div id="reviewContent"></div>
-                <button class="btn-start" id="btnRestart">Пройти заново</button>
+                <h1>Итоговый тест</h1>
+                <p class="welcome-desc">Проверьте свои знания по всему курсу.</p>
+                <div id="finalQuiz"></div>
+                <div class="review-result hidden" id="reviewResult">
+                    <h3 id="reviewScore"></h3>
+                    <p id="reviewMessage"></p>
+                </div>
             </div>
         </main>
 

@@ -2703,6 +2703,7 @@ standard_cost = 10_000_000 * 0.00000002  # $0.20 (уже дёшево)
 // === State ===
 let currentLesson = -1;
 let completedLessons = new Set(JSON.parse(localStorage.getItem('rag-completed') || '[]'));
+const FINAL_QUIZ = COURSE.map(function (lesson) { return lesson.quiz[0]; }).filter(Boolean);
 
 // === DOM ===
 const $ = (sel) => document.querySelector(sel);
@@ -2719,7 +2720,8 @@ function init() {
         else openLesson(currentLesson + 1);
     });
     $('#btnComplete').addEventListener('click', toggleComplete);
-    $('#btnRestart').addEventListener('click', restart);
+    $('#btnReview').addEventListener('click', showFinalReview);
+    $('#btnReset').addEventListener('click', restart);
     $('#mobileMenu').addEventListener('click', () => {
         $('#sidebar').classList.toggle('open');
     });
@@ -2891,23 +2893,70 @@ function updateProgress() {
     const pct = (completedLessons.size / COURSE.length) * 100;
     $('#progressFill').style.width = pct + '%';
     $('#progressText').textContent = completedLessons.size + ' / ' + COURSE.length + ' уроков';
+    $('#btnReview').disabled = completedLessons.size < COURSE.length;
 }
 
 function showFinalReview() {
+    $('#welcomeScreen').classList.add('hidden');
     $('#lessonView').classList.add('hidden');
     $('#finalReview').classList.remove('hidden');
-
-    const content = $('#reviewContent');
-    content.innerHTML = '<div class="review-grid">' +
-        COURSE.map((lesson, i) => `
-            <div class="review-item">
-                <span class="review-check">${completedLessons.has(i) ? '\u2705' : '\u2B1C'}</span>
-                <span class="review-text">${i + 1}. ${lesson.title}</span>
-            </div>
-        `).join('') +
-    '</div>';
-
+    renderFinalQuiz();
     window.scrollTo(0, 0);
+}
+
+function renderFinalQuiz() {
+    const container = $('#finalQuiz');
+    $('#reviewResult').classList.add('hidden');
+    container.innerHTML = FINAL_QUIZ.map((q, qi) => `
+        <div class="quiz-question" data-qi="${qi}">
+            <p>${qi + 1}. ${q.question}</p>
+            <div class="quiz-options">
+                ${q.options.map((opt, oi) => `
+                    <div class="quiz-option" data-oi="${oi}" data-qi="${qi}">${opt}</div>
+                `).join('')}
+            </div>
+            <div class="quiz-feedback" data-qi="${qi}"></div>
+        </div>
+    `).join('');
+
+    const answers = {};
+    container.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            const qi = parseInt(opt.dataset.qi);
+            if (answers[qi] !== undefined) return;
+
+            const q = FINAL_QUIZ[qi];
+            const oi = parseInt(opt.dataset.oi);
+            const isCorrect = oi === q.correct;
+            answers[qi] = oi;
+
+            const qEl = opt.closest('.quiz-question');
+            qEl.querySelectorAll('.quiz-option').forEach(o => {
+                o.classList.add('disabled');
+                if (parseInt(o.dataset.oi) === q.correct) o.classList.add('correct');
+            });
+            if (!isCorrect) opt.classList.add('wrong');
+
+            const fb = qEl.querySelector('.quiz-feedback');
+            fb.textContent = q.explanation;
+            fb.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+
+            if (Object.keys(answers).length === FINAL_QUIZ.length) {
+                const score = Object.entries(answers).filter(([idx, answer]) => answer === FINAL_QUIZ[idx].correct).length;
+                showFinalResult(score, FINAL_QUIZ.length);
+            }
+        });
+    });
+}
+
+function showFinalResult(score, total) {
+    const pct = Math.round(score / total * 100);
+    $('#reviewResult').classList.remove('hidden');
+    $('#reviewScore').textContent = score + ' / ' + total + ' (' + pct + '%)';
+    $('#reviewMessage').textContent = pct >= 80
+        ? 'Отлично! Вы готовы применять RAG-подходы на практике.'
+        : pct >= 50 ? 'Хорошая база. Пересмотрите уроки, где были ошибки.'
+        : 'Стоит пройти курс ещё раз, уделив внимание каждому уроку.';
 }
 
 function restart() {

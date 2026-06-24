@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: Синтетический источник клиентов, нормализованный для учебного bank lakehouse.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: pii_email
+        description: PII-поле, сохранённое только в staging для учебной демонстрации.
+  - name: stg_accounts
+    columns:
+      - name: account_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests: [not_null]
+  - name: stg_card_transactions
+    columns:
+      - name: transaction_id
+        tests: [not_null, unique]
+      - name: amount_rub
+        tests: [not_null]
+  - name: mart_customer_360
+    description: Аналитическая витрина уровня клиента без раскрытия прямых PII.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: total_balance_rub
+        tests: [not_null]
+      - name: risk_event_count_7d
+        tests: [not_null]
+  - name: mart_card_turnover_daily
+    columns:
+      - name: transaction_date
+        tests: [not_null]
+      - name: channel
+        tests: [not_null]
+      - name: transaction_count
+        tests: [not_null]
+      - name: turnover_rub
+        tests: [not_null]
+  - name: mart_payment_risk_signals
+    columns:
+      - name: transaction_id
+        tests: [not_null, unique]
+      - name: risk_signal
+        tests: [not_null]
+      - name: amount_rub
+        tests: [not_null]
+  - name: mart_credit_portfolio_quality
+    columns:
+      - name: stage
+        tests: [not_null]
+      - name: loan_count
+        tests: [not_null]
+      - name: principal_rub
+        tests: [not_null]
+  - name: mart_open_api_consents
+    columns:
+      - name: scope
+        tests: [not_null]
+      - name: consent_count
+        tests: [not_null]
+      - name: active_consent_count
+        tests: [not_null]
+      - name: revoked_consent_count
+        tests: [not_null]

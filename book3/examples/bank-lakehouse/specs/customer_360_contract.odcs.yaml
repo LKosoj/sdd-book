@@ -1,0 +1,32 @@
+apiVersion: v3.1.0
+kind: DataContract
+id: bank.customer_360.v1
+name: Контракт витрины Customer 360
+version: 1.0.0
+schema:
+  - name: mart_customer_360
+    physicalType: table
+    properties:
+      - name: customer_id
+        physicalType: string
+        required: true
+        primaryKey: true
+      - name: total_balance_rub
+        physicalType: decimal
+        required: true
+      - name: risk_event_count_7d
+        physicalType: integer
+        required: true
+quality:
+  - name: no_negative_total_balance
+    type: sql
+    query: total_balance_rub >= 0
+  - name: no_direct_pii
+    type: schema
+    query: нет колонок pii_email, email, phone, passport или passport_number
+  - name: required_risk_count
+    type: schema
+    query: колонка risk_event_count_7d присутствует и не содержит null
+sla:
+  freshness:
+    threshold: 24h

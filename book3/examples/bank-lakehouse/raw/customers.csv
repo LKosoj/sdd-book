@@ -1,0 +1,5 @@
+customer_id,birth_date,region,segment,pii_email,is_resident
+C001,1988-03-14,MOW,mass,c001@example.invalid,True
+C002,1976-11-02,SPE,affluent,c002@example.invalid,True
+C003,1995-07-20,NVS,mass,c003@example.invalid,True
+C004,1969-01-08,KZN,sme_owner,c004@example.invalid,True

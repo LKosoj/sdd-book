@@ -1,0 +1,5 @@
+account_id,customer_id,product_code,opened_at,balance_rub,status
+A001,C001,CURR,2025-01-10,125000.5,active
+A002,C002,SAVE,2024-08-22,920000.0,active
+A003,C003,CURR,2026-02-05,18200.0,active
+A004,C004,SME,2023-05-19,1840000.0,blocked

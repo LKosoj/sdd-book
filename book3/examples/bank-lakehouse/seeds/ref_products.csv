@@ -1,0 +1,4 @@
+product_code,product_name,product_family
+CURR,Текущий счёт,account
+SAVE,Накопительный счёт,account
+SME,Расчётный счёт МСБ,business

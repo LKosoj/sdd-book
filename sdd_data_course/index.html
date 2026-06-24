@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDD для Data Engineering с Qwen Code — мини-курс</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Содержание курса">
+    <div class="brand">
+      <div class="brand-mark">SDD</div>
+      <div class="brand-text">
+        <div class="brand-title">SDD + Qwen Code</div>
+        <div class="brand-sub">для Data Engineering</div>
+      </div>
+    </div>
+
+    <div class="progress-block">
+      <div class="progress-label">
+        <span>Прогресс</span>
+        <span id="progressCount">0 / 14</span>
+      </div>
+      <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+    </div>
+
+    <nav id="lessonNav" class="lesson-nav"></nav>
+
+    <div class="sidebar-foot">
+      <a class="reset-link" id="resetProgress" href="#">Сбросить прогресс</a>
+    </div>
+  </aside>
+
+  <main class="reader">
+    <header class="reader-header">
+      <div class="crumbs"><span id="crumbCourse">Курс</span> / <span id="crumbLesson">Урок 1</span></div>
+      <h1 id="lessonTitle">Загрузка…</h1>
+      <p id="lessonIntro" class="lesson-intro"></p>
+    </header>
+
+    <section class="block" id="objectivesBlock" aria-labelledby="objHeading">
+      <h2 id="objHeading" class="block-title">Цели урока</h2>
+      <ul id="objectivesList" class="objectives"></ul>
+    </section>
+
+    <section class="block" id="bodyBlock" aria-labelledby="bodyHeading">
+      <h2 id="bodyHeading" class="block-title">Содержание</h2>
+      <div id="lessonBody" class="lesson-body"></div>
+    </section>
+
+    <section class="block" id="flashcardsBlock" aria-labelledby="fcHeading">
+      <h2 id="fcHeading" class="block-title">Флеш-карточки</h2>
+      <p class="block-hint">Кликните по карточке, чтобы перевернуть.</p>
+      <div id="flashcards" class="flashcards"></div>
+    </section>
+
+    <section class="block" id="quizBlock" aria-labelledby="quizHeading">
+      <h2 id="quizHeading" class="block-title">Проверка знаний</h2>
+      <div id="quiz" class="quiz"></div>
+    </section>
+
+    <section class="block" id="sourcesBlock" aria-labelledby="srcHeading">
+      <h2 id="srcHeading" class="block-title">Источники</h2>
+      <div id="sources" class="sources"></div>
+    </section>
+
+    <nav class="reader-nav">
+      <button id="prevBtn" class="btn btn-ghost" type="button">← Назад</button>
+      <button id="markBtn" class="btn btn-outline" type="button">Отметить как пройденный</button>
+      <button id="nextBtn" class="btn btn-primary" type="button">Далее →</button>
+    </nav>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

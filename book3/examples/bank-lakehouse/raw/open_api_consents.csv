@@ -1,0 +1,4 @@
+consent_id,customer_id,scope,granted_at,revoked_at
+CN001,C001,accounts.read,2026-05-01,
+CN002,C002,payments.read,2026-05-04,
+CN003,C003,accounts.read,2026-05-07,2026-06-01

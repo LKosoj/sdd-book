@@ -1,0 +1,24 @@
+name: bank_lakehouse
+version: 1.0.0
+config-version: 2
+
+profile: bank_lakehouse
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+
+models:
+  bank_lakehouse:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table
+
+seeds:
+  bank_lakehouse:
+    +quote_columns: false
+

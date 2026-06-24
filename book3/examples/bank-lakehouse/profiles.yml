@@ -1,0 +1,8 @@
+bank_lakehouse:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: target/bank_lakehouse.duckdb
+      threads: 4
+

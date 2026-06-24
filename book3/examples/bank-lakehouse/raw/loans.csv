@@ -1,0 +1,4 @@
+loan_id,customer_id,principal_rub,opened_at,days_past_due,stage
+L001,C001,650000.0,2025-04-12,0,1
+L002,C002,2100000.0,2024-09-01,3,1
+L003,C003,320000.0,2026-02-20,38,2

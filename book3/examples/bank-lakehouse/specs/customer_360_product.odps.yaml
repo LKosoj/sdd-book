@@ -1,0 +1,19 @@
+name: customer-360-product
+version: 1.0.0
+status: draft
+owner:
+  name: Команда дата-платформы банка
+outputPorts:
+  - name: mart_customer_360
+    type: dataset
+    contractUrl: ./customer_360_contract.odcs.yaml
+sla:
+  freshness: 24h
+productStrategy:
+  objectives:
+    - ru: Дать клиентскую аналитику без прямых PII для филиальной, карточной и кредитной отчётности.
+  productKPIs:
+    - id: KPI-C360-001
+      name: Ежедневные обновления по контракту
+      target: 99
+      unit: percent

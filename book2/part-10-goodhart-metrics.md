@@ -24,7 +24,7 @@
 
 Такой подход продолжает SDD-цикл: спецификация, критерии проверки и итерации фиксируются до внедрения изменений, а не подгоняются после получения красивого результата ([GitHub Spec Kit Quickstart](https://github.github.io/spec-kit/quickstart.html)).
 
-Сам эффект «когда мера становится целью, она перестаёт быть хорошей мерой» классически известен как закон Гудхарта ([Wikipedia: Goodhart's law](https://en.wikipedia.org/wiki/Goodhart%27s_law)). Определение SLO у Google SRE прямо опирается на эту осторожность ([SRE Book: Service Level Objectives](https://sre.google/sre-book/service-level-objectives/)).
+Сам эффект «когда мера становится целью, она перестаёт быть хорошей мерой» классически известен как закон Гудхарта ([Wikipedia: Goodhart's law](https://en.wikipedia.org/wiki/Goodhart%27s_law)) — хотя у самого Чарльза Гудхарта (1975) формулировка была иной: «любая наблюдаемая статистическая закономерность разрушается, как только на неё начинают давить в целях управления»; афористичную версию сформулировал Кит Хоскин (1996), а популяризовала Мэрилин Стрэферн (1997). Определение SLO у Google SRE перекликается с этой осторожностью ([SRE Book: Service Level Objectives](https://sre.google/sre-book/service-level-objectives/)).
 
 ## Минимальный учебный сценарий
 

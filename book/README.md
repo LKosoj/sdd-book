@@ -71,9 +71,9 @@
 - Qwen Code MCP: https://qwenlm.github.io/qwen-code-docs/en/users/features/mcp/
 - Настройка Qwen Code в Qwen Cloud: https://docs.qwencloud.com/developer-guides/clients-and-developer-tools/qwen-code
 - GitHub Spec Kit: https://github.github.io/spec-kit/
-- быстрый старт GitHub Spec Kit: https://github.github.com/spec-kit/quickstart.html
+- быстрый старт GitHub Spec Kit: https://github.github.io/spec-kit/quickstart.html
 - обзор документации Kiro: https://aws.amazon.com/documentation-overview/kiro/
-- OWASP Top 10 for Large Language Model Applications: https://owasp.org/www-project-top-10-for-large-language-model-applications/
+- OWASP Top 10 for Large Language Model Applications (проект OWASP GenAI Security Project, версия 2025): https://genai.owasp.org/llm-top-10/
 - материал VentureBeat о фоновом обобщении памяти в Anthropic: https://venturebeat.com/technology/anthropic-introduces-dreaming-a-system-that-lets-ai-agents-learn-from-their-own-mistakes
 - статья Towards Data Science об общей памяти агентов через хуки: https://towardsdatascience.com/unified-agentic-memory-across-harnesses-using-hooks/
 - хуки в Qwen Code: https://qwenlm.github.io/qwen-code-docs/en/users/features/hooks/

@@ -78,7 +78,7 @@
 
 ## Внешние SDD-фреймворки
 
-**GitHub Spec Kit** — открытый фреймворк со стандартным циклом `/constitution → /specify → /clarify → /plan → /tasks → /analyze → /implement`.
+**GitHub Spec Kit** — открытый фреймворк со стандартным циклом `/speckit.constitution → /speckit.specify → /speckit.clarify → /speckit.plan → /speckit.tasks → /speckit.analyze → /speckit.implement`.
 
 **AWS Kiro** — IDE с собственной моделью SDD: spec'и (`requirements.md` + `design.md` + `tasks.md`), steering-файлы, агентные хуки.
 

@@ -235,6 +235,6 @@ Production-сценарии прикладного тома мысленно р�
 
 ## Внешние SDD-фреймворки
 
-**GitHub Spec Kit** — открытый фреймворк со стандартным циклом `/constitution → /specify → /clarify → /plan → /tasks → /analyze → /implement`. Используется во втором томе как референс для Spec CI и spec gate.
+**GitHub Spec Kit** — открытый фреймворк со стандартным циклом `/speckit.constitution → /speckit.specify → /speckit.clarify → /speckit.plan → /speckit.tasks → /speckit.analyze → /speckit.implement`. Используется во втором томе как референс для Spec CI и spec gate.
 
 **AWS Kiro** — IDE с собственной моделью SDD: spec'и (`requirements.md` + `design.md` + `tasks.md`), steering-файлы, агентные хуки. Сопоставление с учебником — в [Приложении A первого тома](../book/appendix-a-sdd-dialects.md).

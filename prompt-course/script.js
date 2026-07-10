@@ -226,7 +226,7 @@ const COURSE = [
 3. Сколько стало после завоза?</code></pre>
 
 <h3>Zero-shot CoT — магическая фраза</h3>
-<p>Всего 4 слова повышают качество reasoning на 30-50%:</p>
+<p>Всего 4 слова повышают качество reasoning — от десятков процентов до кратного роста на математических задачах (Kojima et al.: MultiArith 17.7% → 78.7%, GSM8K 10.4% → 40.7%):</p>
 <pre><code>[любой сложный вопрос]
 
 Давай рассуждать пошагово.</code></pre>
@@ -270,9 +270,9 @@ const COURSE = [
 </div>`,
     flashcards: [
       { front: "Zero-shot vs Few-shot", back: "Zero-shot: только инструкция, без примеров. Для простых задач. Few-shot: 2-5 примеров перед задачей. Учит модель паттерну. На 15-40% точнее для нестандартных задач." },
-      { front: "Chain-of-Thought (CoT)", back: "Техника: заставить модель рассуждать пошагово перед ответом. «Давай рассуждать пошагово» повышает accuracy reasoning-задач на 30-50%. Критично для математики, логики, multi-step анализа." },
+      { front: "Chain-of-Thought (CoT)", back: "Техника: заставить модель рассуждать пошагово перед ответом. «Давай рассуждать пошагово» повышает accuracy reasoning-задач — от десятков процентов до кратного роста на математических (Kojima et al.: GSM8K 10.4% → 40.7%). Критично для математики, логики, multi-step анализа." },
       { front: "Сколько few-shot примеров оптимально?", back: "2-5 примеров. Меньше 2 — модель не видит паттерн. Больше 5 — лишние токены, diminishing returns, шум. Примеры должны быть разнообразными и идеального качества." },
-      { front: "Zero-shot CoT: магическая фраза", back: "«Давай рассуждать пошагово» / «Let's think step by step» — добавление к любому сложному вопросу повышает accuracy на 30-50% без примеров. Работает потому, что форсирует промежуточные шаги рассуждения." },
+      { front: "Zero-shot CoT: магическая фраза", back: "«Давай рассуждать пошагово» / «Let's think step by step» — добавление к сложному вопросу без примеров даёт от десятков процентов до кратного роста accuracy на математических задачах (MultiArith 17.7% → 78.7%). Работает потому, что форсирует промежуточные шаги рассуждения." },
       { front: "Структурированный CoT", back: "Явно пронумерованные шаги рассуждения: «Шаг 1 — данные, Шаг 2 — анализ, Шаг 3 — рекомендация». Лучше чем «рассуждай пошагово» для задач с фиксированной структурой анализа." },
       { front: "Few-shot + ошибки в примерах", back: "Модель копирует паттерны примеров, включая ошибки. Если все примеры короткие — ответы будут короткими. Если примеры содержат фактические ошибки — модель воспроизведёт их. Качество примеров критично." },
       { front: "Комбинация техник: роль + few-shot + CoT", back: "Самые сильные промпты: роль (задаёт экспертизу) + few-shot (задаёт паттерн) + CoT (форсирует рассуждение). Каждый слой добавляет точности — особенно для сложных аналитических задач." }
@@ -539,7 +539,7 @@ def parse_llm_json(response: str) -> dict | None:
     ],
     sources: [
       { title: "OpenAI Structured Outputs", desc: "Документация по json_schema и strict mode", url: "https://platform.openai.com/docs/guides/structured-outputs", icon: "📘" },
-      { title: "Instructor Library", desc: "Pydantic-валидация для LLM-выводов", url: "https://github.com/jxnl/instructor", icon: "🔧" },
+      { title: "Instructor Library", desc: "Pydantic-валидация для LLM-выводов", url: "https://github.com/567-labs/instructor", icon: "🔧" },
       { title: "Outlines", desc: "Structured generation для open-source моделей", url: "https://github.com/dottxt-ai/outlines", icon: "🔧" }
     ]
   },
@@ -1008,7 +1008,7 @@ C) Рынок: маленький. Конкуренция: низкая. MVP: 4 
 # Для чисел: медиана
 # Для текста: ROUGE-based clustering + центроид</code></pre>
 
-<div class="callout callout-tip"><strong>Self-Consistency даёт +10-20% accuracy</strong> на reasoning-задачах при N=5-10. Цена: N API-вызовов вместо одного. Окупается для критических решений.</div>
+<div class="callout callout-tip"><strong>Self-Consistency даёт +3.9…+17.9 п.п. accuracy</strong> (Wang et al., в зависимости от бенчмарка) на reasoning-задачах при N=5-10. Цена: N API-вызовов вместо одного. Окупается для критических решений.</div>
 
 <h2>ReAct: Reasoning + Acting</h2>
 <p>Модель чередует рассуждение (Thought) с действиями (Action), получая результаты (Observation):</p>
@@ -1069,7 +1069,7 @@ result = executor.invoke({"input": user_query})</code></pre>
     flashcards: [
       { front: "Tree-of-Thought vs Chain-of-Thought", back: "CoT: линейное рассуждение (один путь). ToT: на каждом шаге генерирует N вариантов, оценивает каждый, выбирает лучшие. Для задач с ветвлением, brainstorm, планированием. Дороже (N× вызовов)." },
       { front: "Graph-of-Thought", back: "GoT не отбрасывает слабые ветки сразу: гипотезы связываются контрастами, уточняются и синтезируются. Подходит для incident response, review и архитектурных решений с несколькими причинами." },
-      { front: "Self-Consistency", back: "Запустить задачу N раз с temperature > 0, взять majority vote (классификация) или медиану (числа). Убирает случайные ошибки reasoning. +10-20% accuracy при N=5-10. Цена: N API-вызовов." },
+      { front: "Self-Consistency", back: "Запустить задачу N раз с temperature > 0, взять majority vote (классификация) или медиану (числа). Убирает случайные ошибки reasoning. +3.9…+17.9 п.п. accuracy (Wang et al.) при N=5-10. Цена: N API-вызовов." },
       { front: "ReAct (Reasoning + Acting)", back: "Паттерн: Thought → Action → Observation → Thought → ... Модель чередует рассуждение с использованием инструментов (search, API, calculator). Стандартный паттерн для AI-агентов." },
       { front: "Стоимость продвинутых техник reasoning", back: "ToT (3 ветки × 3 уровня): 9+ API-вызовов. Self-Consistency (N=5): 5 вызовов. ReAct: 2-5 вызовов на действие. Для real-time приложений оценивайте latency-бюджет перед выбором техники." },
       { front: "Majority vote для разных типов ответов", back: "Классификация: majority vote (самый частый класс). Числа: медиана (устойчивее к выбросам, чем среднее). Текст: ROUGE-based clustering + выбор центроида. Для чисел никогда не усредняйте — медиана точнее." },
@@ -1342,8 +1342,8 @@ for prompt in red_team_prompts:
     sources: [
       { title: "OWASP Top 10 for LLM Applications", desc: "Стандарт безопасности для LLM-приложений", url: "https://owasp.org/www-project-top-10-for-large-language-model-applications/", icon: "🛡️" },
       { title: "Simon Willison: Prompt Injection", desc: "Подробный блог о векторах атак и защите", url: "https://simonwillison.net/series/prompt-injection/", icon: "📝" },
-      { title: "Rebuff", desc: "Open-source prompt injection detector", url: "https://github.com/protectai/rebuff", icon: "🔧" },
-      { title: "Garak", desc: "LLM vulnerability scanner для red teaming", url: "https://github.com/leondz/garak", icon: "🔧" }
+      { title: "Rebuff", desc: "Open-source prompt injection detector (архивирован в мае 2025, не поддерживается)", url: "https://github.com/protectai/rebuff", icon: "🔧" },
+      { title: "Garak", desc: "LLM vulnerability scanner для red teaming (теперь развивается под крылом NVIDIA)", url: "https://github.com/NVIDIA/garak", icon: "🔧" }
     ]
   },
   {
@@ -1594,7 +1594,7 @@ def get_prompt(task, user_id):
 
 client = anthropic.Anthropic()
 response = client.messages.create(
-    model="claude-opus-4-5",
+    model="claude-opus-4-8",
     max_tokens=1024,
     system=[
         {
@@ -1609,8 +1609,8 @@ response = client.messages.create(
 
 <h3>Параметры Anthropic caching</h3>
 <ul>
-<li><strong>TTL:</strong> ephemeral = 5 минут; можно продлить до 1 часа через billing tier</li>
-<li><strong>Минимальный размер чекпойнта:</strong> ≥1024 токенов (иначе кэш не создаётся)</li>
+<li><strong>TTL:</strong> ephemeral = 5 минут; продлевается до 1 часа параметром <code>ttl: "1h"</code> в cache_control — доступно всем, но запись в часовой кэш стоит 2× input (5-минутный — 1.25×)</li>
+<li><strong>Минимальный размер чекпойнта:</strong> зависит от модели — от 512 до 4096 токенов (например, 1024 у Opus 4.8 и Sonnet 5); меньший блок не кэшируется</li>
 <li><strong>До 4 брейкпоинтов</strong> в одном запросе</li>
 <li><strong>Cache read = 0.1×</strong> от цены input токенов</li>
 </ul>
@@ -1619,7 +1619,7 @@ response = client.messages.create(
 <p>OpenAI (GPT-4o, o1+) и Gemini 2.5 кэшируют автоматически — никаких изменений в API не нужно:</p>
 <ul>
 <li><strong>OpenAI:</strong> автоматически, скидка ~50% на повторяющиеся префиксы ≥1024 токен</li>
-<li><strong>Gemini 2.5:</strong> до 75% скидки на кэшированный контент, минимум 32 токена</li>
+<li><strong>Gemini 2.5:</strong> до 90% скидки на кэшированный контент (кэш-чтение = 0.1× цены input), минимум 2048 токенов</li>
 </ul>
 <div class="callout callout-tip"><strong>Даже без явного cache_control:</strong> если ваш system prompt стабилен между запросами, OpenAI и Gemini автоматически кэшируют его. Всё, что нужно — стабильный префикс.</div>
 
@@ -1667,8 +1667,8 @@ cache_hit_rate = usage.cache_read_input_tokens / (
 <p><strong>Антипаттерн:</strong> Добавлять динамические данные (текущее время, случайный seed, ID запроса) в начало system prompt — это гарантирует 0% cache hit rate.</p>
 </div>`,
     flashcards: [
-      { front: "Anthropic cache_control: ключевые параметры", back: "TTL: ephemeral (5 мин) или до 1 часа. Минимум ≥1024 токена на чекпойнт. До 4 брейкпоинтов. Cache read = 0.1× от цены input токенов. Тип: 'ephemeral' в поле cache_control." },
-      { front: "Implicit caching: OpenAI и Gemini", back: "OpenAI: автоматически, ~50% скидка на повторяющиеся префиксы ≥1024 токен. Gemini 2.5: до 75% скидки. Изменений в API не требуется — просто держите стабильный префикс." },
+      { front: "Anthropic cache_control: ключевые параметры", back: "TTL: ephemeral (5 мин, запись 1.25×) или 1 час через ttl: '1h' (запись 2×, доступно всем). Минимум на чекпойнт зависит от модели: 512-4096 токенов. До 4 брейкпоинтов. Cache read = 0.1× от цены input токенов." },
+      { front: "Implicit caching: OpenAI и Gemini", back: "OpenAI: автоматически, ~50% скидка на повторяющиеся префиксы ≥1024 токен. Gemini 2.5: до 90% скидки (кэш-чтение = 0.1× input), минимум 2048 токенов. Изменений в API не требуется — просто держите стабильный префикс." },
       { front: "Архитектурное правило кэша", back: "Стабильное (system prompt, база знаний, few-shot) — в начало (кэшируется). Волатильное (вопрос пользователя, сессионный контекст, дата) — в конец (не кэшируется). Никогда не ставьте динамику в префикс." },
       { front: "Cache hit rate: цель и измерение", back: "Цель: >70% для приложений с большим system prompt. Измеряется через usage.cache_read_input_tokens / (cache_read + regular_input). При 80% hit rate и 10К system prompt — экономия ~72%." },
       { front: "Типичная экономия от prompt caching", back: "70-90% на стоимость input токенов для приложений с большой базой знаний. При 10К system prompt и 1000 запросов/день без кэша = 10М токенов, с кэшем (80% hit) = 2М input + 8М cache-read." },
@@ -1679,13 +1679,13 @@ cache_hit_rate = usage.cache_read_input_tokens / (
       {
         question: "Минимальный размер чекпойнта для Anthropic prompt caching?",
         options: [
-          "256 токенов",
-          "512 токенов",
-          "1024 токена",
-          "2048 токенов"
+          "256 токенов для всех моделей",
+          "Всегда ровно 1024 токена",
+          "Зависит от модели: от 512 до 4096 токенов",
+          "Ограничений нет — кэшируется любой блок"
         ],
         correct: 2,
-        explanation: "Anthropic требует минимум 1024 токена для создания кэш-чекпойнта. Меньший блок не кэшируется. Это стимулирует группировать стабильный контент в большие блоки."
+        explanation: "Минимум зависит от модели: например, 1024 токена у Opus 4.8 и Sonnet 5, 4096 у Haiku 4.5. Меньший блок не кэшируется. Это стимулирует группировать стабильный контент в большие блоки."
       },
       {
         question: "Вы добавили в начало system prompt строку с текущей датой. Что произойдёт с кэшем?",
@@ -1776,21 +1776,31 @@ CTO трёх unicorn-стартапов, ментор Илона Маска...
 <h2>Глубина reasoning = API-параметры</h2>
 <p>Не пишите «думай глубже» или «рассмотри все варианты» — это текст. Глубина reasoning задаётся параметрами API:</p>
 
-<pre><code># OpenAI o-серия: reasoning_effort
+<pre><code># OpenAI: reasoning_effort
 response = client.chat.completions.create(
     model="o3",
-    reasoning_effort="high",  # low | medium | high
+    reasoning_effort="high",  # none | low | medium | high | xhigh — набор зависит от модели
     messages=[{"role": "user", "content": brief}]
 )
 
-# Anthropic extended thinking: budget_tokens
+# Anthropic, старые модели (до Opus 4.6): budget_tokens
 response = client.messages.create(
     model="claude-opus-4-5",
     thinking={"type": "enabled", "budget_tokens": 10000},
     messages=[{"role": "user", "content": brief}]
+)
+
+# Anthropic, новейшие модели (Opus 4.6+): adaptive thinking + effort
+response = client.messages.create(
+    model="claude-opus-4-8",
+    thinking={"type": "adaptive"},
+    output_config={"effort": "high"},  # low | medium | high | xhigh
+    messages=[{"role": "user", "content": brief}]
 )</code></pre>
 
 <div class="callout callout-tip"><strong>Budget tokens ≠ output tokens.</strong> У Anthropic budget_tokens — это лимит на внутренние размышления (thinking block), не на финальный ответ. 10К thinking + 2К ответ = 12К токенов суммарно.</div>
+
+<div class="callout callout-warn"><strong>budget_tokens устарел на новейших моделях Anthropic.</strong> Начиная с Opus 4.6 используется adaptive thinking: модель сама решает, сколько думать, а глубина управляется параметром effort. На Opus 4.7+/Sonnet 5 запрос с budget_tokens отклоняется с ошибкой; механика budget_tokens остаётся только для старых моделей (Opus 4.5 и раньше).</div>
 
 <h2>Правильный промпт для reasoning-модели: краткий бриф</h2>
 <pre><code># Хороший промпт для o3/Claude thinking:
@@ -1824,34 +1834,34 @@ response = client.messages.create(
 </div>`,
     flashcards: [
       { front: "Почему «think step by step» вреден на reasoning-моделях", back: "Reasoning-модели (o1/o3, Claude thinking, Gemini Deep Think) уже думают пошагово внутри. Добавление «думай пошагово» тратит токены, может конфликтовать с внутренним CoT и ухудшает качество." },
-      { front: "API-параметры для глубины reasoning", back: "OpenAI: reasoning_effort = low/medium/high. Anthropic: thinking.budget_tokens (количество токенов на внутренние рассуждения). Gemini: thinking_budget. Не пишите «думай глубже» в тексте — управляйте параметрами." },
+      { front: "API-параметры для глубины reasoning", back: "OpenAI: reasoning_effort = none/low/medium/high/xhigh (набор зависит от модели). Anthropic: adaptive thinking + effort на новейших моделях (Opus 4.6+), thinking.budget_tokens на старых. Gemini: thinking_budget. Не пишите «думай глубже» в тексте — управляйте параметрами." },
       { front: "Deliberative alignment", back: "Механизм в reasoning-моделях: в процессе CoT модель явно рассуждает о применимости safety spec к запросу. Попытки обойти ограничения через аргументы в промпте работают хуже — модель видит манипуляцию в своём же рассуждении." },
       { front: "Few-shot CoT на reasoning-моделях", back: "Примеры пошагового рассуждения в промпте могут «сбивать» внутренний CoT reasoning-модели. Для o3/Claude thinking предпочтительны zero-shot с чётким брифом или few-shot без объяснения шагов." },
       { front: "Правильный промпт для reasoning-модели", back: "Краткий бриф: задача (1-2 предложения) + ограничения (что нельзя/обязательно) + требуемый вывод. Без развёрнутой персоны, без «рассуждай», без шагов. Модель сама знает, как думать." },
-      { front: "Budget tokens vs output tokens (Anthropic)", back: "budget_tokens = лимит на thinking block (внутренние размышления). Финальный ответ — отдельно. Если budget_tokens=10000 и ответ 2000 токенов — итого ~12000 токенов к оплате. Thinking tokens дешевле output." }
+      { front: "Budget tokens vs output tokens (Anthropic)", back: "budget_tokens = лимит на thinking block (внутренние размышления) у старых моделей (до Opus 4.6); на новейших заменён adaptive thinking с параметром effort. Финальный ответ — отдельно: budget_tokens=10000 и ответ 2000 токенов — итого ~12000 токенов к оплате." }
     ],
     quiz: [
       {
         question: "Что произойдёт, если добавить «Давай рассуждать пошагово» к промпту для o3?",
         options: [
-          "Качество вырастет на 30-50%, как на обычных моделях",
+          "Качество заметно вырастет, как на обычных моделях",
           "Не повлияет или слегка ухудшит — модель уже думает пошагово внутренне",
           "Модель откажется отвечать",
           "Увеличится только latency, качество не изменится"
         ],
         correct: 1,
-        explanation: "Reasoning-модели выполняют CoT внутренне. «Думай пошагово» — лишние токены без пользы, иногда конфликтует с внутренним процессом. На классических моделях эта фраза даёт +30-50%, на reasoning — нейтральна или вредна."
+        explanation: "Reasoning-модели выполняют CoT внутренне. «Думай пошагово» — лишние токены без пользы, иногда конфликтует с внутренним процессом. На классических моделях эта фраза даёт заметный прирост (на математических задачах — вплоть до кратного), на reasoning — нейтральна или вредна."
       },
       {
         question: "Как правильно увеличить глубину reasoning у Claude с extended thinking?",
         options: [
           "Добавить «Рассмотри все возможные варианты» в промпт",
-          "Увеличить budget_tokens в параметре thinking API",
+          "Через API: effort при adaptive thinking (Opus 4.6+) или budget_tokens на старых моделях",
           "Повысить temperature до 0.9",
           "Добавить больше few-shot примеров с рассуждениями"
         ],
         correct: 1,
-        explanation: "Глубина thinking у Claude управляется budget_tokens в API: thinking={type: 'enabled', budget_tokens: 10000}. Текстовые инструкции «думать глубже» не влияют на выделенные ресурсы для рассуждения."
+        explanation: "Глубина thinking у Claude управляется параметрами API: на новейших моделях (Opus 4.6+) — effort при adaptive thinking, на старых — thinking={type: 'enabled', budget_tokens: 10000}. Текстовые инструкции «думать глубже» не влияют на выделенные ресурсы для рассуждения."
       },
       {
         question: "Какой из следующих промптов лучше для reasoning-модели (o3)?",
@@ -1884,12 +1894,12 @@ response = client.messages.create(
           "Использовать o4-mini вместо o3 для простых задач"
         ],
         correct: 2,
-        explanation: "«Не думай слишком много» в тексте промпта не влияет на выделенные токены для reasoning. Стоимость контролируется параметром reasoning_effort (OpenAI) или budget_tokens (Anthropic), а не текстовыми инструкциями."
+        explanation: "«Не думай слишком много» в тексте промпта не влияет на выделенные токены для reasoning. Стоимость контролируется параметром reasoning_effort (OpenAI) или effort / budget_tokens (Anthropic), а не текстовыми инструкциями."
       }
     ],
     sources: [
       { title: "OpenAI Reasoning Models Guide", desc: "Официальное руководство по o1/o3/o4-mini промптингу", url: "https://platform.openai.com/docs/guides/reasoning", icon: "📘" },
-      { title: "Anthropic Extended Thinking Docs", desc: "Claude extended thinking: budget_tokens и best practices", url: "https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking", icon: "📗" },
+      { title: "Anthropic Extended Thinking Docs", desc: "Claude extended thinking: adaptive thinking, effort, budget_tokens и best practices", url: "https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking", icon: "📗" },
       { title: "GPT-4.1 Prompting Guide", desc: "Особенности промптинга GPT-4.1: literal compliance, instruction following", url: "https://cookbook.openai.com/examples/gpt4-1_prompting_guide", icon: "📘" }
     ]
   },
@@ -1906,20 +1916,20 @@ response = client.messages.create(
 <p>Большинство flagship-моделей (GPT-4o, Claude, Gemini) обучены с токенизатором, в котором доминирует английский язык. Это приводит к тому, что BPE (Byte Pair Encoding) дробит редкие словоформы кириллицы на мелкие кусочки — буквы или пары букв вместо целых слов.</p>
 
 <h2>Сравнение токенов: английский vs русский</h2>
-<pre><code># Примеры через tiktoken (cl100k_base / GPT-4o):
+<pre><code># Примеры через tiktoken (o200k_base — GPT-4o и новее):
 
 Фраза                           | EN токены | RU токены | Коэф.
 --------------------------------|-----------|-----------|------
 "machine learning"              |     2     |    ---    |  1×
-"машинное обучение"             |    ---    |     7     | ~3.5×
+"машинное обучение"             |    ---    |     4     |  2×
 "context window"                |     2     |    ---    |  1×
-"контекстное окно"              |    ---    |     5     | ~2.5×
+"контекстное окно"              |    ---    |     4     |  2×
 "prompt engineering"            |     2     |    ---    |  1×
-"проектирование промптов"       |    ---    |     7     | ~3.5×
-"neural network architecture"   |     3     |    ---    |  1×
-"архитектура нейронной сети"    |    ---    |     8     | ~2.7×</code></pre>
+"проектирование промптов"       |    ---    |     6     |  3×
+"neural network architecture"   |     4     |    ---    |  1×
+"архитектура нейронной сети"    |    ---    |     8     |  2×</code></pre>
 
-<p>Средний коэффициент раздутия: <strong>2-3× по токенам</strong> для типичного технического русского текста.</p>
+<p>Средний коэффициент раздутия: <strong>~2× по токенам</strong> (до 3× на редких словоформах) для типичного технического русского текста. Токенизатор o200k_base (введён вместе с GPT-4o, словарь ~200К) заметно снизил «кириллический налог» по сравнению со старым cl100k_base, но не устранил его.</p>
 
 <div class="callout callout-warn"><strong>Последствия токен-раздутия:</strong> в 2× больше токенов → в 2× меньше эффективный контекст → в 2× дороже → reasoning-модели тратят пропорционально больше budget_tokens на русский текст.</div>
 
@@ -1932,12 +1942,12 @@ response = client.messages.create(
 Не используй маркетинговые клише. Ссылайся на документацию.
 Формат ответа: проблема → решение → шаги.
 
-# После (английский system prompt, ~200 токенов):
+# После (английский system prompt, ~350 токенов):
 You are a technical support assistant.
 Be concise and direct. Reference documentation.
 Format: problem → solution → steps.
 Reply in Russian.</code></pre>
-<p>Экономия: ~500 токенов на каждом запросе. При 10К запросов/день — 5М токенов (~$12.50 на GPT-4o).</p>
+<p>Экономия: ~350 токенов на каждом запросе. При 10К запросов/день — 3.5М токенов (~$8.75 на GPT-4o).</p>
 
 <h3>Модели с Cyrillic-dense токенизаторами</h3>
 <p>Для русскоязычных задач рассмотрите модели, оптимизированные под кириллицу:</p>
@@ -1958,16 +1968,16 @@ Reply in Russian.</code></pre>
 <div class="key-concept">
 <p><strong>Ситуация:</strong> EdTech-платформа генерирует персонализированные учебные материалы на русском языке. Система промпт + инструкции = ~3000 токенов на русском. Стоимость: $0.0075/запрос × 50К запросов/день = $375/день.</p>
 <p><strong>Правильные подходы:</strong></p>
-<ul><li><strong>Перевести системный промпт на английский + «Reply in Russian»:</strong> 3000 RU токенов → ~1100 EN токенов. Стоимость: $0.00275/запрос × 50К = $137.5/день. Экономия $237.5/день = ~$86К/год.</li><li><strong>Рассмотреть T-pro 2.0 / GigaChat для bulk-генерации:</strong> Cyrillic-dense токенизатор даёт паритет с английским, стоимость API ниже флагмана — для стандартных учебных текстов качество достаточное.</li></ul>
+<ul><li><strong>Перевести системный промпт на английский + «Reply in Russian»:</strong> 3000 RU токенов → ~1500 EN токенов. Стоимость: $0.00375/запрос × 50К = $187.5/день. Экономия $187.5/день = ~$68К/год.</li><li><strong>Рассмотреть T-pro 2.0 / GigaChat для bulk-генерации:</strong> Cyrillic-dense токенизатор даёт паритет с английским, стоимость API ниже флагмана — для стандартных учебных текстов качество достаточное.</li></ul>
 <p><strong>Антипаттерн:</strong> Писать длинные технические инструкции на русском «для удобства команды» — команда читает промпты раз в месяц, а платить за раздутые токены нужно при каждом запросе.</p>
 </div>`,
     flashcards: [
-      { front: "BPE-токенизация и кириллица", back: "BPE (Byte Pair Encoding) дробит редкие словоформы кириллицы на мелкие части (буквы/пары). Результат: русский текст занимает в 2-3× больше токенов, чем эквивалентный английский на тех же моделях." },
-      { front: "Последствия токен-раздутия для русского", back: "2-3× больше токенов → эффективный контекст сокращается вдвое → стоимость удваивается → reasoning-модели тратят больше budget_tokens. Критично для длинных документов и RAG-систем." },
-      { front: "Эвристика «EN system prompt + RU reply»", back: "Технические инструкции на английском занимают в ~2.5× меньше токенов. Добавьте «Reply in Russian» — контент пользователя на русском, инструкции на английском. Экономия ~60% на системном промпте." },
+      { front: "BPE-токенизация и кириллица", back: "BPE (Byte Pair Encoding) дробит редкие словоформы кириллицы на мелкие части (буквы/пары). Результат: русский текст занимает примерно в 2× больше токенов (до 3× на редких словоформах), чем эквивалентный английский на тех же моделях." },
+      { front: "Последствия токен-раздутия для русского", back: "~2× больше токенов → эффективный контекст сокращается вдвое → стоимость удваивается → reasoning-модели тратят больше budget_tokens. Критично для длинных документов и RAG-систем." },
+      { front: "Эвристика «EN system prompt + RU reply»", back: "Технические инструкции на английском занимают в ~2× меньше токенов. Добавьте «Reply in Russian» — контент пользователя на русском, инструкции на английском. Экономия ~50% на системном промпте." },
       { front: "Cyrillic-dense токенизаторы", back: "Модели с Russian-native токенизаторами: Vikhr (Vikhrmodels), T-pro 2.0 (T-Bank), GigaChat (Сбер), YandexGPT (Яндекс). Кириллица занимает сопоставимо с английским — 3-5× дешевле флагманов для RU-задач." },
-      { front: "Примерный коэффициент токенов RU/EN", back: "Технический русский текст: 2-3× токенов vs английский. «Контекстное окно» = ~5 токенов, «context window» = 2 токена. Бытовой русский (более высокочастотные слова) — ближе к 1.5-2×." },
-      { front: "Влияние на контекстное окно", back: "При окне 128К токенов: английский документ помещает ~100К слов, аналогичный русский — ~40-50К слов. Для длинных документов это критически важно при выборе стратегии обработки." }
+      { front: "Примерный коэффициент токенов RU/EN", back: "Технический русский текст: ~2× токенов vs английский (до 3× на редких словоформах, o200k_base). «Контекстное окно» = 4 токена, «context window» = 2 токена. Бытовой русский (более высокочастотные слова) — ближе к 1.5×." },
+      { front: "Влияние на контекстное окно", back: "При окне 128К токенов: английский документ помещает ~100К слов, аналогичный русский — ~50К слов. Для длинных документов это критически важно при выборе стратегии обработки." }
     ],
     quiz: [
       {
@@ -1985,12 +1995,12 @@ Reply in Russian.</code></pre>
         question: "Системный промпт на русском занимает 3000 токенов. Примерно сколько займёт та же инструкция на английском?",
         options: [
           "2800 токенов — почти нет разницы",
-          "1000-1500 токенов (в 2-3× меньше)",
+          "~1500 токенов (примерно в 2× меньше)",
           "500 токенов (в 6× меньше)",
           "5000 токенов — английский длиннее"
         ],
         correct: 1,
-        explanation: "Средний коэффициент раздутия технического русского = 2-3×. 3000 RU токенов → ~1000-1500 EN токенов. Это прямая экономия на каждом API-запросе."
+        explanation: "Средний коэффициент раздутия технического русского на o200k_base ≈ 2×. 3000 RU токенов → ~1500 EN токенов. Это прямая экономия на каждом API-запросе."
       },
       {
         question: "Какая модель из списка имеет Cyrillic-dense токенизатор?",
@@ -2113,7 +2123,7 @@ prompts:
   - "Summarize this document: {{document}}"
 providers:
   - openai:gpt-4o
-  - anthropic:claude-opus-4-5
+  - anthropic:claude-opus-4-8
 tests:
   - vars:
       document: "{{file('test-doc.txt')}}"
@@ -2200,7 +2210,7 @@ tests:
       }
     ],
     sources: [
-      { title: "Андрей Карпати о Context Engineering", desc: "Твит, закрепивший термин context engineering в 2025", url: "https://x.com/karpathy/status/1936835882381676601", icon: "📝" },
+      { title: "Андрей Карпати о Context Engineering", desc: "Твит, закрепивший термин context engineering в 2025", url: "https://x.com/karpathy/status/1937902205765607626", icon: "📝" },
       { title: "LLMLingua (Microsoft)", desc: "Prompt compression: LLMLingua, LLMLingua-2, LongLLMLingua", url: "https://github.com/microsoft/LLMLingua", icon: "🔧" },
       { title: "Promptfoo", desc: "Open-source инструмент для тестирования промптов в CI", url: "https://promptfoo.dev/", icon: "🔧" },
       { title: "Lost in the Middle (Liu et al.)", desc: "Исследование: как LLM теряет информацию из середины контекста", url: "https://arxiv.org/abs/2307.03172", icon: "📄" },
@@ -2227,19 +2237,19 @@ tests:
 - Cost per successful task (не per request!)</code></pre>
 
 <h2>Почему output дороже input</h2>
-<p>Output токены всегда дороже input: у GPT-4o input = $2.50/M, output = $10/M (4×). У reasoning-моделей разрыв ещё больше — extended thinking генерирует тысячи output-токенов для внутреннего CoT.</p>
+<p>Output токены всегда дороже input: у GPT-4o input = $2.50/M, output = $10/M (4×). У reasoning-моделей проблема усугубляется — extended thinking генерирует тысячи output-токенов для внутреннего CoT.</p>
 
-<pre><code># Цены актуальные ~2025 (USD/1M токенов):
-Модель          | Input  | Output | Ratio
-----------------|--------|--------|-------
-GPT-4o          | $2.50  | $10.00 | 4×
-GPT-4o-mini     | $0.15  | $0.60  | 4×
-o3              | $10    | $40    | 4×
-Claude Opus 4   | $15    | $75    | 5×
-Claude Sonnet 4 | $3     | $15    | 5×
-Gemini 2.5 Pro  | $1.25  | $10    | 8×</code></pre>
+<pre><code># Цены актуальные ~2026 (USD/1M токенов):
+Модель           | Input  | Output | Ratio
+-----------------|--------|--------|-------
+GPT-4o           | $2.50  | $10.00 | 4×
+GPT-4o-mini      | $0.15  | $0.60  | 4×
+o3               | $2     | $8     | 4×
+Claude Opus 4.8  | $5     | $25    | 5×
+Claude Sonnet 5  | $3     | $15    | 5×
+Gemini 2.5 Pro   | $1.25  | $10    | 8×</code></pre>
 
-<div class="callout callout-warn"><strong>Reasoning-модели = output bloat.</strong> o3 с reasoning_effort=high может генерировать 5-15К thinking токенов на запрос — это output, оплачиваемый по $40/M. Контролируйте max_completion_tokens.</div>
+<div class="callout callout-warn"><strong>Reasoning-модели = output bloat.</strong> o3 с reasoning_effort=high может генерировать 5-15К thinking токенов на запрос — это output, оплачиваемый по $8/M. Контролируйте max_completion_tokens.</div>
 
 <h2>Model Routing</h2>
 <pre><code>def smart_route(query: str, context_size: int) -> str:
@@ -2251,9 +2261,9 @@ Gemini 2.5 Pro  | $1.25  | $10    | 8×</code></pre>
     elif complexity == "medium":
         return "gpt-4o"               # $2.50/$10 per M
     elif complexity == "complex":
-        return "o3"                   # $10/$40 per M — только для задач, где нужен reasoning
+        return "o3"                   # $2/$8 per M — только для задач, где нужен reasoning
     else:
-        return "claude-sonnet-4-5"    # $3/$15 per M — сбалансированный выбор
+        return "claude-sonnet-5"      # $3/$15 per M — сбалансированный выбор
 
 # Типичный трафик: 70% simple, 25% medium, 5% complex
 # Без routing: всё на gpt-4o = 100% стоимости
@@ -2313,11 +2323,11 @@ Answer directly. Maximum {N} words.
 </div>`,
     flashcards: [
       { front: "$/успешный_ответ vs $/запрос", back: "Правильная метрика = (input_cost + output_cost) / success_rate. Если 20% запросов требуют retry — реальная стоимость на 25% выше. «Дёшевая» модель с низким success rate может быть дороже." },
-      { front: "Почему output токены дороже input", back: "Output генерируется авторегрессивно (токен за токеном), input обрабатывается параллельно. GPT-4o: input $2.50/M, output $10/M (4×). Reasoning-модели хуже: o3 input $10/M, output $40/M." },
+      { front: "Почему output токены дороже input", back: "Output генерируется авторегрессивно (токен за токеном), input обрабатывается параллельно. GPT-4o: input $2.50/M, output $10/M (4×). У reasoning-моделей (o3: $2/M input, $8/M output) к этому добавляются thinking-токены, оплачиваемые как output." },
       { front: "Model routing: экономия", back: "70% трафика — простые запросы → gpt-4o-mini ($0.15/M). 25% — medium → gpt-4o ($2.50/M). 5% — complex → o3. Vs всё на gpt-4o: экономия ~65% при сохранении качества." },
       { front: "Batch API: когда использовать", back: "OpenAI Batch API: 50% скидка, результат до 24 часов. Для: offline analytics, bulk document processing, ночная генерация отчётов. Не для: real-time запросов пользователей." },
       { front: "Semantic Cache: порог cosine", back: "Cosine similarity ≥ 0.95 = семантически идентичные запросы. Меньше порог → больше ложных hits (плохой ответ для похожего, но другого вопроса). 0.95 — стандартный баланс точность/покрытие." },
-      { front: "Output token bloat на reasoning-моделях", back: "o3/Claude thinking генерирует тысячи thinking-токенов — это output по $40/M. Контролируйте: max_completion_tokens, reasoning_effort=low для простых задач, не просите развёрнутых ответов без нужды." }
+      { front: "Output token bloat на reasoning-моделях", back: "o3/Claude thinking генерирует тысячи thinking-токенов — это output по цене output-токенов (у o3 — $8/M). Контролируйте: max_completion_tokens, reasoning_effort=low для простых задач, не просите развёрнутых ответов без нужды." }
     ],
     quiz: [
       {
@@ -2499,7 +2509,7 @@ response_format={
           "Claude Haiku без extended thinking для простого форматирования"
         ],
         correct: 0,
-        explanation: "GPT-4o — классическая модель без встроенного reasoning. Для неё «think step by step» даёт +30-50% на сложных задачах. Для o3, Claude thinking, Gemini Deep Think — это бесполезно или вредно."
+        explanation: "GPT-4o — классическая модель без встроенного reasoning. Для неё «think step by step» даёт заметный прирост на сложных задачах — от десятков процентов до кратного роста на математических бенчмарках (Kojima et al.). Для o3, Claude thinking, Gemini Deep Think — это бесполезно или вредно."
       },
       {
         question: "Чем Structured Output лучше JSON mode?",

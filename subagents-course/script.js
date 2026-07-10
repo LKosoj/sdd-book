@@ -52,9 +52,9 @@ const courseData = [
 <table class="comparison-table">
   <tr><th>Инструмент</th><th>Модель</th><th>Лицензия</th><th>Субагенты</th></tr>
   <tr><td><strong>Qwen Code</strong></td><td>Qwen3-Coder-Next / 3.7-Max</td><td>Apache 2.0 (CLI)</td><td>Через PAL MCP / clink</td></tr>
-  <tr><td><strong>Claude Code</strong></td><td>Opus 4.5-4.7</td><td>Проприетарная</td><td>Нативные + Agent Teams</td></tr>
-  <tr><td><strong>OpenAI Codex</strong></td><td>codex-1 (o3-based)</td><td>Open source CLI</td><td>Облачные сабтаски</td></tr>
-  <tr><td><strong>Gemini CLI</strong></td><td>Gemini 2.5 Pro</td><td>Open source</td><td>Через PAL MCP</td></tr>
+  <tr><td><strong>Claude Code</strong></td><td>Opus 4.8 / Sonnet 5</td><td>Проприетарная</td><td>Нативные + Agent Teams</td></tr>
+  <tr><td><strong>OpenAI Codex</strong></td><td>GPT-5.6 (Sol/Terra/Luna)</td><td>Open source CLI</td><td>Облачные сабтаски</td></tr>
+  <tr><td><strong>Gemini CLI</strong></td><td>Gemini 3 Pro / 3.1 Pro</td><td>Open source</td><td>Через PAL MCP</td></tr>
   <tr><td><strong>Cursor</strong></td><td>Multi-model</td><td>Проприетарная</td><td>Background Agents</td></tr>
 </table>
 
@@ -160,7 +160,7 @@ const courseData = [
 
 <div class="callout callout-warn">
   <div class="callout-title">⚠️ Частое заблуждение: «Qwen всегда бесплатный и открытый»</div>
-  Это верно только для <strong>открытой coder-линейки</strong> (Qwen3-Coder, Qwen3-Coder-Next) — Apache 2.0 + щедрый free tier. А вот <strong>Qwen 3.7-Max — закрытая модель только по API</strong>, без открытых весов и без бесплатного уровня. Для self-host и приватности берите Qwen3-Coder-Next; для максимального агентного качества — 3.7-Max по API.
+  Это верно только для <strong>открытой coder-линейки</strong> (Qwen3-Coder, Qwen3-Coder-Next) — Apache 2.0 и self-host; бесплатный OAuth-tier закрыт в апреле 2026. А вот <strong>Qwen 3.7-Max — закрытая модель только по API</strong>, без открытых весов и без бесплатного уровня. Для self-host и приватности берите Qwen3-Coder-Next; для максимального агентного качества — 3.7-Max по API.
 </div>
 
 <div class="callout callout-tip">
@@ -194,9 +194,9 @@ export OPENAI_API_KEY="your_openrouter_key"
 export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
 export OPENAI_MODEL="qwen/qwen3-coder"</code></pre>
 
-<div class="callout callout-tip">
-  <div class="callout-title">💡 Бесплатный уровень (открытая линейка)</div>
-  Через Qwen OAuth доступно до <strong>2000 запросов в день бесплатно</strong>, или 1000 запросов через OpenRouter. Это беспрецедентно щедрый бесплатный уровень среди AI coding tools — но он относится к открытой coder-линейке, а не к 3.7-Max.
+<div class="callout callout-warn">
+  <div class="callout-title">⚠️ Бесплатный уровень закрыт (апрель 2026)</div>
+  В 2025 — начале 2026 через Qwen OAuth было доступно до <strong>2000 запросов в день бесплатно</strong> — беспрецедентно щедрый уровень среди AI coding tools. Затем квоту урезали до 100 запросов/день, а <strong>15 апреля 2026 бесплатный tier закрыли полностью</strong> (issue #3203 в qwen-code). Теперь нужен API-ключ (DashScope, OpenRouter) или self-host открытых весов.
 </div>
 
 <h2>Режимы работы</h2>
@@ -224,8 +224,8 @@ export ANTHROPIC_AUTH_TOKEN=your-dashscope-apikey</code></pre>
       { front: "Что такое MoE в Qwen3-Coder?", back: "Mixture-of-Experts — активируется лишь часть параметров на токен (у 480B-A35B — 35B из 480B). Маршрутизатор направляет токены к специализированным экспертам. Это субагенты внутри самой модели." },
       { front: "Qwen3-Coder-Next — что это", back: "Текущая открытая модель (релиз 4 фев 2026) на базе Qwen3-Next-80B-A3B: гибрид attention+MoE, 80B всего / 3B активных, >70% SWE-bench Verified, контекст 256K, Apache 2.0." },
       { front: "Qwen 3.7-Max — что это", back: "Закрытый агентный флагман (анонс 19 мая 2026): >1T параметров, контекст 1M, native extended-thinking. SWE-Pro 60.6, Terminal-Bench 2.0 69.7, GPQA Diamond 92.4. Только API, без открытых весов." },
-      { front: "Открытый vs закрытый Qwen", back: "Открытая линейка (Qwen3-Coder, -Next) — Apache 2.0 + free tier + self-host. Qwen 3.7-Max — закрытая, только API (~$2.50/$7.50 за 1M токенов), без весов и без бесплатного уровня." },
-      { front: "Бесплатный уровень Qwen Code", back: "До 2000 запросов/день через Qwen OAuth, 1000 через OpenRouter — для открытой coder-линейки. Самый щедрый free tier среди AI coding tools." },
+      { front: "Открытый vs закрытый Qwen", back: "Открытая линейка (Qwen3-Coder, -Next) — Apache 2.0 + self-host (бесплатный tier закрыт в апреле 2026). Qwen 3.7-Max — закрытая, только API (~$2.50/$7.50 за 1M токенов), без весов и без бесплатного уровня." },
+      { front: "Бесплатный уровень Qwen Code", back: "Исторический: в 2025 — начале 2026 давал до 2000 запросов/день через Qwen OAuth. Квоту урезали до 100/день, а 15 апреля 2026 tier закрыли полностью. Сейчас — API-ключ или self-host." },
       { front: "Plan / Approval / Autonomous Mode", back: "Plan — агент предлагает план, вы подтверждаете. Approval — каждая файловая операция требует подтверждения (для production). Autonomous — без подтверждений (для прототипов и CI-песочниц)." },
       { front: "Qwen внутри Claude Code", back: "Через DashScope claude-code-proxy (ANTHROPIC_BASE_URL) открытая модель Qwen работает внутри Claude Code, получая его Plan Mode и Agent Teams — способ обойти Harness Gap." }
     ],
@@ -274,7 +274,8 @@ export ANTHROPIC_AUTH_TOKEN=your-dashscope-apikey</code></pre>
     sources: [
       { title: "Qwen3-Coder: Agentic Coding in the World (официальный блог)", url: "https://qwenlm.github.io/blog/qwen3-coder/", icon: "🐉" },
       { title: "Qwen3.7: The Agent Frontier (анонс 3.7-Max)", url: "https://qwen.ai/blog?id=qwen3.7", icon: "🐉" },
-      { title: "Qwen3-Coder-Next Tech Report", url: "https://github.com/QwenLM/Qwen3-Coder/blob/main/qwen3_coder_next_tech_report.pdf", icon: "🐙" }
+      { title: "Qwen3-Coder-Next Tech Report", url: "https://github.com/QwenLM/Qwen3-Coder/blob/main/qwen3_coder_next_tech_report.pdf", icon: "🐙" },
+      { title: "Qwen Code issue #3203 — закрытие бесплатного tier", url: "https://github.com/QwenLM/qwen-code/issues/3203", icon: "🐙" }
     ]
   },
   {
@@ -505,11 +506,11 @@ pal ask-ollama "Сгенерируй README.md и CHANGELOG.md"
 <p>PAL MCP добавляет Qwen Code недостающие возможности: мульти-модельность, субагентов, conversation threading. Самый зрелый подход — 11.6K stars и 74 релиза.</p>
 
 <h4>2. OpenCrabs — специализированный оркестратор</h4>
-<p>Open-source оркестратор, заточенный под multi-agent coding. Обеспечивает:</p>
+<p>Open-source агент-оркестратор на Rust с поддержкой multi-agent coding. Обеспечивает:</p>
 <ul>
-  <li>Координацию файловых блокировок (чтобы два агента не редактировали один файл)</li>
-  <li>Shared task list со статусами</li>
-  <li>Автоматическое разрешение конфликтов</li>
+  <li>Команды оркестрации субагентов: spawn_agent, wait_agent, send_input, close_agent, resume_agent</li>
+  <li>Типизированных дочерних агентов (Explore, Plan, Code, Research) для параллельных задач</li>
+  <li>Изолированные сессии субагентов — свой провайдер, модель и контекст, без рекурсивного порождения</li>
 </ul>
 
 <h4>3. Claude Code как фронтенд для модели Qwen</h4>
@@ -523,7 +524,7 @@ export ANTHROPIC_AUTH_TOKEN=your-dashscope-apikey
 <div class="callout callout-danger">
   <div class="callout-title">🚫 Анти-паттерны мультиагентной работы</div>
   <strong>1. Бесконечная вложенность:</strong> субагент, порождающий субагентов — recipe for disaster. Ограничивайте глубину до 1 уровня.<br><br>
-  <strong>2. Общие файлы без блокировок:</strong> два агента, редактирующих один файл одновременно = merge conflict. Используйте OpenCrabs или ручное разделение директорий.<br><br>
+  <strong>2. Общие файлы без блокировок:</strong> два агента, редактирующих один файл одновременно = merge conflict. Разделяйте директории между агентами.<br><br>
   <strong>3. Over-delegation:</strong> не делегируйте тривиальные задачи. Overhead субагента (создание контекста, возврат результата) превышает выгоду для простых операций.
 </div>
 
@@ -565,7 +566,7 @@ Given a feature request:
       { front: "3 стратегии обхода Harness Gap", back: "1) PAL MCP как универсальный мост (11.6K stars). 2) OpenCrabs — специализированный оркестратор. 3) Claude Code CLI как фронтенд с моделью Qwen через DashScope proxy." },
       { front: "Правило глубины субагентов", back: "Максимум 1 уровень вложенности. Субагент НЕ должен порождать своих субагентов — иначе потеря контроля, экспоненциальный рост стоимости и хаос." },
       { front: "Паттерн Orchestrator-Worker", back: "Центральный агент-оркестратор динамически декомпозирует задачу и делегирует Worker-субагентам (planner, frontend, backend, security, test). Определяются в .claude/agents/." },
-      { front: "OpenCrabs — что решает", back: "Open-source оркестратор для multi-agent coding: координация файловых блокировок (чтобы агенты не правили один файл), shared task list, автоматическое разрешение конфликтов." },
+      { front: "OpenCrabs — что решает", back: "Open-source Rust-оркестратор для multi-agent coding: команды spawn_agent/wait_agent/send_input/close_agent/resume_agent, типизированные субагенты (Explore, Plan, Code, Research) в изолированных сессиях." },
       { front: "3 анти-паттерна оркестрации", back: "1) Бесконечная вложенность субагентов. 2) Общие файлы без блокировок (merge conflicts). 3) Over-delegation тривиальных задач (overhead > выгода)." },
       { front: "Экономика мульти-модельного ревью", back: "Ревью 3 моделями стоит в 3-5x дороже одиночного — каждый субагент это отдельный API-запрос с полным контекстом. Применять только когда качество критичнее стоимости." }
     ],
@@ -583,15 +584,15 @@ Given a feature request:
         explanation: "Переименование переменной — тривиальная задача. Overhead создания субагента (новый контекст, API-вызов, возврат) превышает выгоду. Делегируйте только сложные задачи."
       },
       {
-        question: "Зачем OpenCrabs координирует файловые блокировки?",
+        question: "Как OpenCrabs организует работу субагентов?",
         options: [
-          "Для шифрования файлов",
-          "Чтобы два агента не редактировали один файл одновременно и не создавали merge conflict",
-          "Для ускорения чтения с диска",
-          "Чтобы ограничить размер файлов"
+          "Через шифрование файлов",
+          "Через команды оркестрации (spawn_agent, wait_agent и др.) и типизированных агентов в изолированных сессиях",
+          "Через ускорение чтения с диска",
+          "Через ограничение размера файлов"
         ],
         correct: 1,
-        explanation: "Без блокировок параллельные агенты, правящие один файл, порождают конфликты слияния. OpenCrabs координирует доступ и автоматически разрешает конфликты."
+        explanation: "OpenCrabs порождает типизированных дочерних агентов (Explore, Plan, Code, Research) командами spawn_agent/wait_agent/send_input/close_agent/resume_agent; каждый работает в изолированной сессии со своим контекстом."
       },
       {
         question: "Почему оркестрацию выгодно вести на Qwen3-Coder-Next, а сложный рефакторинг — на флагмане?",
@@ -617,7 +618,7 @@ Given a feature request:
       }
     ],
     sources: [
-      { title: "OpenCrabs — Multi-Agent Orchestration", url: "https://github.com/RoggeOhta/awesome-codex-cli", icon: "🐙" },
+      { title: "OpenCrabs — Multi-Agent Orchestration", url: "https://github.com/adolfousier/opencrabs", icon: "🐙" },
       { title: "Qwen3-Coder-Next Tech Report", url: "https://github.com/QwenLM/Qwen3-Coder/blob/main/qwen3_coder_next_tech_report.pdf", icon: "🐙" },
       { title: "Cross-LLM Sub-Agent Orchestration Skills", url: "https://github.com/shinpr/sub-agents-skills", icon: "🐙" }
     ]
@@ -634,7 +635,7 @@ Given a feature request:
     ],
     content: `<h2>Архитектура OpenAI Codex</h2>
 
-<p>Современный OpenAI Codex (CLI v0.130.0, май 2026) — это не просто локальный терминальный инструмент. Это <strong>комплексная система</strong>, интегрированная с облачной средой выполнения. Базовая модель — <code>codex-1</code>, специализированная версия o3, оптимизированная через обучение с подкреплением на реальных сценариях разработки.</p>
+<p>Современный OpenAI Codex (CLI v0.130.0, май 2026) — это не просто локальный терминальный инструмент. Это <strong>комплексная система</strong>, интегрированная с облачной средой выполнения. Базовая модель — семейство <code>GPT-5.6</code> (дефолт <code>gpt-5.6-sol</code>): с конца марта 2026 Codex работает на поколении GPT-5 (gpt-5-codex, GPT-5.2/5.3-Codex), с 23 апреля 2026 базовой была GPT-5.5, летом 2026 её сменила линейка GPT-5.6. Исторический <code>codex-1</code> (2025) — специализированная версия o3, оптимизированная через обучение с подкреплением на реальных сценариях разработки.</p>
 
 <h3>Два режима работы</h3>
 <table class="comparison-table">
@@ -678,8 +679,8 @@ Given a feature request:
   <tr><th>Аспект</th><th>OpenAI Codex</th><th>Qwen Code</th></tr>
   <tr><td><strong>Субагенты</strong></td><td>Нативные (Subagent GA)</td><td>Через PAL MCP / clink</td></tr>
   <tr><td><strong>Изоляция</strong></td><td>Облачная sandbox</td><td>Процессная (отдельный CLI)</td></tr>
-  <tr><td><strong>Модели</strong></td><td>Только OpenAI (codex-1)</td><td>Любые (Qwen, Claude, Gemini, Ollama)</td></tr>
-  <tr><td><strong>Стоимость</strong></td><td>$20/мес + API usage</td><td>Бесплатно (2000 req/day) или self-host</td></tr>
+  <tr><td><strong>Модели</strong></td><td>Только OpenAI (GPT-5.5/5.6)</td><td>Любые (Qwen, Claude, Gemini, Ollama)</td></tr>
+  <tr><td><strong>Стоимость</strong></td><td>$20/мес + API usage</td><td>API или self-host (free tier закрыт в апреле 2026)</td></tr>
   <tr><td><strong>Open source</strong></td><td>CLI да, backend нет</td><td>CLI полностью Apache 2.0</td></tr>
 </table>
 
@@ -707,7 +708,7 @@ Given a feature request:
       { front: "Главное отличие Codex от Qwen Code", back: "Codex: нативные субагенты, но vendor lock-in (только OpenAI). Qwen Code: субагенты через PAL MCP, но гетерогенные модели (любой LLM) и open-source CLI." },
       { front: "Почему 1/10 агентных проектов доходит до production?", back: "Основная причина — отсутствие governance layer: делегирование, видимость, восстановление после ошибок. Не недостаток интеллекта моделей." },
       { front: "Sandbox isolation в Codex", back: "Каждый субагент работает в отдельной облачной песочнице с полной копией репозитория и своей git-веткой. Ошибка одного не затрагивает других; слияние через PR." },
-      { front: "Базовая модель Codex", back: "codex-1 — специализированная версия o3, дообученная через RL на реальных сценариях разработки. Codex привязан только к моделям OpenAI." },
+      { front: "Базовая модель Codex", back: "С апреля 2026 — GPT-5.5, с лета 2026 — семейство GPT-5.6 (дефолт gpt-5.6-sol). Исторический codex-1 (2025) — версия o3, дообученная через RL. Codex привязан только к моделям OpenAI." },
       { front: "4 принципа governance для агентов", back: "Visibility (логирование действий), Approval Gates (подтверждение критичных операций), Rollback (каждый шаг = git commit), Rate Limiting (лимиты на субагентов и API)." },
       { front: "Локальный vs облачный Codex", back: "Локальный CLI — ваш терминал, субагенты через PAL MCP, для DevOps. Облачный — изолированная sandbox, нативные Subagent Tasks, для параллельной разработки." }
     ],
@@ -756,7 +757,8 @@ Given a feature request:
     sources: [
       { title: "Codex Subagents: Parallel AI Coding at Scale", url: "https://atalupadhyay.wordpress.com/2026/03/17/codex-subagents-parallel-ai-coding-at-scale/", icon: "🔗" },
       { title: "Codex Gets Subagents: Industry Standard Pattern", url: "https://pub.spillwave.com/codex-gets-subagents-the-parallel-ai-coding-pattern-is-now-industry-standard-how-does-it-stack-35bd217ef11f", icon: "🔗" },
-      { title: "Multi-Agent System Architecture Patterns", url: "https://www.clickittech.com/ai/multi-agent-system-architecture/", icon: "🔗" }
+      { title: "Multi-Agent System Architecture Patterns", url: "https://www.clickittech.com/ai/multi-agent-system-architecture/", icon: "🔗" },
+      { title: "OpenAI Codex — Models (официальная документация)", url: "https://developers.openai.com/codex/models", icon: "🔗" }
     ]
   },
   {
@@ -901,6 +903,8 @@ cd ../project-feature-a &amp;&amp; claude</code></pre>
   <tr><td>Agent Teams (3 агента)</td><td>400-800K</td><td>$8-24</td></tr>
 </table>
 
+<p><em>Цифры в таблице — иллюстративные оценки порядка величин, а не измеренные данные. Официальный ориентир из документации Claude Code: Agent Teams расходуют примерно в 7 раз больше токенов, чем обычная сессия, когда участники работают в plan mode.</em></p>
+
 <div class="callout callout-danger">
   <div class="callout-title">🚫 Когнитивная нагрузка</div>
   Как отмечает Саймон Уиллисон (соавтор Django): «Мультиагентные системы не упрощают работу — они её трансформируют. Агенты генерируют код, но человек должен проверять, корректировать курс и удерживать ментальную модель нескольких одновременных процессов.»
@@ -915,7 +919,7 @@ cd ../project-feature-a &amp;&amp; claude</code></pre>
       { front: "Где определяются субагенты Claude Code?", back: "В директории .claude/agents/ как markdown-файлы с YAML-фронтматтером: name, description, список tools и системный промпт." },
       { front: "Как включить Agent Teams?", back: "Переменной окружения CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1. Функция экспериментальная." },
       { front: "4 возможности Agent Teams", back: "Shared Task List (видят прогресс друг друга), Lead Agent (тимлид-декомпозитор), Peer-to-Peer (оспаривают решения), Directory Ownership (явное владение директориями против конфликтов)." },
-      { front: "Стоимость Agent Teams (3 агента)", back: "~400-800K токенов/час = $8-24/час, против $1-3 у одиночного агента. Peer-to-peer переговоры резко увеличивают расход." },
+      { front: "Стоимость Agent Teams (3 агента)", back: "Иллюстративная оценка: ~400-800K токенов/час = $8-24/час против $1-3 у одиночного агента. Официальный ориентир Claude Code: ~7x токенов в plan mode. Peer-to-peer переговоры резко увеличивают расход." },
       { front: "Когнитивная нагрузка (С. Уиллисон)", back: "Мультиагентность не упрощает, а трансформирует работу: человек должен проверять код, корректировать курс и удерживать ментальную модель нескольких параллельных процессов." },
       { front: "Форк разговора vs git worktrees", back: "Форк — для непересекающихся задач (вопросы о кодовой базе, research, чтение доков). Git worktrees — для пересекающейся работы над кодом: отдельная директория на своей ветке, без конфликтов файлов." },
       { front: "Метод cascade", back: "Новые задачи открывать в новых вкладках справа; проходить слева направо (от старых к новым); держать максимум 3-4 активные задачи одновременно, чтобы не терять контроль над контекстом." },
@@ -1060,7 +1064,7 @@ cd ../project-feature-a &amp;&amp; claude</code></pre>
 #   "question" → docs-lookup agent
 #   "security" → security-auditor agent</code></pre>
 
-<p><strong>Лучший инструмент:</strong> Qwen Code (бесплатный уровень для массовой обработки)</p>
+<p><strong>Лучший инструмент:</strong> Qwen Code (дешёвая массовая обработка: self-host или недорогой API)</p>
 
 <h3>4. Evaluator-Optimizer</h3>
 <p>Один агент генерирует, второй оценивает. <strong>Цикл повторяется</strong> до достижения порогового качества.</p>
@@ -1121,7 +1125,7 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
 
 <table class="comparison-table">
   <tr><th>Критерий</th><th>Qwen Code</th><th>Codex</th><th>Claude Code</th></tr>
-  <tr><td><strong>Стоимость</strong></td><td>🟢 Бесплатно / self-host</td><td>🟡 $20 + API</td><td>🔴 $20-200/мес</td></tr>
+  <tr><td><strong>Стоимость</strong></td><td>🟢 Self-host / недорогой API</td><td>🟡 $20 + API</td><td>🔴 $20-200/мес</td></tr>
   <tr><td><strong>Нативные субагенты</strong></td><td>🔴 Через PAL MCP</td><td>🟢 Subagent GA</td><td>🟢 Subagents + Teams</td></tr>
   <tr><td><strong>Гетерогенные модели</strong></td><td>🟢 Любые LLM</td><td>🔴 Только OpenAI</td><td>🟡 Ограниченно</td></tr>
   <tr><td><strong>Open Source</strong></td><td>🟢 CLI Apache 2.0</td><td>🟡 CLI only</td><td>🔴 Проприетарный</td></tr>
@@ -1141,7 +1145,7 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
 </div>
 
 <div class="key-concept">
-  <strong>Мини-кейс:</strong> SaaS-команда автоматизировала разбор входящих GitHub issues. Сначала на каждый issue запускали мощного оркестратора — дорого и медленно. Переписали как <strong>Router</strong>: дешёвый классификатор на Qwen3-Coder-Next метит issue (bug/feature/question/security) и направляет нужному субагенту. Объём вырос до сотен issue в день, а счёт остался скромным благодаря бесплатному уровню — выбор паттерна (Router вместо Orchestrator-Worker) и инструмента под него оказался важнее «силы» модели.
+  <strong>Мини-кейс:</strong> SaaS-команда автоматизировала разбор входящих GitHub issues. Сначала на каждый issue запускали мощного оркестратора — дорого и медленно. Переписали как <strong>Router</strong>: дешёвый классификатор на Qwen3-Coder-Next метит issue (bug/feature/question/security) и направляет нужному субагенту. Объём вырос до сотен issue в день, а счёт остался скромным благодаря дешёвому инференсу Next (self-host) — выбор паттерна (Router вместо Orchestrator-Worker) и инструмента под него оказался важнее «силы» модели.
 </div>`,
     flashcards: [
       { front: "4 паттерна оркестрации", back: "1) Orchestrator-Worker (динамическая декомпозиция). 2) Pipeline (последовательные этапы). 3) Router (классификация и маршрутизация). 4) Evaluator-Optimizer (цикл генерация-оценка)." },
@@ -1149,7 +1153,7 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
       { front: "Pipeline vs Orchestrator-Worker", back: "Pipeline — известная структура, фиксированная последовательность этапов (выход одного = вход следующего). Orchestrator-Worker — неизвестная структура, динамическая декомпозиция." },
       { front: "Паттерн Router", back: "Классифицирует входящий запрос и направляет к специализированному агенту (bug→bug-fixer, security→auditor). Идеален для разнородного потока задач (issue triage)." },
       { front: "Паттерн Evaluator-Optimizer", back: "Generator пишет, Evaluator оценивает (тесты, coverage); цикл повторяется до порога качества. Лучший инструмент — Codex (sandbox для безопасного запуска тестов)." },
-      { front: "Когда использовать Qwen Code?", back: "Нужны гетерогенные модели, бесплатный/self-host вариант, open-source CLI, приватность. Идеален для Orchestrator-Worker и Router (массовая обработка на free tier)." },
+      { front: "Когда использовать Qwen Code?", back: "Нужны гетерогенные модели, self-host или недорогой API, open-source CLI, приватность. Идеален для Orchestrator-Worker и Router (дешёвая массовая обработка)." },
       { front: "Главный анти-паттерн мультиагентности", back: "Бесконечная вложенность субагентов. Глубина максимум 1-2 уровня — каждый лишний уровень экспоненциально растит стоимость и снижает контроль." },
       { front: "Итеративный retrieval — суть паттерна", back: "Субагент знает буквальный запрос, но не ЦЕЛЬ за ним. Оркестратор оценивает каждый возврат, задаёт уточняющие вопросы, субагент добирает у источника — цикл до достаточности, максимум ~3 итерации." },
       { front: "Передавай цель, а не только запрос", back: "Главное правило делегирования: субагенту нужен контекст намерения, а не голая формулировка. «Найди валидацию токена» vs «мы добавляем refresh-token и боимся пропуска истёкших — найди валидацию и оцени риск» — второй даёт фильтрацию по релевантности." },
@@ -1183,7 +1187,7 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
       },
       {
         question: "Какой инструмент лучше всего для Evaluator-Optimizer с запуском тестов?",
-        options: ["Qwen Code (free tier)", "Codex (cloud sandbox)", "Любой текстовый редактор", "Gemini CLI"],
+        options: ["Qwen Code (self-host)", "Codex (cloud sandbox)", "Любой текстовый редактор", "Gemini CLI"],
         correct: 1,
         explanation: "Evaluator должен безопасно запускать тесты сгенерированного кода. Cloud sandbox Codex изолирует исполнение, что делает его удачным выбором для этого паттерна."
       },
@@ -1248,7 +1252,7 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
 <h3>Реальная стоимость владения</h3>
 <table class="comparison-table">
   <tr><th>Инструмент</th><th>Free Tier</th><th>Pro</th><th>Enterprise</th></tr>
-  <tr><td><strong>Qwen Code</strong></td><td>2000 req/day (открытая линейка)</td><td>API: $1.2-15/M tokens</td><td>Self-host: $0 + GPU</td></tr>
+  <tr><td><strong>Qwen Code</strong></td><td>Закрыт в апреле 2026 (был 2000 req/day)</td><td>API: $1.2-15/M tokens</td><td>Self-host: $0 + GPU</td></tr>
   <tr><td><strong>Claude Code</strong></td><td>Нет</td><td>$20-200/мес</td><td>Enterprise: договорная</td></tr>
   <tr><td><strong>OpenAI Codex</strong></td><td>Open source CLI</td><td>$20/мес + API</td><td>SOC 2: договорная</td></tr>
 </table>
@@ -1260,6 +1264,8 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
   <li><strong>3 субагента (Fan-Out):</strong> ~200-350K токенов/час = $4-10/час</li>
   <li><strong>Agent Teams (3 агента):</strong> ~500K-1M токенов/час = $10-30/час</li>
 </ul>
+
+<p><em>Это иллюстративные оценки, а не измеренные данные. По документации Claude Code, Agent Teams расходуют ~7x токенов обычной сессии при работе участников в plan mode.</em></p>
 
 <div class="callout callout-tip">
   <div class="callout-title">💡 Правило 80/20 для субагентов</div>
@@ -1307,7 +1313,7 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
   <div class="callout-title">✅ 10 пунктов production-readiness</div>
   <ol style="margin: 0.5rem 0 0 1rem; line-height: 2;">
     <li>Субагенты ограничены глубиной 1</li>
-    <li>Файловые конфликты решены (разделение директорий / OpenCrabs)</li>
+    <li>Файловые конфликты решены (разделение директорий между агентами)</li>
     <li>Каждое действие = git commit (rollback ready)</li>
     <li>Approval gates на критических операциях</li>
     <li>Логирование всех действий агентов</li>
@@ -1323,7 +1329,7 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
 
 <table class="comparison-table">
   <tr><th>Размер команды</th><th>Рекомендация</th><th>Бюджет/мес</th></tr>
-  <tr><td>1-3 разработчика</td><td>Qwen Code + одиночный агент</td><td>$0-20</td></tr>
+  <tr><td>1-3 разработчика</td><td>Qwen Code + одиночный агент</td><td>$0 (self-host) или $10-50 (API)</td></tr>
   <tr><td>5-10 разработчиков</td><td>Qwen Code + PAL MCP (субагенты)</td><td>$50-200</td></tr>
   <tr><td>10-50 разработчиков</td><td>Claude Code + Agent Teams</td><td>$200-1000</td></tr>
   <tr><td>Enterprise</td><td>Гибрид: Qwen (Router) + Claude (Pipeline)</td><td>$1000+</td></tr>
@@ -1349,11 +1355,11 @@ Phase 5: VERIFY     (build-error-resolver)  -> done или возврат на �
   <strong>Мини-кейс:</strong> Финтех включил автономного агента для миграций БД — без approval gate. Агент «оптимизировал» индекс на проде в час пик и положил сервис на 20 минут. После инцидента ввели governance: каждое действие = git commit (rollback), миграции и деплой за approval gate, бюджет токенов с авто-паузой, staging-прогон перед prod. С тех пор ни один агентный шаг не доходит до прода без человека на критичных операциях — это и есть переход от «1 из 10» к управляемому внедрению.
 </div>`,
     flashcards: [
-      { front: "Мультипликатор субагентов", back: "3 субагента (Fan-Out) = 3-5x стоимость одиночного агента. Agent Teams (3 агента) = 10-15x. Применяйте субагентов только для 20% задач, где параллелизм даёт измеримую выгоду." },
+      { front: "Мультипликатор субагентов", back: "Иллюстративные оценки: 3 субагента (Fan-Out) ≈ 3-5x стоимости одиночного агента, Agent Teams ≈ 10-15x (по докам Claude Code — ~7x токенов в plan mode). Применяйте субагентов только для 20% задач, где параллелизм даёт измеримую выгоду." },
       { front: "5 столпов governance", back: "1) Visibility (логирование). 2) Approval Gates (подтверждение критичных операций). 3) Rollback (каждое действие = git commit). 4) Rate Limiting (лимиты). 5) Audit Trail (запись решений)." },
       { front: "Правило 80/20 для субагентов", back: "80% задач решает одиночный агент; субагенты — для 20% задач, где параллелизм/специализация дают выгоду: security audit, deployment, архитектура, мульти-модельный ревью." },
       { front: "Approval Gates — для чего", back: "Критические операции требуют подтверждения человека: DB-миграции, production deploy, удаление файлов, внешние API-вызовы, изменение секретов." },
-      { front: "Стратегия по размеру команды", back: "1-3: Qwen + одиночный агент ($0-20). 5-10: Qwen + PAL MCP ($50-200). 10-50: Claude Code + Agent Teams ($200-1000). Enterprise: гибрид Qwen Router + Claude Pipeline ($1000+)." },
+      { front: "Стратегия по размеру команды", back: "1-3: Qwen + одиночный агент ($0 self-host или $10-50 API). 5-10: Qwen + PAL MCP ($50-200). 10-50: Claude Code + Agent Teams ($200-1000). Enterprise: гибрид Qwen Router + Claude Pipeline ($1000+)." },
       { front: "Будущее: spec-driven orchestration", back: "Переход от промпт-ориентированных роев к спецификация-ориентированной оркестрации: агенты работают от формальной спецификации, как TDD для AI (см. урок 15)." },
       { front: "Главный вывод про scaffolding", back: "Координация и строительные леса (scaffolding) агентов важнее чистой мощности модели. Qwen — гибкость, Claude — зрелость, Codex — безопасность. Инструмент под задачу." }
     ],
@@ -1895,7 +1901,7 @@ alias claude-research='claude --system-prompt \"$(cat ~/.claude/contexts/researc
 
 <div class="callout callout-warn">
   <div class="callout-title">⚠️ Amazon Q extension (2025)</div>
-  В популярное расширение через цепочку поставки внедрили вредоносную инструкцию, нацеленную на удаление файлов/ресурсов. Урок: агенты и их инструменты — часть supply chain; недоверенным может оказаться даже «свой» плагин. Проверяйте и ограничивайте то, что агент исполняет.
+  В популярное расширение через цепочку поставки внедрили вредоносную инструкцию, нацеленную на удаление файлов/ресурсов. Из-за ошибки в пейлоаде инструкция в итоге не сработала, и реального удаления данных не произошло — но вектор атаки был настоящим. Урок: агенты и их инструменты — часть supply chain; недоверенным может оказаться даже «свой» плагин. Проверяйте и ограничивайте то, что агент исполняет.
 </div>
 
 <div class="key-concept">
@@ -1908,7 +1914,7 @@ alias claude-research='claude --system-prompt \"$(cat ~/.claude/contexts/researc
       { front: "Prompt injection между агентами", back: "Один скомпрометированный агент отравляет остальных: researcher прочитал вредоносную страницу и передал «инструкции» дальше — заражается вся траектория. Доверие между агентами не безусловно." },
       { front: "Least privilege для субагента", back: "Давать минимум прав под роль: security-auditor — только Read/Grep, без Write/Deploy/сети. Меньше прав = меньше шансов собрать летальную триаду." },
       { front: "Инцидент Replit (июль 2025)", back: "AI-агент во время code freeze удалил production-БД (~1200 компаний) и замаскировал это отчётами. Урок: автономия с правом менять состояние без approval gate и без изоляции от прода = катастрофа." },
-      { front: "Инцидент Amazon Q (2025)", back: "Через supply chain в расширение внедрили вредоносную инструкцию на удаление ресурсов. Урок: агенты и их инструменты — часть цепочки поставки; даже «свой» плагин может быть недоверенным." },
+      { front: "Инцидент Amazon Q (2025)", back: "Через supply chain в расширение внедрили вредоносную инструкцию на удаление ресурсов; из-за ошибки в пейлоаде она не сработала — данные не пострадали. Урок: агенты и их инструменты — часть цепочки поставки; даже «свой» плагин может быть недоверенным." },
       { front: "Санитизация на стыках агентов", back: "Результат субагента — это данные, а не команды. Не подмешивать его в системный промпт как доверенные инструкции, иначе инъекция из недоверенного ввода станет «приказом»." }
     ],
     quiz: [

@@ -279,7 +279,7 @@ Answer: Текущая цена BTC ≈ 6 035 000 ₽</code></pre>
       </ul>
 
       <div class="key-concept">
-        <strong>Parallel tool calls</strong> — современные модели (GPT-4, Claude 3) могут вызвать несколько инструментов за один шаг. Это ускоряет выполнение, но требует, чтобы инструменты были независимыми (без side effects, конфликтующих друг с другом).
+        <strong>Parallel tool calls</strong> — современные модели могут вызвать несколько инструментов за один шаг. Это ускоряет выполнение, но требует, чтобы инструменты были независимыми (без side effects, конфликтующих друг с другом).
       </div>
 
       <h4>Паттерн: Tool Composition</h4>
@@ -539,6 +539,8 @@ Answer: Текущая цена BTC ≈ 6 035 000 ₽</code></pre>
         <li><strong>Дублирование работы:</strong> два агента делают одно и то же. Решение: task registry с lock</li>
       </ul>
 
+      <p><strong>Замечание о фреймворках (2026):</strong> статья AutoGen (в источниках) остаётся отличным введением в multi-agent паттерны, но сам классический AutoGen переведён в maintenance-режим: Microsoft объединил AutoGen и Semantic Kernel в Microsoft Agent Framework (2026); сообщество поддерживает независимый форк AG2. Паттерны из статьи актуальны независимо от судьбы конкретного фреймворка.</p>
+
       <h4>🎯 Мини-кейс</h4>
       <div class="key-concept">
         <p><strong>Ситуация:</strong> Команда строит multi-agent систему для генерации маркетинговых кампаний. Research agent ищет данные о конкурентах, Copywriter agent пишет текст, Designer agent создаёт описание изображений, Review agent оценивает результат. Система постоянно зависает — агенты ждут друг друга.</p>
@@ -619,7 +621,7 @@ Answer: Текущая цена BTC ≈ 6 035 000 ₽</code></pre>
     sources: [
       { title: "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation", url: "https://arxiv.org/abs/2308.08155", icon: "📄" },
       { title: "CrewAI Documentation", url: "https://docs.crewai.com/", icon: "🔗" },
-      { title: "MetaGPT: Meta Programming for Multi-Agent Collaborative Framework", url: "https://arxiv.org/abs/2308.00352", icon: "📄" }
+      { title: "MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework", url: "https://arxiv.org/abs/2308.00352", icon: "📄" }
     ]
   },
   {
@@ -801,7 +803,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
     ],
     sources: [
       { title: "Reflexion: Language Agents with Verbal Reinforcement Learning", url: "https://arxiv.org/abs/2303.11366", icon: "📄" },
-      { title: "Plan-and-Solve: Improving Zero-Shot CoT by Planning", url: "https://arxiv.org/abs/2305.04091", icon: "📄" },
+      { title: "Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models", url: "https://arxiv.org/abs/2305.04091", icon: "📄" },
       { title: "NeMo Guardrails (NVIDIA)", url: "https://github.com/NVIDIA/NeMo-Guardrails", icon: "🔗" }
     ]
   },
@@ -842,14 +844,14 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
 
       <h4>Оптимизация стоимости</h4>
       <ul>
-        <li><strong>Модельный роутинг:</strong> простые задачи → дешёвая модель (GPT-4o-mini), сложные → мощная (GPT-4, Claude Opus)</li>
+        <li><strong>Модельный роутинг:</strong> простые задачи → дешёвая модель mini/Haiku-класса, сложные → мощная модель Opus-класса</li>
         <li><strong>Caching:</strong> кэшировать ответы на повторяющиеся запросы (semantic cache по embedding similarity)</li>
         <li><strong>Prompt compression:</strong> убирать лишнее из system prompt, сжимать примеры</li>
         <li><strong>Streaming:</strong> отдавать результаты по мере генерации — не ускоряет, но улучшает UX</li>
       </ul>
 
       <h4>Выбор модели по типу задачи</h4>
-      <p>Модельный роутинг работает только при понятном правиле: какой <em>класс</em> модели достаточен для задачи. Полезно мыслить тремя классами — лёгкая, средняя, тяжёлая — это переносимая эвристика, не привязанная к конкретному вендору. Примеры вендоров: лёгкий класс — Claude Haiku, GPT-4o-mini, Gemini Flash; средний — Claude Sonnet, GPT-4o; тяжёлый — Claude Opus, o-series, Gemini Pro.</p>
+      <p>Модельный роутинг работает только при понятном правиле: какой <em>класс</em> модели достаточен для задачи. Полезно мыслить тремя классами — лёгкая, средняя, тяжёлая — это переносимая эвристика, не привязанная к конкретному вендору. Примеры вендоров: лёгкий класс — Claude Haiku, mini-модели OpenAI, Gemini Flash; средний — Claude Sonnet, средние модели OpenAI; тяжёлый — Claude Opus, reasoning-линейки OpenAI, Gemini Pro. Конкретные названия быстро устаревают (например, линейка GPT-4o в 2026 переведена в legacy) — но сам паттерн роутинга по «весовым классам» неизменен.</p>
 
       <table style="width:100%;border-collapse:collapse;margin:1rem 0;">
         <thead>
@@ -907,7 +909,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
         <p><strong>Правильные подходы:</strong></p>
         <ul>
           <li><strong>Observability первым делом:</strong> trace показывает — 40 из 45 сек уходят на RAG retrieval (плохие индексы). LLM-as-Judge показывает 30% ответов нерелевантны из-за плохого chunking. Исправить retrieval → latency 8 сек, relevance 85%</li>
-          <li><strong>Модельный роутинг:</strong> 70% запросов — простые FAQ, решаемые GPT-4o-mini ($0.15/1M). Сложные 30% — Claude Sonnet. Стоимость: $0.80 → $0.18/запрос</li>
+          <li><strong>Модельный роутинг:</strong> 70% запросов — простые FAQ, решаемые дешёвой моделью mini/Haiku-класса (~$0.15/1M). Сложные 30% — Claude Sonnet. Стоимость: $0.80 → $0.18/запрос</li>
         </ul>
         <p><strong>Антипаттерн:</strong> оптимизировать «на глаз» без данных — тюнить промпты вместо исправления retrieval, потому что observability не показывает, где реально проблема.</p>
       </div>
@@ -1201,37 +1203,39 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
     ],
     content: `
       <h4>Что такое reasoning-модели</h4>
-      <p>OpenAI o1/o3, Claude с extended thinking, Gemini 2.0 Flash Thinking — это LLM, которые перед генерацией ответа проводят <strong>внутреннее рассуждение</strong> (chain-of-thought) скрытое от пользователя. Они «думают дольше» над задачей, прежде чем ответить.</p>
+      <p>Reasoning-модели — это LLM, которые перед генерацией ответа проводят <strong>внутреннее рассуждение</strong> (chain-of-thought) скрытое от пользователя. Они «думают дольше» над задачей, прежде чем ответить. Первые поколения (2024–2025): OpenAI o1/o3, Claude с extended thinking, Gemini с режимом thinking. Часть ранних моделей уже снята (o1-preview, o1-mini); сегодня их место заняли новые reasoning-линейки OpenAI и Gemini 2.5/3 с thinking.</p>
 
       <div class="key-concept">
-        <strong>Extended thinking (Anthropic):</strong> Claude выделяет бюджет «мышления» в токенах (budget_tokens). Внутренние мысли не выставляются в API-ответ, но учитываются в стоимости. Параметр thinking: &#123; type: "enabled", budget_tokens: 10000 &#125;.
+        <strong>Extended thinking (Anthropic):</strong> Claude выделяет бюджет «мышления» в токенах (budget_tokens). Внутренние мысли не выставляются в API-ответ, но учитываются в стоимости. Параметр thinking: &#123; type: "enabled", budget_tokens: 10000 &#125;.<br>
+        <em>Важно (2026):</em> на новейших моделях Anthropic (Opus 4.6/4.7+) budget_tokens депрекирован — вместо него adaptive thinking с параметром <code>effort</code> (аналог reasoning_effort): модель сама решает, сколько «думать», а effort задаёт глубину. Принцип «управляемый бюджет мышления» остаётся, меняется лишь ручка управления.
       </div>
 
-      <p><strong>reasoning_effort (OpenAI):</strong> параметр low/medium/high, управляющий глубиной внутреннего рассуждения o-моделей. High — дольше и точнее, low — быстрее и дешевле.</p>
+      <p><strong>reasoning_effort (OpenAI):</strong> параметр low/medium/high, управляющий глубиной внутреннего рассуждения reasoning-моделей. High — дольше и точнее, low — быстрее и дешевле. Индустрия в целом сходится именно к этой модели управления (effort вместо явного токен-бюджета).</p>
 
       <h4>Почему тонкий цикл с reasoning-моделью часто лучше сложной оркестрации</h4>
       <p>До появления reasoning-моделей сложные задачи требовали multi-agent оркестрации: один агент планирует, другой выполняет, третий проверяет. Теперь ситуация меняется:</p>
       <ul>
-        <li><strong>Одна reasoning-модель</strong> с высоким budget_tokens может сама декомпозировать задачу, выбрать стратегию, выполнить шаги и проверить результат</li>
+        <li><strong>Одна reasoning-модель</strong> с высоким бюджетом мышления (budget_tokens / effort=high) может сама декомпозировать задачу, выбрать стратегию, выполнить шаги и проверить результат</li>
         <li><strong>Меньше координационного overhead</strong> — нет потерь контекста при передаче между агентами, нет deadlocks, нет сложной оркестрационной логики</li>
         <li><strong>Дешевле при правильном использовании</strong> — 3 оркестрованных GPT-4o вызова могут стоить дороже одного o3 вызова с аналогичным качеством</li>
       </ul>
 
-      <p><strong>Правило выбора:</strong> если задача требует глубокого reasoning (математика, код, планирование, debugging) — сначала попробуйте одну reasoning-модель с достаточным budget_tokens. Multi-agent нужен тогда, когда задача действительно параллелизируется или требует специализированных инструментов.</p>
+      <p><strong>Правило выбора:</strong> если задача требует глубокого reasoning (математика, код, планирование, debugging) — сначала попробуйте одну reasoning-модель с достаточным бюджетом мышления (budget_tokens / effort). Multi-agent нужен тогда, когда задача действительно параллелизируется или требует специализированных инструментов.</p>
 
       <h4>Антипаттерн: CoT-промпт на reasoning-модели</h4>
       <p>До reasoning-моделей инженеры добавляли в промпт: «Think step by step. First, analyze the problem. Then...» Это заставляло обычные LLM рассуждать явно.</p>
 
       <div class="key-concept">
-        <strong>Антипаттерн:</strong> добавлять CoT-инструкции в промпт для o1/o3/Claude-thinking. У этих моделей внутреннее рассуждение встроено. Явные CoT-инструкции не улучшают результат, а только увеличивают токены и стоимость. Промпты для reasoning-моделей должны быть <em>короткими и целевыми</em>.
+        <strong>Антипаттерн:</strong> добавлять CoT-инструкции в промпт для reasoning-моделей (o-series, Claude с thinking). У этих моделей внутреннее рассуждение встроено. Явные CoT-инструкции не улучшают результат, а только увеличивают токены и стоимость. Промпты для reasoning-моделей должны быть <em>короткими и целевыми</em>.
       </div>
 
       <h4>budget_tokens и reasoning_effort: практические цифры</h4>
       <ul>
-        <li><strong>Low reasoning (o3-mini low / budget_tokens 1K-2K):</strong> простые вопросы, классификация, routing — быстро, дёшево</li>
-        <li><strong>Medium (budget_tokens 5K-10K):</strong> код средней сложности, анализ, планирование</li>
-        <li><strong>High (budget_tokens 20K-32K):</strong> сложные алгоритмы, математические доказательства, критичные архитектурные решения</li>
+        <li><strong>Low reasoning (effort=low / budget_tokens 1K-2K):</strong> простые вопросы, классификация, routing — быстро, дёшево</li>
+        <li><strong>Medium (effort=medium / budget_tokens 5K-10K):</strong> код средней сложности, анализ, планирование</li>
+        <li><strong>High (effort=high / budget_tokens 20K-32K):</strong> сложные алгоритмы, математические доказательства, критичные архитектурные решения</li>
       </ul>
+      <p><em>Пометка (2026):</em> явные токен-цифры относятся к budget_tokens старых моделей Claude; на новейших моделях Anthropic тот же выбор делается через effort (low/medium/high) при adaptive thinking. Соответствие уровней сохраняется.</p>
 
       <h4>Deliberative alignment</h4>
       <p>Reasoning-модели позволяют реализовать <strong>deliberative alignment</strong> — модель не просто следует правилам из промпта, а «рассуждает» о том, какое действие соответствует ценностям, прежде чем ответить. Это повышает устойчивость к jailbreak и edge cases по сравнению с prompt-only guardrails.</p>
@@ -1241,20 +1245,20 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
         <p><strong>Ситуация:</strong> Команда строит агента для автоматического code review. Первый вариант: orchestrator-agent → static analysis worker → style check worker → security scan worker → summary writer. 5 LLM-вызовов, 45 секунд, $0.12 за PR.</p>
         <p><strong>Правильные подходы:</strong></p>
         <ul>
-          <li><strong>Один Claude с extended thinking:</strong> budget_tokens=16000, один вызов — модель сама анализирует код со всех сторон. Результат: 15 сек, $0.08 за PR, качество выше (нет потерь контекста между агентами)</li>
+          <li><strong>Один Claude с extended thinking:</strong> budget_tokens=16000 (на новейших моделях — effort=high), один вызов — модель сама анализирует код со всех сторон. Результат: 15 сек, $0.08 за PR, качество выше (нет потерь контекста между агентами)</li>
           <li><strong>Гибридный подход:</strong> reasoning-модель для анализа + специализированные детерминированные инструменты для static analysis (не нужно LLM для линтера)</li>
         </ul>
         <p><strong>Антипаттерн:</strong> добавить «Think step by step, first check syntax, then check security...» в промпт к Claude thinking — это дублирует внутреннее мышление модели и увеличивает стоимость без пользы.</p>
       </div>
     `,
     flashcards: [
-      { front: "Что такое extended thinking (Anthropic)?", back: "Режим, при котором Claude выделяет бюджет токенов для внутреннего рассуждения перед ответом. Параметр: thinking: { type: 'enabled', budget_tokens: N }. Внутренние мысли не видны пользователю, но улучшают качество на сложных задачах." },
-      { front: "reasoning_effort в OpenAI o-моделях", back: "Параметр low/medium/high для управления глубиной внутреннего reasoning. Low: быстрее/дешевле. High: точнее/дольше/дороже. Аналог budget_tokens у Anthropic." },
+      { front: "Что такое extended thinking (Anthropic)?", back: "Режим, при котором Claude выделяет бюджет токенов для внутреннего рассуждения перед ответом. Исторический параметр: thinking: { type: 'enabled', budget_tokens: N }. На новейших моделях (Opus 4.6/4.7+) budget_tokens депрекирован в пользу adaptive thinking с параметром effort. Внутренние мысли не видны пользователю, но улучшают качество на сложных задачах." },
+      { front: "reasoning_effort в reasoning-моделях OpenAI", back: "Параметр low/medium/high для управления глубиной внутреннего reasoning. Low: быстрее/дешевле. High: точнее/дольше/дороже. У Anthropic аналог — budget_tokens (старые модели), на новейших — adaptive thinking с параметром effort." },
       { front: "Когда reasoning-модель лучше multi-agent оркестрации?", back: "Когда задача требует глубокого reasoning (код, математика, планирование) и не parallelizable. Одна reasoning-модель — меньше координационного overhead, меньше потерь контекста, часто дешевле." },
-      { front: "Антипаттерн: CoT-промпт на reasoning-модели", back: "Добавлять 'Think step by step...' в промпт для o1/o3/Claude thinking. У них CoT встроен. Явные инструкции только увеличивают токены. Промпты для reasoning-моделей — короткие и целевые." },
+      { front: "Антипаттерн: CoT-промпт на reasoning-модели", back: "Добавлять 'Think step by step...' в промпт для reasoning-моделей (o-series, Claude thinking). У них CoT встроен. Явные инструкции только увеличивают токены. Промпты для reasoning-моделей — короткие и целевые." },
       { front: "Deliberative alignment", back: "Reasoning-модели 'рассуждают' о соответствии действия ценностям перед ответом — это надёжнее prompt-only guardrails. Устойчивее к jailbreak и edge cases." },
-      { front: "budget_tokens: практические уровни", back: "1K-2K: простые задачи, routing. 5K-10K: код средней сложности, анализ. 20K-32K: сложные алгоритмы, критичные решения. Начинайте с меньшего — увеличивайте при недостаточном качестве." },
-      { front: "Gemini Thinking vs Claude Extended Thinking", back: "Оба реализуют internal chain-of-thought перед ответом. Gemini Thinking (Flash): быстрее и дешевле, хорошо для reasoning средней сложности. Claude extended thinking: более контролируемый budget, лучше для очень сложных задач." },
+      { front: "budget_tokens: практические уровни", back: "1K-2K: простые задачи, routing. 5K-10K: код средней сложности, анализ. 20K-32K: сложные алгоритмы, критичные решения. Начинайте с меньшего — увеличивайте при недостаточном качестве. На новейших моделях Anthropic вместо цифр — effort low/medium/high (adaptive thinking)." },
+      { front: "Gemini Thinking vs Claude Extended Thinking", back: "Оба реализуют internal chain-of-thought перед ответом. Gemini (2.5/3) с thinking: быстрее и дешевле, хорошо для reasoning средней сложности. Claude extended thinking: более контролируемый бюджет мышления, лучше для очень сложных задач." },
       { front: "Антипаттерн: reasoning-модель для простых задач", back: "Использовать o3 или Claude thinking для классификации, перефразирования, форматирования — где обычный LLM справится за 1/10 стоимости. Reasoning overhead не добавляет ценности для детерминированных задач." }
     ],
     quiz: [
@@ -1285,7 +1289,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
         options: [
           "Multi-agent: 10 агентов по одному шагу",
           "Обычный GPT-4o с CoT-промптом",
-          "Reasoning-модель с высоким budget_tokens / reasoning_effort=high",
+          "Reasoning-модель с высоким бюджетом мышления (effort=high / budget_tokens)",
           "Prompt Chaining из 10 последовательных вызовов"
         ],
         correct: 2,
@@ -1356,12 +1360,14 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
       <ul>
         <li><strong>Claude Sonnet (computer use):</strong> получает скриншот экрана → решает, что нажать/написать → выполняет действие → получает новый скриншот</li>
         <li><strong>OSWorld benchmark:</strong> Claude достиг 61.4% на задачах управления ОС (2025)</li>
-        <li><strong>OpenAI Operator:</strong> browser agent для автоматизации веб-задач (booking, forms, research)</li>
+        <li><strong>ChatGPT Agent (OpenAI):</strong> автоматизация веб-задач (booking, forms, research). Отдельный продукт Operator закрыт в августе 2025 — его функциональность вошла в ChatGPT Agent</li>
       </ul>
       <p><strong>Применение:</strong> автоматизация legacy-систем без API, RPA нового поколения, тестирование UI. <strong>Ограничения:</strong> высокая latency (скриншоты медленно), чувствительность к изменениям UI, сложность тестирования.</p>
 
-      <h4>4. OpenTelemetry GenAI Semantic Conventions</h4>
-      <p>В 2025 OpenTelemetry утвердил семантические соглашения для GenAI — стандарт observability для LLM-систем:</p>
+      <h4>4. Observability-стандарты: OpenTelemetry GenAI и OpenInference</h4>
+      <p>Для трассировки LLM-систем сложились две родственные спецификации — важно их не путать:</p>
+      <p><strong>OpenTelemetry GenAI Semantic Conventions</strong> — официальные соглашения OpenTelemetry. Тип операции задаётся атрибутом <code>gen_ai.operation.name</code> со значениями вроде <code>chat</code>, <code>execute_tool</code>, <code>invoke_agent</code>, <code>embeddings</code>; имя спана строится как «{operation} {model}» (например, «chat gpt-4»). Плюс стандартные атрибуты: модель, input/output tokens, параметры запроса.</p>
+      <p><strong>OpenInference (Arize Phoenix)</strong> — комплементарная OTel-совместимая конвенция, которая вводит таксономию <em>span kinds</em>:</p>
       <ul>
         <li><strong>CHAIN</strong> — span для цепочки вызовов (workflow)</li>
         <li><strong>LLM</strong> — span для одного LLM-вызова (input tokens, output tokens, model, latency)</li>
@@ -1370,7 +1376,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
         <li><strong>AGENT</strong> — span для агентного шага (reasoning, decision)</li>
         <li><strong>GUARDRAIL</strong> — span для проверки безопасности (policy, result)</li>
       </ul>
-      <p>Инструменты, поддерживающие OTEL GenAI: Langfuse, Phoenix, AWS Bedrock Traces, Google Cloud AI observability.</p>
+      <p>Поддержка в инструментах: OpenInference — нативно в Phoenix (Arize); OTel GenAI — Langfuse, AWS Bedrock Traces, Google Cloud AI observability и другие OTel-совместимые бэкенды.</p>
 
       <h4>5. Human-in-the-Loop как архитектурный паттерн</h4>
       <p>HITL — не просто «спросить пользователя». Это архитектурный паттерн с несколькими формами:</p>
@@ -1401,7 +1407,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
       { front: "A2A Protocol (Google, апрель 2025)", back: "Agent-to-Agent открытый протокол для коммуникации агентов разных систем. Включает: Agent Card (самоописание), task delegation, status polling, streaming. Стандарт для межагентного взаимодействия." },
       { front: "A2A vs MCP — в чём разница?", back: "MCP (Anthropic): агент ↔ инструмент/данные. A2A (Google): агент ↔ агент. Комплементарны: A2A — оркестрация агентов, MCP — доступ к ресурсам. Используются вместе." },
       { front: "Computer Use — как работает?", back: "Агент получает скриншот → анализирует что на экране → решает действие (клик, ввод) → выполняет → получает новый скриншот. Цикл повторяется. Claude достиг 61.4% на OSWorld (2025)." },
-      { front: "OTEL GenAI span kinds", back: "CHAIN (workflow), LLM (один вызов), TOOL (инструмент), RETRIEVER (RAG), AGENT (шаг агента), GUARDRAIL (проверка). Стандарт observability для LLM-систем от OpenTelemetry (2025)." },
+      { front: "OTel GenAI vs OpenInference", back: "OTel GenAI (официальные конвенции OpenTelemetry): атрибут gen_ai.operation.name (chat, execute_tool, invoke_agent, embeddings), имя спана «{operation} {model}». OpenInference (Arize Phoenix): таксономия span kinds — CHAIN, LLM, TOOL, RETRIEVER, AGENT, GUARDRAIL. Комплементарные OTel-совместимые стандарты observability для LLM-систем." },
       { front: "LangGraph interrupt()", back: "Механизм остановки графа агента в заданной точке для human review. Состояние сохраняется, человек одобряет/изменяет, граф продолжается. Реализация synchronous HITL в агентном пайплайне." },
       { front: "Synchronous vs Asynchronous HITL", back: "Sync: агент ждёт подтверждения прямо сейчас (блокирующий). Async: агент выполняет, человек проверяет результат до вступления в силу (неблокирующий). Выбор зависит от срочности и обратимости действия." }
     ],
@@ -1429,7 +1435,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
         explanation: "A2A и MCP решают разные задачи и комплементарны. MCP (Anthropic): агент получает доступ к инструментам и данным. A2A (Google): агенты делегируют задачи друг другу. Вместе — полный стек коммуникации."
       },
       {
-        question: "Какой OTEL GenAI span kind используется для RAG retrieval?",
+        question: "Какой span kind из конвенции OpenInference (Arize Phoenix) используется для RAG retrieval?",
         options: [
           "LLM",
           "CHAIN",
@@ -1437,7 +1443,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
           "TOOL"
         ],
         correct: 2,
-        explanation: "RETRIEVER span охватывает RAG retrieval операции: query embedding, поиск по векторной БД, возврат top-k результатов. Отдельный span позволяет измерить latency retrieval изолированно от LLM."
+        explanation: "RETRIEVER span (таксономия OpenInference; в официальных OTel GenAI conventions тип операции задаётся через gen_ai.operation.name) охватывает RAG retrieval операции: query embedding, поиск по векторной БД, возврат top-k результатов. Отдельный span позволяет измерить latency retrieval изолированно от LLM."
       },
       {
         question: "Компании нужен агент для автоматизации HR-процессов. Увольнение сотрудника требует подтверждения HR-директора. Как реализовать?",
@@ -1464,8 +1470,9 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
     ],
     sources: [
       { title: "Anthropic Agent SDK — Skills Documentation", url: "https://docs.anthropic.com/en/docs/build-with-claude/agents-and-tools/agent-skills", icon: "🔗" },
-      { title: "Google A2A Protocol", url: "https://google.github.io/A2A/", icon: "🔗" },
+      { title: "A2A Protocol (Linux Foundation)", url: "https://a2a-protocol.org", icon: "🔗" },
       { title: "OpenTelemetry GenAI Semantic Conventions", url: "https://opentelemetry.io/docs/specs/semconv/gen-ai/", icon: "🔗" },
+      { title: "OpenInference Semantic Conventions (Arize)", url: "https://github.com/Arize-ai/openinference", icon: "🔗" },
       { title: "LangGraph Human-in-the-loop", url: "https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/", icon: "🔗" },
       { title: "Claude Computer Use — Anthropic Docs", url: "https://docs.anthropic.com/en/docs/build-with-claude/computer-use", icon: "🔗" }
     ]
@@ -1492,8 +1499,8 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
 
       <h4>Implicit Caching: OpenAI и Gemini</h4>
       <ul>
-        <li><strong>OpenAI (GPT-4o, o-series):</strong> автоматическое кэширование prefix токенов при совпадении ≥1024 токенов в начале запроса. Скидка 50% на cached input. Не требует специальных маркеров.</li>
-        <li><strong>Gemini (Google):</strong> context caching через явный API, TTL настраивается. Особенно эффективно для длинных документов (1M+ токен контекстное окно).</li>
+        <li><strong>OpenAI:</strong> автоматическое кэширование prefix токенов при совпадении ≥1024 токенов в начале запроса. Скидка на cached input варьируется по моделям: 50–80%. Не требует специальных маркеров.</li>
+        <li><strong>Gemini (Google):</strong> explicit context caching через API с настраиваемым TTL, а начиная с Gemini 2.5 — ещё и автоматическое implicit-кеширование без настройки. Особенно эффективно для длинных документов (1M+ токен контекстное окно).</li>
       </ul>
 
       <h4>Почему агенты умножают стоимость</h4>
@@ -1540,7 +1547,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
             <td style="padding:8px;border:1px solid #ddd;">~$0.07/запрос</td>
           </tr>
           <tr>
-            <td style="padding:8px;border:1px solid #ddd;">Code review, reasoning модель, 5K budget_tokens</td>
+            <td style="padding:8px;border:1px solid #ddd;">Code review, reasoning-модель, средний бюджет мышления (~5K токенов / effort=medium)</td>
             <td style="padding:8px;border:1px solid #ddd;">~$0.12/PR</td>
             <td style="padding:8px;border:1px solid #ddd;">~$0.04/PR (c caching)</td>
           </tr>
@@ -1568,7 +1575,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
     `,
     flashcards: [
       { front: "Prompt caching Anthropic: цены", back: "Cache write: $3.75/1M, cache read: $0.30/1M, обычный input: $3/1M. При высоком hit rate: ~90% экономия. Кэшировать: system prompt, документы, few-shot примеры." },
-      { front: "Implicit caching OpenAI", back: "Автоматически при совпадении ≥1024 токенов prefix. Скидка 50% на cached input без специальных маркеров. Работает для GPT-4o и o-моделей." },
+      { front: "Implicit caching OpenAI", back: "Автоматически при совпадении ≥1024 токенов prefix. Скидка на cached input зависит от модели: 50–80%, без специальных маркеров. Работает для актуальных моделей OpenAI." },
       { front: "Почему агенты умножают стоимость?", back: "Каждый шаг tool loop добавляет весь предыдущий контекст заново. 10-шаговый агент с 2K system prompt = 20K лишних токенов на system prompt. Кэшируйте system prompt — максимальный эффект." },
       { front: "Batch API — когда использовать?", back: "Для асинхронных задач без требований к latency: ежедневные отчёты, оффлайн-анализ, массовая обработка. Скидка 50% у Anthropic и OpenAI. Первый инструмент оптимизации для batch workloads." },
       { front: "Semantic cache", back: "Кэш по semantic similarity запросов: embedding нового запроса → cosine similarity с кэшем → если >0.92, вернуть кэшированный ответ. Эффективен для повторяющихся похожих запросов (FAQ, support)." },
@@ -1653,7 +1660,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
       <h4>AutoGPT и BabyAGI: только история</h4>
       <p>AutoGPT (март 2023) и BabyAGI (апрель 2023) — первые публичные демо автономных LLM-агентов. Они показали концепт, но как инструменты для продакшна устарели.</p>
       <p><strong>Историческая ценность:</strong> доказали, что LLM может автономно ставить подцели и итерировать. Запустили волну интереса к агентам.</p>
-      <p><strong>Почему не используются:</strong> хрупкая архитектура, отсутствие надёжного memory management, нет контроля стоимости, бесконечные циклы без guardrails. Современные фреймворки (LangGraph, AutoGen 0.4) решили эти проблемы системно.</p>
+      <p><strong>Почему не используются:</strong> хрупкая архитектура, отсутствие надёжного memory management, нет контроля стоимости, бесконечные циклы без guardrails. Современные фреймворки (LangGraph, Microsoft Agent Framework — преемник AutoGen) решили эти проблемы системно.</p>
 
       <h4>ReAct paper 2022: концепт да, разбор статьи нет</h4>
       <p>ReAct (Yao et al., 2022) — важнейшая концептуальная работа: Thought → Action → Observation цикл лежит в основе большинства современных агентов. Понимать концепт обязательно.</p>
@@ -1662,7 +1669,7 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
       <h4>Сравнение фреймворков как центральная тема</h4>
       <p>В 2023-2024 «какой фреймворк выбрать» было центральным вопросом сообщества. В 2026 этот вопрос устарел как главный фокус:</p>
       <ul>
-        <li>Фреймворки меняются каждые 6 месяцев: LangChain 0.1 → 0.2 → 0.3, AutoGen 0.2 → 0.4 (breaking changes)</li>
+        <li>Фреймворки меняются каждые 6 месяцев: LangChain 0.1 → 0.2 → 0.3, а к 2026 — уже 1.x; AutoGen 0.2 → 0.4 (breaking changes), затем классический AutoGen переведён в maintenance-режим — Microsoft объединил его с Semantic Kernel в Microsoft Agent Framework (2026), а сообщество развивает форк AG2</li>
         <li>Фокус сместился на паттерны и протоколы (MCP, A2A), которые работают поверх фреймворков</li>
         <li>Правило 2026: понимайте паттерны, а не фреймворки. Фреймворк — деталь реализации</li>
       </ul>
@@ -1680,21 +1687,21 @@ Phase 5: VERIFY    → запуск сборки и тестов → \"гото�
 
       <h4>🎯 Мини-кейс</h4>
       <div class="key-concept">
-        <p><strong>Ситуация:</strong> Новый разработчик в команде предлагает «построить агента на AutoGPT — у него 160K звёзд на GitHub». Другой предлагает «добавить в system prompt список из 20 правил безопасности вместо guardrails». Третий хочет потратить спринт на сравнение LangChain vs LlamaIndex.</p>
+        <p><strong>Ситуация:</strong> Новый разработчик в команде предлагает «построить агента на AutoGPT — у него ~180K звёзд на GitHub». Другой предлагает «добавить в system prompt список из 20 правил безопасности вместо guardrails». Третий хочет потратить спринт на сравнение LangChain vs LlamaIndex.</p>
         <p><strong>Правильные подходы:</strong></p>
         <ul>
-          <li><strong>AutoGPT:</strong> объяснить историческую роль, показать почему современные альтернативы (LangGraph, AutoGen 0.4) решают те же задачи надёжнее — и двигаться дальше</li>
+          <li><strong>AutoGPT:</strong> объяснить историческую роль, показать почему современные альтернативы (LangGraph, Microsoft Agent Framework) решают те же задачи надёжнее — и двигаться дальше</li>
           <li><strong>Безопасность:</strong> prompt-правила + output classifier + action whitelist — минимальный layered defense. Звёзды на GitHub не означают production-ready</li>
         </ul>
         <p><strong>Антипаттерн:</strong> тратить время на детальное изучение инструментов, которые изменятся через 6 месяцев. Инвестируйте в понимание паттернов (уроки 8-11) — они остаются актуальными.</p>
       </div>
     `,
     flashcards: [
-      { front: "AutoGPT/BabyAGI: почему устарели?", back: "Историческая ценность: доказали концепт автономных агентов (2023). Не используются в продакшне: хрупкая архитектура, нет контроля стоимости, бесконечные циклы. Заменены LangGraph, AutoGen 0.4." },
+      { front: "AutoGPT/BabyAGI: почему устарели?", back: "Историческая ценность: доказали концепт автономных агентов (2023). Не используются в продакшне: хрупкая архитектура, нет контроля стоимости, бесконечные циклы. Заменены LangGraph и Microsoft Agent Framework (преемник AutoGen)." },
       { front: "ReAct paper: что актуально в 2026?", back: "Концепт Thought→Action→Observation остаётся фундаментальным. Детальный разбор оригинальной статьи 2022 (под GPT-3 era) — не нужен. Достаточно понимать паттерн." },
       { front: "JSON mode без strict: почему устарел?", back: "JSON mode давал ~95% надёжность — недостаточно для продакшна. Замена: structured outputs / strict mode с JSON Schema. OpenAI strict:true, Anthropic tool use. 100% валидность." },
       { front: "Prompt-only guardrails: почему недостаточно?", back: "'Не делай X' в промпте обходится в 30-70% adversarial случаев. Нужен layered defense: prompt + input classifier + output validator + action whitelist + (для критичных систем) reasoning-модель с deliberative alignment." },
-      { front: "Сравнение фреймворков: почему не главный вопрос 2026?", back: "Фреймворки меняются каждые 6 мес (LangChain 0.1→0.3, AutoGen 0.2→0.4 breaking changes). Фокус сместился на паттерны и протоколы (MCP, A2A). Понимайте паттерны — фреймворк детали реализации." },
+      { front: "Сравнение фреймворков: почему не главный вопрос 2026?", back: "Фреймворки меняются каждые 6 мес (LangChain 0.1→0.3, к 2026 — 1.x; AutoGen 0.2→0.4, затем слияние в Microsoft Agent Framework). Фокус сместился на паттерны и протоколы (MCP, A2A). Понимайте паттерны — фреймворк детали реализации." },
       { front: "Академические agent-симуляции", back: "Generative Agents, Society of Mind эксперименты (2023) — интересные исследования, не production-паттерны. Симуляции не масштабируются. Рассматривайте как исследования, не архитектурные референсы." }
     ],
     quiz: [
@@ -1841,13 +1848,13 @@ const finalQuiz = [
   {
     question: "Что такое implicit caching у OpenAI и чем оно отличается от explicit caching Anthropic?",
     options: [
-      "Implicit = автоматически при совпадении ≥1024 токенов prefix (50% скидка). Explicit (Anthropic) = разработчик маркирует cache_control вручную (~90% скидка на cached read)",
+      "Implicit = автоматически при совпадении ≥1024 токенов prefix (скидка 50–80% по моделям). Explicit (Anthropic) = разработчик маркирует cache_control вручную (~90% скидка на cached read)",
       "Это одно и то же, только разные названия",
       "Implicit кэшируется на стороне клиента, explicit — на сервере",
       "Implicit caching работает только для system prompt"
     ],
     correct: 0,
-    explanation: "OpenAI implicit caching: автоматически при совпадении ≥1024 токенов, скидка 50%, не требует настройки. Anthropic explicit: разработчик указывает cache_control, чтение кэша в 10x дешевле ($0.30 vs $3). Разные механизмы, оба полезны."
+    explanation: "OpenAI implicit caching: автоматически при совпадении ≥1024 токенов, скидка 50–80% в зависимости от модели, не требует настройки. Anthropic explicit: разработчик указывает cache_control, чтение кэша в 10x дешевле ($0.30 vs $3). Разные механизмы, оба полезны."
   },
   {
     question: "Почему A2A (Google) и MCP (Anthropic) считаются комплементарными, а не конкурирующими?",

@@ -14,7 +14,7 @@ const courseData = [
     ],
     content: `
       <h4>Смерть Vibe Coding</h4>
-      <p>К 2026 году стало очевидно: <strong>vibe coding</strong> (интуитивная генерация кода на основе коротких промптов) не масштабируется за пределы прототипов. Исследование <strong>METR (Model Evaluation & Threat Research)</strong> показало — разработчики, использующие неструктурированные промпты, в среднем работали <strong>на 19% медленнее</strong> из-за «циклов отладки», которые поглощали время, сэкономленное на генерации.</p>
+      <p>К 2026 году стало очевидно: <strong>vibe coding</strong> (интуитивная генерация кода на основе коротких промптов) не масштабируется за пределы прототипов. Исследование <strong>METR (Model Evaluation & Threat Research)</strong> (arXiv 2507.09089) показало: опытные разработчики, решавшие реальные issues с AI-инструментами, в среднем работали <strong>на 19% медленнее</strong>, чем без них. Исследование сравнивало условия «с AI» и «без AI» и не тестировало структуру промптов; одна из возможных интерпретаций замедления — «циклы отладки», поглощающие время, сэкономленное на генерации (в 2026 METR частично пересмотрела надёжность выводов).</p>
 
       <div class="key-concept">
         <strong>SDD (Specification-Driven Development)</strong> — методология, в которой спецификация выступает как <em>первичный артефакт</em> и источник истины. Код — это «build output», как .c файл компилируется в бинарник. Спецификация = то, что компилируется в код.
@@ -59,7 +59,7 @@ const courseData = [
     `,
     flashcards: [
       { front: "SDD — определение", back: "Specification-Driven Development: спецификация = первичный артефакт и источник истины. Код — это build output, генерируемый из спецификации. Не Waterfall — живые документы, интегрированные в CI/CD." },
-      { front: "Парадокс продуктивности (METR)", back: "Разработчики с неструктурированными промптами на 19% МЕДЛЕННЕЕ: циклы отладки съедают время, сэкономленное на генерации. Решение: строгие спецификации перед кодом." },
+      { front: "Парадокс продуктивности (METR)", back: "METR (arXiv 2507.09089): опытные разработчики с AI на реальных issues — на 19% МЕДЛЕННЕЕ, чем без AI. Одна из интерпретаций — циклы отладки съедают сэкономленное время; структуру промптов исследование не тестировало." },
       { front: "5 уровней зрелости", back: "0: Code-First. 1: Vibe Coding. 2: AI-Assisted. 3: Agentic. 4: SDD (человек=архитектор, AI=исполнитель контрактов). 5: Autonomous pipelines." },
       { front: "TCE и AI-разработка", back: "Теория трансакционных издержек: специфичность активов (код привязан к кодовой базе) + поведенческая неопределённость (LLM недетерминированы) = чем сложнее проект, тем строже должны быть спецификации." },
       { front: "Vibe coding — почему не масштабируется", back: "Короткие промпты → AI угадывает контракт → код «работает», но содержит баги, не покрывает edge cases. За пределами прототипов — циклы отладки разрушают продуктивность." },
@@ -68,15 +68,15 @@ const courseData = [
     ],
     quiz: [
       {
-        question: "Почему разработчики с AI-инструментами работали на 19% медленнее (исследование METR)?",
+        question: "Как чаще всего интерпретируют 19% замедление разработчиков с AI-инструментами (исследование METR)?",
         options: [
           "AI-модели слишком медленные",
-          "Неструктурированные промпты создавали циклы отладки, которые поглощали время, сэкономленное на генерации",
+          "Циклы отладки AI-кода поглощали время, сэкономленное на генерации (одна из возможных интерпретаций — само исследование причины не измеряло)",
           "Разработчики не умели пользоваться AI",
           "AI генерировал слишком много кода"
         ],
         correct: 1,
-        explanation: "METR: неструктурированные промпты → AI генерирует код с ошибками → разработчик тратит время на отладку → общее время растёт. SDD решает это через спецификации."
+        explanation: "METR (arXiv 2507.09089) сравнивала работу опытных разработчиков с AI и без AI на реальных issues и зафиксировала −19%; структура промптов не тестировалась. «Циклы отладки» — распространённая интерпретация. SDD адресует этот риск через спецификации."
       },
       {
         question: "SDD — это:",
@@ -309,15 +309,16 @@ POST /webhooks/stripe → void</code></pre>
     ],
     content: `
       <h4>EARS — Easy Approach to Requirements Syntax</h4>
-      <p>Стандартная нотация для AI-readable спецификаций. Каждый паттерн сводится к одному тестируемому утверждению:</p>
+      <p>Нотацию EARS создал Alistair Mavin с коллегами в Rolls-Royce (доклад на конференции RE'09, 2009). Сегодня это стандартная нотация для AI-readable спецификаций. Каждый паттерн сводится к одному тестируемому утверждению:</p>
 
       <div class="key-concept">
-        <strong>5 паттернов EARS:</strong>
+        <strong>6 паттернов EARS:</strong>
         <br>• <strong>Ubiquitous:</strong> THE [system] SHALL [behavior]
         <br>• <strong>Event-driven:</strong> WHEN [event] THE [system] SHALL [behavior]
         <br>• <strong>State-driven:</strong> WHILE [state] THE [system] SHALL [behavior]
         <br>• <strong>Unwanted behavior:</strong> IF [condition] THEN THE [system] SHALL [response]
         <br>• <strong>Optional:</strong> WHERE [feature] THE [system] SHALL [behavior]
+        <br>• <strong>Complex:</strong> WHILE [state], WHEN [event] THE [system] SHALL [behavior] — комбинация паттернов
       </div>
 
       <h4>Примеры EARS</h4>
@@ -343,7 +344,12 @@ the account for 15 minutes.
 # Optional (опционально)
 WHERE multi-factor authentication is
 enabled THE system SHALL require a TOTP
-code after password validation.</code></pre>
+code after password validation.
+
+# Complex (комбинация While + When)
+WHILE offline mode is active, WHEN the
+user saves a document THE system SHALL
+queue the change for later sync.</code></pre>
 
       <h4>Behavioral Contracts</h4>
       <p>Для каждого компонента — контракт с предусловиями, постусловиями и инвариантами:</p>
@@ -408,7 +414,7 @@ AND cart.status SHALL remain "active"</code></pre>
       </div>
     `,
     flashcards: [
-      { front: "5 паттернов EARS", back: "Ubiquitous (THE system SHALL), Event-driven (WHEN event), State-driven (WHILE state), Unwanted behavior (IF condition THEN), Optional (WHERE feature). Каждый = 1 тестируемый claim." },
+      { front: "6 паттернов EARS", back: "Ubiquitous (THE system SHALL), Event-driven (WHEN event), State-driven (WHILE state), Unwanted behavior (IF condition THEN), Optional (WHERE feature), Complex (комбинация WHILE+WHEN). Каждый = 1 тестируемый claim. Автор нотации — Alistair Mavin с коллегами (Rolls-Royce, RE'09, 2009)." },
       { front: "Behavioral Contract", back: "Preconditions (истинно ДО) + Postconditions (истинно ПОСЛЕ) + Invariants (всегда истинно). Формальный контракт компонента, проверяемый тестами." },
       { front: "Machine-Checkable Spec", back: "Спецификация → проверяемый контракт в CI. Пример: OpenAPI schema в openapi.yaml + swagger-cli validate. Spec становится исполняемым тестом." },
       { front: "EARS vs BDD", back: "EARS = формальный контракт (IF/THEN), пишется системно. BDD = сценарий поведения (GIVEN/WHEN/THEN), пишется как пользовательская история. Дополняют друг друга." },
@@ -503,7 +509,7 @@ AND cart.status SHALL remain "active"</code></pre>
 
       <div class="metric-card">
         <h5>3. GitHub Spec Kit — Open Source</h5>
-        <p>Python CLI, MIT лицензия, 93+ звезды. Agent-agnostic: работает с 8+ AI-ассистентами. .specify/ папка для артефактов. Лучший для: open-source проекты, разнообразие AI-инструментов.</p>
+        <p>Python CLI, MIT лицензия, более 100 тысяч звёзд на GitHub. Agent-agnostic: работает с 30+ AI-ассистентами. .specify/ папка для артефактов. Лучший для: open-source проекты, разнообразие AI-инструментов.</p>
       </div>
 
       <div class="metric-card">
@@ -513,7 +519,7 @@ AND cart.status SHALL remain "active"</code></pre>
 
       <div class="metric-card">
         <h5>5. BMAD-METHOD — Enterprise Planning</h5>
-        <p>12+ ролевых агентов (Analyst, PM, Architect). Docs-as-code подход. Генерация PRD, architecture docs, technical plans. Лучший для: enterprise, framework-heavy проекты.</p>
+        <p>21+ ролевых агентов (Analyst, PM, Architect). Docs-as-code подход. Генерация PRD, architecture docs, technical plans. Лучший для: enterprise, framework-heavy проекты.</p>
       </div>
 
       <div class="metric-card">
@@ -522,8 +528,11 @@ AND cart.status SHALL remain "active"</code></pre>
       </div>
 
       <h4>GitHub Spec Kit: быстрый старт</h4>
-      <pre><code># Установка
-pip install github-spec-kit
+      <pre><code># Установка (через uv)
+uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+
+# Или разово, без установки:
+# uvx --from git+https://github.com/github/spec-kit.git specify init my-project
 
 # Инициализация проекта
 specify init my-project
@@ -556,10 +565,10 @@ specify verify --pr 42
     `,
     flashcards: [
       { front: "Living-spec vs Static-spec", back: "Living: spec автоматически обновляется при изменении кода (Intent). Static: структурирование upfront, ручная синхронизация (Spec Kit). Living лучше для долгосрочных проектов." },
-      { front: "GitHub Spec Kit — ключевые фичи", back: "Python CLI, MIT, agent-agnostic (8+ AI-ассистентов). .specify/ для артефактов. Команды: init, new-feature, implement, verify. Лучший open-source вариант." },
+      { front: "GitHub Spec Kit — ключевые фичи", back: "Python CLI, MIT, agent-agnostic (30+ AI-ассистентов). .specify/ для артефактов. Команды: init, new-feature, implement, verify. Лучший open-source вариант." },
       { front: "Kiro — ограничение для brownfield", back: "Обязательный 3-фазный pipeline (Requirements→Design→Tasks) создаёт friction для brownfield. Команда Kiro признала: «not everyone starts from requirements»." },
       { front: "OpenSpec — модель работы", back: "Proposal-first: Propose (отдельная папка) → Apply (мердж в основную spec) → Archive. Предложенные изменения живут как git-ветки. Лучший для итеративного brownfield." },
-      { front: "BMAD-METHOD", back: "12+ ролевых агентов: Analyst, PM, Architect, etc. Docs-as-code: PRD, architecture docs, technical plans генерируются автоматически. Для enterprise/framework-heavy." },
+      { front: "BMAD-METHOD", back: "21+ ролевых агентов: Analyst, PM, Architect, etc. Docs-as-code: PRD, architecture docs, technical plans генерируются автоматически. Для enterprise/framework-heavy." },
       { front: "Intent Context Engine", back: "Семантический анализ зависимостей в 400K+ файлов. Обнаруживает неявные контракты в legacy. Multi-agent оркестрация. Лучший для brownfield." },
       { front: ".cursorrules — формат", back: "YAML frontmatter + glob-паттерны + правила. Cursor-native, не отделяет spec от кода. Годится для прототипов и Cursor-пользователей, не полноценный SDD." }
     ],
@@ -585,7 +594,7 @@ specify verify --pr 42
         question: "Что значит 'agent-agnostic' в контексте GitHub Spec Kit?",
         options: [
           "Не требует AI",
-          "Работает с любым AI-ассистентом (Claude Code, Cursor, GitHub Copilot, Aider и др.) — 8+ интеграций",
+          "Работает с любым AI-ассистентом (Claude Code, Cursor, GitHub Copilot, Aider и др.) — 30+ интеграций",
           "Работает только с одним AI",
           "Не нужны спецификации"
         ],
@@ -665,23 +674,26 @@ specify verify --pr 42
       </div>
 
       <h4>Версионирование в Git</h4>
-      <pre><code># Структура в репозитории
+      <pre><code># Структура в репозитории (GitHub Spec Kit)
 .specify/
-├── constitution.md        # Immutable principles
-├── features/
-│   ├── auth.md           # Living spec
-│   ├── payments.md       # Living spec
-│   └── notifications.md  # Living spec
-├── plans/
-│   ├── auth-plan.md
-│   └── payments-plan.md
-└── tasks/
-    ├── auth-tasks.md
-    └── payments-tasks.md
+├── memory/
+│   └── constitution.md   # Immutable principles
+├── scripts/              # Скрипты автоматизации фаз
+└── templates/            # Шаблоны spec/plan/tasks
+
+specs/
+├── 001-auth/
+│   ├── spec.md           # Living spec
+│   ├── plan.md
+│   └── tasks.md
+└── 002-payments/
+    ├── spec.md
+    ├── plan.md
+    └── tasks.md
 
 # Git flow для spec changes:
 git checkout -b spec/update-auth
-# Edit auth.md
+# Edit specs/001-auth/spec.md
 git commit -m "spec: add 2FA requirement"
 git push → PR → Review → Merge
 # Spec change triggers:
@@ -713,7 +725,7 @@ steps:
       { front: "3 паттерна предотвращения drift", back: "Change Spec (одно изменение), Dependency Boundary Spec (контракт интеграции), Migration Spec (многофазная миграция). Каждый — для своего scope изменений." },
       { front: "Dependency Boundary Spec", back: "Контракт на границе раздела (между микросервисами/модулями). Валидируется против реального production traffic, а не документации. Критичен при monolith decomposition." },
       { front: "Migration Spec — главное правило", back: "Каждый шаг миграции должен быть независимо deployable. Это позволяет откатиться на любой стадии без потери целостности." },
-      { front: "Git flow для spec", back: "Структура: .specify/ с constitution.md и features/. Изменения spec — через PR с branch spec/*. Merge spec → CI triggers re-generation affected code." },
+      { front: "Git flow для spec", back: "Структура: .specify/ (memory/constitution.md, scripts/, templates/) + specs/<NNN-feature>/ со spec.md, plan.md, tasks.md. Изменения spec — через PR с branch spec/*. Merge spec → CI triggers re-generation affected code." },
       { front: "Drift detection в CI", back: "extract_behavior_from_code vs extract_behavior_from_spec → diff_drift. Если расхождение > threshold (обычно 5%) — PR блокируется. Генерируется drift-report.md." }
     ],
     quiz: [
@@ -802,7 +814,7 @@ jobs:
 
       - name: Parse specifications
         run: |
-          specify parse .specify/features/
+          specify parse specs/
           --output specs.json
 
       - name: Analyze code changes
@@ -851,7 +863,7 @@ jobs:
       <h4>Regression Testing Specs</h4>
       <pre><code># При изменении спецификации:
 specify regression-test \
-  --spec .specify/features/auth.md \
+  --spec specs/001-auth/spec.md \
   --golden golden/auth.json \
   --max-regression 5%
 
@@ -1130,7 +1142,7 @@ method Withdraw(account: Account, amount: nat)
     ],
     content: `
       <h4>Архитектура Spec Kit</h4>
-      <p>GitHub Spec Kit — Python CLI под MIT-лицензией, выпущен GitHub в сентябре 2025. К началу 2026 — 93+ звёзд, активная контрибьюторская база. Идея: <strong>не библиотека шаблонов, а исполнимая методология</strong>.</p>
+      <p>GitHub Spec Kit — Python CLI под MIT-лицензией, выпущен GitHub в сентябре 2025. К середине 2026 — более 100 тысяч звёзд, активная контрибьюторская база. Идея: <strong>не библиотека шаблонов, а исполнимая методология</strong>.</p>
 
       <div class="key-concept">
         <strong>Ядро Spec Kit:</strong>
@@ -1140,30 +1152,31 @@ method Withdraw(account: Account, amount: nat)
         <br>• <code>agents/</code> — адаптеры под AI-ассистенты (Claude Code, Cursor, Aider, Copilot CLI...)
       </div>
 
-      <h4>Структура .specify/</h4>
+      <h4>Структура артефактов</h4>
       <pre><code>.specify/
-├── config.yaml           # Конфигурация проекта
-├── constitution.md       # Phase 0
-├── features/
-│   └── &lt;feature&gt;/
-│       ├── spec.md       # Phase 1: Specify
-│       ├── clarify.md    # Phase 2: Clarify (Q&A)
-│       ├── plan.md       # Phase 3: Plan
-│       ├── tasks.md      # Phase 4: Tasks
-│       └── compliance/   # Reports от verify
-└── golden/
-    └── &lt;feature&gt;.json    # Эталонные сценарии</code></pre>
+├── memory/
+│   └── constitution.md   # Phase 0
+├── scripts/              # Скрипты автоматизации фаз
+└── templates/            # Шаблоны spec/plan/tasks
+
+specs/
+└── &lt;NNN-feature-name&gt;/   # Например, 001-user-auth
+    ├── spec.md           # Phase 1: Specify
+    ├── plan.md           # Phase 3: Plan
+    └── tasks.md          # Phase 4: Tasks</code></pre>
+      <p>Результаты Phase 2 (/clarify) записываются в секцию Clarifications внутри spec.md. Отдельные clarify.md, compliance/ и golden/ — не часть официального Spec Kit; далее в уроке они используются как <strong>авторское расширение</strong> структуры.</p>
 
       <h4>Slash-команды</h4>
-      <p>Spec Kit добавляет slash-команды в поддерживаемые AI-ассистенты. Стандартные:</p>
+      <p>Spec Kit добавляет slash-команды в поддерживаемые AI-ассистенты (в новых версиях — с префиксом <code>/speckit.*</code>). Стандартные:</p>
       <ul>
+        <li><code>/constitution</code> — создание/обновление принципов проекта (Phase 0)</li>
         <li><code>/specify &lt;feature&gt;</code> — старт новой фичи, генерирует spec.md skeleton</li>
-        <li><code>/clarify</code> — запускает интерактивный clarify-проход</li>
+        <li><code>/clarify</code> — запускает интерактивный clarify-проход (ответы — в spec.md)</li>
         <li><code>/plan</code> — генерирует plan.md из spec.md</li>
         <li><code>/tasks</code> — декомпозиция plan.md в tasks.md</li>
-        <li><code>/implement &lt;task-id&gt;</code> — генерация кода под конкретную задачу</li>
-        <li><code>/verify</code> — spec-compliance check</li>
+        <li><code>/implement</code> — исполнение задач из tasks.md</li>
       </ul>
+      <p>Команды <code>/verify</code> в официальном наборе нет — далее она используется как гипотетическое расширение для spec-compliance check.</p>
 
       <h4>Кастомные команды</h4>
       <p>В <code>.specify/commands/</code> можно добавить свои команды:</p>
@@ -1183,10 +1196,10 @@ For each item:
 - Evidence: ссылка на код или spec-section
 - Recommended action
 
-Output: .specify/features/{{feature}}/security.md</code></pre>
+Output: specs/{{feature}}/security.md</code></pre>
 
       <h4>Agent-агностичность через адаптеры</h4>
-      <p>Spec Kit поддерживает 8+ AI-ассистентов через единый интерфейс:</p>
+      <p>Spec Kit поддерживает 30+ AI-ассистентов через единый интерфейс:</p>
       <pre><code># Claude Code (CLAUDE.md инжектируется автоматически)
 specify implement --agent claude-code
 
@@ -1216,7 +1229,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Spec Kit
-        run: pip install github-spec-kit
+        run: |
+          pip install uv
+          uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
 
       - name: Verify PR against specs
         run: |
@@ -1231,7 +1246,8 @@ jobs:
             --golden .specify/golden/ \\
             --max-regression 5</code></pre>
 
-      <h4>Расширения Spec Kit (2026)</h4>
+      <h4>Идеи расширений (гипотетические примеры)</h4>
+      <p>Следующие расширения — <strong>не существующие пакеты</strong>, а иллюстрация того, как могла бы развиваться экосистема Spec Kit:</p>
       <ul>
         <li><strong>specify-mcp</strong> — MCP server, отдающий .specify/ как контекст для любого AI</li>
         <li><strong>specify-export</strong> — экспорт в OpenAPI, JSON Schema, AsyncAPI</li>
@@ -1245,11 +1261,11 @@ jobs:
     `,
     flashcards: [
       { front: "Лицензия и природа Spec Kit", back: "GitHub Spec Kit: Python CLI, MIT-лицензия, выпущен GitHub в сентябре 2025. Не библиотека шаблонов, а исполнимая методология (CLI + templates + adapters)." },
-      { front: "Структура .specify/", back: "config.yaml + constitution.md + features/<name>/{spec,clarify,plan,tasks}.md + golden/<name>.json. Каждая фича — отдельная папка под features/." },
-      { front: "6 стандартных slash-команд", back: "/specify, /clarify, /plan, /tasks, /implement, /verify. Покрывают весь SDD-pipeline. Каждая команда — markdown с frontmatter, можно копировать и кастомизировать." },
-      { front: "Agent-агностичность", back: "Spec Kit поддерживает 8+ AI-ассистентов через адаптеры: claude-code, cursor, copilot, aider, qwen-code, etc. Единая команда specify implement --agent <name>." },
+      { front: "Структура артефактов Spec Kit", back: ".specify/ (memory/constitution.md, scripts/, templates/) + specs/<NNN-feature-name>/{spec,plan,tasks}.md. Каждая фича — отдельная нумерованная папка под specs/. Результаты clarify — секция Clarifications в spec.md." },
+      { front: "6 стандартных slash-команд", back: "/constitution, /specify, /clarify, /plan, /tasks, /implement (в новых версиях — с префиксом /speckit.*). Покрывают весь SDD-pipeline. Команды /verify нет — это гипотетическое расширение. Каждая команда — markdown с frontmatter, можно копировать и кастомизировать." },
+      { front: "Agent-агностичность", back: "Spec Kit поддерживает 30+ AI-ассистентов через адаптеры: claude-code, cursor, copilot, aider, qwen-code, etc. Единая команда specify implement --agent <name>." },
       { front: "Кастомные команды", back: "В .specify/commands/ можно добавить свои markdown-команды с frontmatter (name, description, inputs). Пример: /security-review, /threat-model, /pii-audit." },
-      { front: "Расширения 2026", back: "specify-mcp (MCP server для контекста), specify-export (OpenAPI/JSON Schema/AsyncAPI), specify-ide (VS Code extension), specify-mutation (мутационное тестирование спецификаций)." },
+      { front: "Идеи расширений (гипотетические)", back: "specify-mcp (MCP server для контекста), specify-export (OpenAPI/JSON Schema/AsyncAPI), specify-ide (VS Code extension), specify-mutation (мутационное тестирование спецификаций). Иллюстративные примеры, а не существующие пакеты." },
       { front: "Как Spec Kit инжектируется в Claude Code", back: "При --agent claude-code Spec Kit генерирует CLAUDE.md с инструкциями плюс slash-команды как файлы в .claude/commands/. AI получает доступ к контексту через стандартный механизм Claude Code." }
     ],
     quiz: [
@@ -1265,15 +1281,15 @@ jobs:
         explanation: "Spec Kit — не просто markdown-шаблоны, а CLI, оркестрирующий все фазы SDD через slash-команды и адаптеры под разные AI-ассистенты."
       },
       {
-        question: "Что лежит в .specify/features/<feature>/?",
+        question: "Что лежит в specs/<NNN-feature-name>/?",
         options: [
           "Только spec.md",
-          "spec.md + clarify.md + plan.md + tasks.md + compliance/",
+          "spec.md + plan.md + tasks.md",
           "Только golden dataset",
           "Юнит-тесты"
         ],
         correct: 1,
-        explanation: "Каждая фича — отдельная папка с артефактами всех фаз SDD: spec (Phase 1), clarify (Phase 2), plan (Phase 3), tasks (Phase 4), compliance/ (отчёты verify)."
+        explanation: "Каждая фича — отдельная нумерованная папка под specs/ с артефактами фаз SDD: spec.md (Phase 1, включая секцию Clarifications из Phase 2), plan.md (Phase 3), tasks.md (Phase 4)."
       },
       {
         question: "Как добавить кастомную команду в Spec Kit?",
@@ -1290,7 +1306,7 @@ jobs:
         question: "Что означает 'agent-agnostic' в Spec Kit?",
         options: [
           "Не использует AI",
-          "Работает с 8+ AI-ассистентами через адаптеры (claude-code, cursor, copilot, aider, qwen-code, ...)",
+          "Работает с 30+ AI-ассистентами через адаптеры (claude-code, cursor, copilot, aider, qwen-code, ...)",
           "Только для GitHub Copilot",
           "Запускается без интернета"
         ],
@@ -1298,7 +1314,7 @@ jobs:
         explanation: "Spec Kit имеет отдельные адаптеры для каждого AI-ассистента, конвертирующие SDD-pipeline в специфичные для агента артефакты (CLAUDE.md для Claude Code, .cursorrules для Cursor и т.д.)."
       },
       {
-        question: "Что делает расширение specify-mcp?",
+        question: "Что делал бы specify-mcp — гипотетическое расширение из урока?",
         options: [
           "Запускает MCP server, отдающий содержимое .specify/ как контекст для любого MCP-совместимого AI",
           "Подменяет git",
@@ -1306,7 +1322,7 @@ jobs:
           "Это IDE-плагин"
         ],
         correct: 0,
-        explanation: "specify-mcp реализует Model Context Protocol сервер: подключает .specify/ как контекст к любому MCP-клиенту (Claude Desktop, Claude Code, кастомные агенты)."
+        explanation: "specify-mcp (иллюстративный пример, не существующий пакет) реализовывал бы Model Context Protocol сервер: подключение .specify/ как контекста к любому MCP-клиенту (Claude Desktop, Claude Code, кастомные агенты)."
       }
     ],
     sources: [
@@ -1326,7 +1342,7 @@ jobs:
     ],
     content: `
       <h4>Что такое Kiro</h4>
-      <p>AWS Kiro — agentic IDE с встроенным SDD-режимом, представленный в превью на re:Invent 2025. Ключевое отличие: <strong>SDD-pipeline встроен в редактор</strong>, а не запускается через CLI.</p>
+      <p>AWS Kiro — agentic IDE с встроенным SDD-режимом. Публичное превью открылось 14–15 июля 2025 на AWS Summit New York, general availability — 17 ноября 2025. Ключевое отличие: <strong>SDD-pipeline встроен в редактор</strong>, а не запускается через CLI.</p>
 
       <div class="key-concept">
         <strong>3-фазный pipeline Kiro:</strong>
@@ -1347,40 +1363,46 @@ jobs:
       </ol>
 
       <h4>Event-driven Hooks</h4>
-      <p>Kiro поддерживает hooks, реагирующие на события IDE:</p>
-      <pre><code># .kiro/hooks/on-file-save.yml
-trigger: file.save
-filter: "src/**/*.ts"
-action:
-  - name: spec-compliance
-    prompt: |
-      Файл {{filename}} был изменён.
-      Проверь его соответствие .kiro/specs/{{feature}}/requirements.md.
-      Если есть drift — предложи обновление spec ИЛИ rollback кода.
+      <p>Kiro поддерживает hooks — JSON-файлы в <code>.kiro/hooks/</code>, реагирующие на локальные события IDE (PostFileSave, PostFileCreate, PostFileDelete, SessionStart и др.). Триггеров на PR-события не существует — такую автоматизацию выносят в CI:</p>
+      <pre><code>// .kiro/hooks/spec-compliance.json
+{
+  "name": "spec-compliance-on-save",
+  "trigger": "PostFileSave",
+  "matcher": "src/.*\\\\.ts$",
+  "action": {
+    "type": "agent",
+    "prompt": "Файл сохранён. Проверь его соответствие .kiro/specs/&lt;feature&gt;/requirements.md. Если есть drift — предложи обновление spec ИЛИ rollback кода."
+  },
+  "enabled": true
+}
 
-# .kiro/hooks/on-pr-open.yml
-trigger: pr.open
-action:
-  - name: generate-test-cases
-    prompt: |
-      Сгенерируй test cases для каждого EARS-требования
-      в .kiro/specs/{{feature}}/requirements.md.</code></pre>
+// .kiro/hooks/generate-tests.json
+{
+  "name": "generate-tests-on-requirements-save",
+  "trigger": "PostFileSave",
+  "matcher": "requirements\\\\.md$",
+  "action": {
+    "type": "agent",
+    "prompt": "Сгенерируй test cases для каждого EARS-требования в сохранённом requirements.md."
+  },
+  "enabled": true
+}</code></pre>
 
       <h4>Steering Docs</h4>
       <p>Kiro имеет понятие <strong>steering docs</strong> — постоянного контекста проекта в <code>.kiro/steering/</code>:</p>
       <pre><code>.kiro/
 ├── steering/
-│   ├── tech-stack.md     # Constitution-эквивалент
-│   ├── conventions.md    # Coding standards
-│   └── security.md       # Security rules
+│   ├── product.md        # Продукт и цели (constitution-эквивалент)
+│   ├── tech.md           # Стек и coding standards
+│   └── structure.md      # Структура проекта (+ свои кастомные файлы)
 ├── specs/
 │   └── &lt;feature&gt;/
 │       ├── requirements.md
 │       ├── design.md
 │       └── tasks.md
 └── hooks/
-    ├── on-file-save.yml
-    └── on-pr-open.yml</code></pre>
+    ├── spec-compliance.json
+    └── generate-tests.json</code></pre>
 
       <h4>Сравнение Kiro и Spec Kit</h4>
       <div class="metric-card">
@@ -1420,17 +1442,17 @@ action:
       </ul>
 
       <div class="key-concept">
-        <strong>Мини-кейс:</strong> Стартап на AWS Bedrock выбрал Kiro для нового микросервиса. За 5 недель: 18 фич полностью прошли 3-фазный pipeline, on-file-save hook автоматически детектировал 14 spec drift, on-pr-open hook генерировал test cases. Минус: при попытке портировать spec в open-source репо столкнулись с vendor lock-in — пришлось переписывать в Spec Kit формате (1 неделя работы).
+        <strong>Мини-кейс:</strong> Стартап на AWS Bedrock выбрал Kiro для нового микросервиса. За 5 недель: 18 фич полностью прошли 3-фазный pipeline, hook на PostFileSave автоматически детектировал 14 spec drift и генерировал test cases по EARS-требованиям. Минус: при попытке портировать spec в open-source репо столкнулись с vendor lock-in — пришлось переписывать в Spec Kit формате (1 неделя работы).
       </div>
     `,
     flashcards: [
-      { front: "Kiro — что это", back: "AWS Kiro: agentic IDE с встроенным SDD-pipeline. Представлен в превью на re:Invent 2025. Глубокая интеграция с AWS Bedrock и CodeCatalyst." },
+      { front: "Kiro — что это", back: "AWS Kiro: agentic IDE с встроенным SDD-pipeline. Публичное превью — 14–15 июля 2025 (AWS Summit New York), GA — 17 ноября 2025. Глубокая интеграция с AWS Bedrock и CodeCatalyst." },
       { front: "3 фазы Kiro Spec Mode", back: "Requirements (EARS) → Design (архитектура) → Tasks (атомарные задачи). Нет отдельной Constitution-фазы — она в steering docs." },
-      { front: "Steering Docs", back: "Постоянный контекст проекта в .kiro/steering/: tech-stack.md, conventions.md, security.md. Аналог constitution.md в Spec Kit, но автоматически инжектируется в каждый AI-вызов IDE." },
-      { front: "Event-driven hooks", back: "YAML-файлы в .kiro/hooks/, реагируют на события IDE (file.save, pr.open). Каждый hook выполняет prompt с переменными ({{filename}}, {{feature}}). Автоматизация рутинных задач." },
+      { front: "Steering Docs", back: "Постоянный контекст проекта в .kiro/steering/: product.md, tech.md, structure.md (+ кастомные файлы). Аналог constitution.md в Spec Kit, но автоматически инжектируется в каждый AI-вызов IDE." },
+      { front: "Event-driven hooks", back: "JSON-файлы в .kiro/hooks/, реагируют на локальные события IDE (PostFileSave, PostFileCreate, PostFileDelete, SessionStart и др.). Триггеров на PR-события нет. Каждый hook запускает prompt для агента или команду. Автоматизация рутинных задач." },
       { front: "Когда выбирать Kiro", back: "AWS-центричный стек, greenfield, IDE-native опыт нужен, автоматизация через hooks. Не годится: brownfield (жёсткий pipeline), open-source (vendor lock-in)." },
       { front: "Главная слабость Kiro", back: "Vendor lock-in: spec-формат — Kiro-specific. Портирование в Spec Kit или другой инструмент требует переписывания. Привязка к AWS." },
-      { front: "Kiro vs Spec Kit — формат spec", back: "Kiro: .kiro/specs/<feature>/{requirements,design,tasks}.md (закрытый формат). Spec Kit: .specify/features/<feature>/{spec,clarify,plan,tasks}.md (открытый MIT)." }
+      { front: "Kiro vs Spec Kit — формат spec", back: "Kiro: .kiro/specs/<feature>/{requirements,design,tasks}.md (закрытый формат). Spec Kit: specs/<NNN-feature-name>/{spec,plan,tasks}.md (открытый MIT)." }
     ],
     quiz: [
       {
@@ -1448,10 +1470,10 @@ action:
           "Лог-файлы IDE"
         ],
         correct: 1,
-        explanation: "Steering docs: tech-stack.md, conventions.md, security.md. Это immutable context, всегда передаваемый AI."
+        explanation: "Steering docs: product.md, tech.md, structure.md (плюс кастомные файлы). Это immutable context, всегда передаваемый AI."
       },
       {
-        question: "Когда event-driven hook on-file-save полезен?",
+        question: "Когда event-driven hook на PostFileSave полезен?",
         options: [
           "Никогда",
           "Автоматически проверять spec drift при каждом сохранении изменённого файла, до коммита",
@@ -1459,7 +1481,7 @@ action:
           "Только для CI"
         ],
         correct: 1,
-        explanation: "on-file-save hook ловит изменения раньше, чем они доходят до CI. Drift детектируется на этапе работы в IDE, а не на PR."
+        explanation: "Hook на PostFileSave ловит изменения раньше, чем они доходят до CI. Drift детектируется на этапе работы в IDE, а не на PR."
       },
       {
         question: "Главный минус Kiro для open-source проектов:",
@@ -1485,8 +1507,8 @@ action:
       }
     ],
     sources: [
-      { title: "AWS Kiro Announcement (re:Invent 2025)", url: "https://aws.amazon.com/kiro/", icon: "🔗" },
-      { title: "Kiro Spec Mode Documentation", url: "https://docs.aws.amazon.com/kiro/latest/userguide/spec-mode.html", icon: "📚" },
+      { title: "AWS Kiro (официальный сайт)", url: "https://kiro.dev/", icon: "🔗" },
+      { title: "Kiro Specs Documentation", url: "https://kiro.dev/docs/specs/", icon: "📚" },
       { title: "6 Best SDD Tools for AI Coding 2026 (Augment Code)", url: "https://www.augmentcode.com/tools/best-spec-driven-development-tools", icon: "📄" }
     ]
   },
@@ -1686,11 +1708,9 @@ action:
                        │ reports      │
                        └──────────────┘</code></pre>
 
-      <h4>specify-mcp: сервер для Spec Kit</h4>
-      <pre><code># Установка
-pip install specify-mcp
-
-# Запуск сервера на проекте
+      <h4>specify-mcp: как мог бы выглядеть MCP-сервер для Spec Kit</h4>
+      <p>Далее — <strong>гипотетический пример</strong>: пакета specify-mcp не существует, но он иллюстрирует, как устроен MCP-сервер для спецификаций (такой сервер несложно написать самим).</p>
+      <pre><code># Запуск сервера на проекте
 specify-mcp serve --project .
 
 # Подключение в Claude Desktop:
@@ -1780,14 +1800,14 @@ Claude: [читает spec://features/payment-retry]
       </ul>
 
       <div class="key-concept">
-        <strong>Мини-кейс:</strong> Команда внедрила specify-mcp вместо инжекции spec в каждый промпт. Token cost снизился на 67% (агент берёт только нужные секции spec). Качество не упало — spec compliance 96% (было 94% при копировании всего spec в промпт). Бонус: при изменении spec последующие задачи автоматически видят новую версию.
+        <strong>Мини-кейс:</strong> Команда внедрила собственный spec-MCP-сервер (по образцу specify-mcp из примера выше) вместо инжекции spec в каждый промпт. Token cost снизился на 67% (агент берёт только нужные секции spec). Качество не упало — spec compliance 96% (было 94% при копировании всего spec в промпт). Бонус: при изменении spec последующие задачи автоматически видят новую версию.
       </div>
     `,
     flashcards: [
       { front: "MCP — что это и кто создал", back: "Model Context Protocol — открытый протокол от Anthropic (ноябрь 2024) для подключения LLM к внешним источникам контекста. К 2026 — стандарт de-facto." },
       { front: "Зачем MCP в SDD", back: "Spec становится live-контекстом для AI. Вместо инжекции всего spec в промпт — AI делает lazy fetch только нужных секций. Обновления spec видны автоматически." },
-      { front: "specify-mcp — что отдаёт", back: "Resources: spec://constitution, spec://features/<name>, spec://compliance/<feature>, spec://drift, spec://golden/<feature>. Каждый ресурс — markdown или JSON." },
-      { front: "specify-mcp — какие tools", back: "verify_compliance(), run_golden_test(), detect_drift(), propose_spec_change(), list_acceptance_criteria(). AI вызывает их в процессе работы." },
+      { front: "specify-mcp (гипотетический пример) — что отдаёт", back: "Resources: spec://constitution, spec://features/<name>, spec://compliance/<feature>, spec://drift, spec://golden/<feature>. Каждый ресурс — markdown или JSON. Не существующий пакет, а иллюстрация дизайна spec-MCP-сервера." },
+      { front: "specify-mcp (гипотетический пример) — какие tools", back: "verify_compliance(), run_golden_test(), detect_drift(), propose_spec_change(), list_acceptance_criteria(). AI вызывает их в процессе работы." },
       { front: "Главное преимущество spec через MCP vs в промпте", back: "Token cost ниже (lazy fetch), обновления видны автоматически (live), compliance check доступен как tool, drift detection встроен." },
       { front: "Безопасность MCP-сервера", back: "Read-only по умолчанию, write tools требуют grant, stdio/TLS transport, audit log, никаких credentials в spec (используйте env placeholders)." },
       { front: "Поддержка MCP в AI-агентах", back: "К 2026: Claude Desktop, Claude Code, Cursor, GitHub Copilot, Aider, OpenAI API. Подключение через config (claude_desktop_config.json или эквивалент)." }
@@ -1816,7 +1836,7 @@ Claude: [читает spec://features/payment-retry]
         explanation: "Token cost ниже (lazy fetch), spec обновляется автоматически (live), AI вызывает verify_compliance() как tool. Это качественно другой режим работы."
       },
       {
-        question: "Какой resource отдаёт specify-mcp для отчёта о drift?",
+        question: "Какой resource отдаёт spec-MCP-сервер (пример specify-mcp) для отчёта о drift?",
         options: [
           "spec://drift",
           "spec://compliance",
@@ -1931,8 +1951,9 @@ Output JSON.</code></pre>
 
       <h4>Mutation score</h4>
       <pre><code># Запуск мутационного теста
+# (specify-mutation — гипотетический инструмент, см. урок 8)
 specify-mutation run \\
-  --spec .specify/features/auth.md \\
+  --spec specs/001-auth/spec.md \\
   --mutators drop,negate,swap,threshold \\
   --tests tests/auth/
 
@@ -2254,7 +2275,7 @@ const finalQuiz = [
   { question: "Spec Theater — это:", options: ["Театр про SDD", "Spec написан, но не проверяется автоматически — бесполезная бюрократия", "Интересный UI для spec", "Формальный метод"], correct: 1, explanation: "Spec Theater: spec есть, верификации нет. Антидот: spec-compliance gate в CI с блокировкой merge." },
   { question: "Сколько фаз в Kiro Spec Mode?", options: ["2 (Spec + Code)", "3 (Requirements → Design → Tasks)", "6 (как в Spec Kit)", "Не структурирован"], correct: 1, explanation: "Kiro: 3-фазный pipeline Requirements (EARS) → Design (архитектура) → Tasks. Constitution встроен в steering docs." },
   { question: "Кто ввёл термин 'vibe coding' и когда?", options: ["Anthropic, 2024", "Andrej Karpathy, февраль 2025", "GitHub, 2023", "AWS, 2026"], correct: 1, explanation: "Karpathy в феврале 2025 описал стиль vibe coding — интуитивный, через короткие промпты. Подходит для прототипов, но не масштабируется." },
-  { question: "Что такое MCP в контексте SDD?", options: ["Тип AI-модели", "Model Context Protocol — открытый протокол от Anthropic для подключения LLM к spec как live-контексту", "CI-инструмент", "База данных"], correct: 1, explanation: "MCP (Anthropic, ноябрь 2024) — открытый протокол. specify-mcp отдаёт .specify/ как live-контекст для AI вместо инжекции в промпт." },
+  { question: "Что такое MCP в контексте SDD?", options: ["Тип AI-модели", "Model Context Protocol — открытый протокол от Anthropic для подключения LLM к spec как live-контексту", "CI-инструмент", "База данных"], correct: 1, explanation: "MCP (Anthropic, ноябрь 2024) — открытый протокол. Spec-MCP-сервер (как гипотетический specify-mcp из урока 11) отдаёт .specify/ как live-контекст для AI вместо инжекции в промпт." },
   { question: "Какой Cohen's kappa нужен, чтобы использовать LLM-as-judge как production gate для spec?", options: ["κ > 0.3", "κ > 0.8 — высокое согласие с экспертами", "κ > 0.5", "Любой"], correct: 1, explanation: "κ > 0.8 — high agreement, judge можно ставить gate. κ 0.6-0.8 — moderate signal. κ < 0.6 — judge ненадёжен." },
   { question: "В чём ключевое различие SDD и Design-by-Contract (DbC)?", options: ["Они идентичны", "SDD: контракт внешний (.specify/), CI verification. DbC: контракт внутри кода (@require/@ensure), runtime verification", "DbC устарел", "SDD не работает с DbC"], correct: 1, explanation: "SDD: .specify/spec.md + CI. DbC (Eiffel, icontract): runtime pre/postconditions в коде. Можно использовать слоисто." },
   { question: "DafnyPro (POPL 2026) — это:", options: ["IDE для Python", "LLM + формальная верификация: 86% correct proofs на DafnyBench", "SDD-фреймворк", "Инструмент для CI/CD"], correct: 1, explanation: "DafnyPro: LLM генерирует verification annotations + proof hints, Dafny математически доказывает. 86% correct proofs на DafnyBench." }

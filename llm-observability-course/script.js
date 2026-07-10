@@ -17,7 +17,7 @@ const courseData = [
       <p>Традиционный мониторинг отвечает на вопрос: <em>«Работает ли система?»</em> LLM Observability отвечает на вопрос: <em>«Почему модель повела себя именно так?»</em> HTTP-коды и время отклика БД не способны зафиксировать семантический дрейф, галлюцинации и непредсказуемое потребление токенов.</p>
 
       <div class="key-concept">
-        <strong>Silent success — главный антипаттерн LLM:</strong> система возвращает HTTP 200 OK с грамматически безупречным ответом, который при этом фактически неверен. Datadog в обзоре post-mortem 2025 года показал: 67% инцидентов с LLM-приложениями в продакшне имели HTTP 2xx, а проблема была обнаружена через пользовательскую жалобу. Traditional APM здесь бесполезен.
+        <strong>Silent success — главный антипаттерн LLM:</strong> система возвращает HTTP 200 OK с грамматически безупречным ответом, который при этом фактически неверен. Такой качественный отказ не виден в HTTP-кодах и часто обнаруживается только через пользовательскую жалобу. Для масштаба: по данным Datadog «State of AI Engineering 2026», ~5% production LLM-запросов (примерно 1 из 20) завершаются явной ошибкой — а качественные отказы происходят поверх этого и вовсе не попадают в статистику ошибок. Traditional APM здесь бесполезен.
       </div>
 
       <h4>Трилемма оценки</h4>
@@ -48,7 +48,7 @@ const courseData = [
       { front: "LLM Observability vs APM", back: "APM: «Работает ли система?» (HTTP-коды, latency). LLM Obs: «Почему модель повела себя так?» (галлюцинации, дрейф, токены, качество ответов)." },
       { front: "Трилемма оценки", back: "Выбор 2 из 3: (1) автоматические метрики — быстрые/дешёвые, (2) человеческая оценка — качественная/дорогая, (3) LLM-as-Judge — сбалансированный подход." },
       { front: "Как LLM «молча» выходят из строя?", back: "Генерируют фактически неверный, но грамматически правильный текст. Попадают в бесконечные циклы tool calls. Уязвимы к prompt injection. Без observability это невидимо." },
-      { front: "Silent success", back: "Главный антипаттерн LLM: HTTP 200 OK + галлюцинация. Datadog 2025: 67% LLM-инцидентов имели HTTP 2xx, проблема всплыла через жалобу пользователя." },
+      { front: "Silent success", back: "Главный антипаттерн LLM: HTTP 200 OK + галлюцинация. Качественный отказ не виден в HTTP-кодах и APM — часто всплывает через жалобу пользователя. Явные ошибки (по Datadog, ~5% LLM-запросов) — лишь видимая часть проблем." },
       { front: "Юридический риск галлюцинаций", back: "Mata v. Avianca: адвокат отправил в суд вымышленные прецеденты. Air Canada 2024: чат-бот выдумал refund policy — суд обязал компанию исполнить. Observability = compliance." },
       { front: "Non-determinism в проде", back: "Одинаковый промпт → разный ответ. Стандартные unit-тесты неприменимы. Нужны distribution-based метрики (p95, drift) и semantic validators." },
       { front: "Без observability — debugging вслепую", back: "Нет трейса = нет воспроизведения. Нет токенов = нет cost-контроля. Нет drift-детекции = деградация на месяцы незаметна. LLM Observability — не nice-to-have." }
@@ -113,8 +113,8 @@ const courseData = [
     sources: [
       { title: "The Complete Guide to LLM Observability (Portkey, 2026)", url: "https://portkey.ai/blog/the-complete-guide-to-llm-observability/", icon: "📄" },
       { title: "LLM Application Lifecycle (Applied AI, 2025)", url: "https://www.applied-ai.com/briefings/llm-application-lifecycle/", icon: "📄" },
-      { title: "Air Canada chatbot postmortem (Dev.to)", url: "https://dev.to/johalputt/postmortem-our-ai-powered-chatbot-hallucinated-sensitive-data", icon: "📄" },
-      { title: "Datadog LLM Observability 2025 report", url: "https://www.datadoghq.com/blog/llm-otel-semantic-convention/", icon: "📄" }
+      { title: "Moffatt v. Air Canada, 2024 BCCRT 149 — case analysis (McCarthy Tétrault)", url: "https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot", icon: "📄" },
+      { title: "Datadog State of AI Engineering (2026)", url: "https://www.datadoghq.com/state-of-ai-engineering/", icon: "📄" }
     ]
   },
   {
@@ -157,7 +157,7 @@ const courseData = [
 
       <h4>Prompt caching observability</h4>
       <div class="key-concept">
-        <strong>Cache hit rate = cache_read / (cache_read + input_tokens).</strong> Целевой диапазон 80–95%. Anthropic: <code>cache_control</code> явный, чтение = 10% цены входа, запись = 125%. OpenAI: автоматически от 1024 токенов, кэш = 50% цены. Без мониторинга hit rate деньги уходят, но не ясно — кэш промахивается из-за неверного breakpoint или потому что трафик действительно уникальный.
+        <strong>Cache hit rate = cache_read / (cache_read + input_tokens).</strong> Целевой диапазон 80–95%. Anthropic: <code>cache_control</code> явный, чтение = 10% цены входа, запись = 125%. OpenAI: автоматически от 1024 токенов; на текущих моделях (GPT-5.6+) чтение = 10% цены входа, запись = 125%, TTL фиксирован 30 минут. Без мониторинга hit rate деньги уходят, но не ясно — кэш промахивается из-за неверного breakpoint или потому что трафик действительно уникальный.
       </div>
 
       <h4>Атрибуция затрат (FinOps)</h4>
@@ -170,21 +170,21 @@ const courseData = [
         <li><strong>Error Rate</strong> — ошибки API, rate limits, таймауты</li>
         <li><strong>Длина ответа</strong> — гистограммы помогают выявить деградацию (слишком краткие или избыточные ответы)</li>
         <li><strong>Дрейф (Drift)</strong> — изменение распределения входных или выходных данных с течением времени</li>
-        <li><strong>Tool-call success rate</strong> — для агентов: процент tool-calls с валидным parsing (38% production agent failures = malformed JSON)</li>
+        <li><strong>Tool-call success rate</strong> — для агентов: процент tool-calls с валидным parsing (malformed JSON в tool-call аргументах — одна из самых частых категорий production agent failures)</li>
       </ul>
 
       <div class="key-concept">
-        <strong>Мини-кейс «Агент за $4 200 за 63 часа»:</strong> в публичном postmortem (Medium, 2026) команда выкатила агента с tool-use, у которого один из инструментов возвращал длинный JSON. Агент не валидировал размер ответа, повторял вызов с уточняющим контекстом, попадал в цикл «уточнить → расширить контекст → снова уточнить». За 63 часа израсходовано $4 200. Token volume alert на p99 окне 5 минут поймал бы это за первые 10 минут. Cost alert на средние — нет.
+        <strong>Мини-кейс «Агент за $4 200 за 63 часа» (иллюстративный сценарий):</strong> команда выкатила агента с tool-use, у которого один из инструментов возвращал длинный JSON. Агент не валидировал размер ответа, повторял вызов с уточняющим контекстом, попадал в цикл «уточнить → расширить контекст → снова уточнить». За 63 часа израсходовано $4 200. Token volume alert на p99 окне 5 минут поймал бы это за первые 10 минут. Cost alert на средние — нет.
       </div>
     `,
     flashcards: [
       { front: "TTFT vs TPOT/ITL", back: "TTFT = время до первого токена (отзывчивость). TPOT/ITL = время на каждый последующий токен (скорость печати). Оба критичны для streaming UX. Таргеты: TTFT <500мс, TPOT <100мс." },
       { front: "Почему P99 latency важнее среднего?", back: "Среднее скрывает outliers. P99 показывает худшие случаи — KV-cache evictions, batching interference, троттлинг провайдера, неоптимальные промпты." },
       { front: "Token accounting детализация", back: "input_tokens + output_tokens + cached_tokens + reasoning_tokens + audio/image_tokens. Без детализации невозможно понять, куда уходят деньги." },
-      { front: "Cache hit rate", back: "cache_read / (cache_read + input_tokens). Таргет 80–95%. Anthropic cache_read = 10% цены, OpenAI = 50%. Без мониторинга hit rate расходы на cache писать = 125% — деньги в трубу." },
+      { front: "Cache hit rate", back: "cache_read / (cache_read + input_tokens). Таргет 80–95%. Cache read = 10% цены входа (Anthropic и OpenAI GPT-5.6+). Без мониторинга hit rate расходы на cache write = 125% — деньги в трубу." },
       { front: "Token volume vs request rate для cost-алертов", back: "Request rate бесполезен: один request может стоить как 10. Цикл tool-use → 1 request, но 100K токенов. Алерт всегда на token volume или $ cost, не на rate." },
       { front: "Reasoning tokens", back: "o1, o3, Claude extended thinking генерируют скрытые reasoning токены, которые тарифицируются. Без отдельного учёта reasoning_tokens cost-модель неверна на 2-5x." },
-      { front: "Tool-call success rate", back: "Для агентов: процент tool-calls с валидным parsing. 38% production agent failures = malformed JSON (parsing errors). Метрика — первая линия диагностики агентов." }
+      { front: "Tool-call success rate", back: "Для агентов: процент tool-calls с валидным parsing. Malformed JSON (parsing errors) — одна из самых частых категорий production agent failures. Метрика — первая линия диагностики агентов." }
     ],
     quiz: [
       {
@@ -309,7 +309,7 @@ with tracer.start_as_current_span("llm-call",
                        response.usage.completion_tokens)</code></pre>
 
       <h4>OpenLLMetry — auto-instrumentation</h4>
-      <p>Проект <strong>OpenLLMetry от Traceloop</strong> (Apache 2.0, 6.6k+ stars) — референс-имплементация GenAI SemConv. Один <code>Traceloop.init()</code> авто-инструментирует 30+ библиотек: OpenAI, Anthropic, LangChain, LlamaIndex, Pinecone, Weaviate, Qdrant. Экспорт в любой OTel-бэкенд.</p>
+      <p>Проект <strong>OpenLLMetry от Traceloop</strong> (Apache 2.0, 7k+ stars) — референс-имплементация GenAI SemConv. Один <code>Traceloop.init()</code> авто-инструментирует 30+ библиотек: OpenAI, Anthropic, LangChain, LlamaIndex, Pinecone, Weaviate, Qdrant. Экспорт в любой OTel-бэкенд.</p>
 
       <h4>Что логировать в трейсе</h4>
       <ul>
@@ -330,7 +330,7 @@ with tracer.start_as_current_span("llm-call",
       { front: "OpenTelemetry gen_ai.* атрибуты", back: "Стандартные атрибуты: gen_ai.system (провайдер), gen_ai.request.model, gen_ai.usage.input_tokens, gen_ai.usage.output_tokens, gen_ai.response.finish_reasons. Vendor-agnostic." },
       { front: "Что логировать в LLM-трейсе?", back: "Полный промпт, ответ модели, tool calls, latency per span, token usage, session metadata. Без этого невозможно воспроизвести и отдебажить." },
       { front: "OTel SemConv 1.37+ — что нового", back: "Agent spans (gen_ai.agent.name, gen_ai.agent.id), framework spans для LangChain/LlamaIndex, message content opt-in (gen_ai.input.messages). Принят Datadog, Phoenix, Langfuse." },
-      { front: "OpenLLMetry — что это", back: "Apache 2.0 проект Traceloop, 6.6k stars. Один Traceloop.init() — авто-инструментация 30+ библиотек (OpenAI, Anthropic, LangChain, Pinecone). Экспорт в любой OTel-бэкенд." },
+      { front: "OpenLLMetry — что это", back: "Apache 2.0 проект Traceloop, 7k+ stars. Один Traceloop.init() — авто-инструментация 30+ библиотек (OpenAI, Anthropic, LangChain, Pinecone). Экспорт в любой OTel-бэкенд." },
       { front: "OTLP endpoint у Langfuse", back: "Langfuse имеет нативный OTLP-эндпоинт /api/public/otel — принимает стандартный OTel-трафик с маппингом gen_ai.* атрибутов в свою модель данных. Vendor-agnostic." },
       { front: "Зачем opt-in message content в OTel", back: "По умолчанию gen_ai.input.messages / gen_ai.output.messages не пишутся из соображений privacy (PII в логах). Включаются явно через переменную окружения OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT=true." }
     ],
@@ -539,7 +539,7 @@ lf = Langfuse(mask=mask_pii)
           "Лицензия не важна"
         ],
         correct: 1,
-        explanation: "MIT позволяет: self-hosting в private cloud, форки, коммерческое использование. Сравните с LangSmith (closed source, SaaS-only) — нет данных on-prem, vendor lock-in."
+        explanation: "MIT позволяет: self-hosting в private cloud, форки, коммерческое использование. Сравните с LangSmith (closed source; self-hosted — только платный Enterprise add-on) — vendor lock-in."
       }
     ],
     sources: [
@@ -609,7 +609,7 @@ result = chain.invoke({"question": "..."})
       <ul>
         <li><strong>Vendor lock-in</strong> — полный потенциал только с LangChain/LangGraph</li>
         <li>Менее подходит для LlamaIndex, DSPy или кастомных OTel-инструментаций</li>
-        <li>Хостинг только SaaS (нет open-source self-hosted)</li>
+        <li>Self-hosted доступен, но только как платный Enterprise add-on (Kubernetes/Docker) — не open-source, в отличие от Langfuse</li>
       </ul>
 
       <div class="key-concept">
@@ -621,7 +621,7 @@ result = chain.invoke({"question": "..."})
       { front: "Production → Dataset в LangSmith", back: "Конвертация production трейсов в evaluation датасеты. Нашли плохой ответ → добавили в golden dataset → regression test. Замкнутый цикл улучшения." },
       { front: "Vendor lock-in LangSmith", back: "Полный потенциал только с LangChain/LangGraph. Для LlamaIndex, DSPy или кастомных стеков — Langfuse или Phoenix будут лучше." },
       { front: "LangGraph trajectory как USP", back: "LangSmith — единственная платформа с native-визуализацией графов LangGraph: узлы, переходы, retry-петли, condition branches. Generic OTel это не даёт." },
-      { front: "SaaS-only ограничение", back: "LangSmith нет в self-hosted варианте (только Enterprise plan, дорого). Данные уходят в облако LangChain — для on-prem требований не подходит." },
+      { front: "Ограничение хостинга LangSmith", back: "Self-hosted существует, но только как платный Enterprise add-on (Kubernetes/Docker) — не open-source, в отличие от Langfuse. На стандартных планах данные уходят в облако LangChain." },
       { front: "Cost LangSmith vs Langfuse", back: "LangSmith: per-seat + per-trace pricing, дорого при росте. Langfuse self-hosted: только инфраструктура. На 1M traces/мес LangSmith $1500+, Langfuse — $200." },
       { front: "A/B тестирование промптов", back: "LangSmith experiments: запуск двух версий промпта на одном датасете, side-by-side сравнение accuracy/latency/tokens. Встроено в платформу." }
     ],
@@ -679,7 +679,7 @@ result = chain.invoke({"question": "..."})
           "Это рыночная случайность"
         ],
         correct: 1,
-        explanation: "LangSmith SaaS-only с per-trace pricing. На больших объёмах счёт растёт линейно. Langfuse self-hosted: фиксированные инфра-расходы независимо от объёма трейсов."
+        explanation: "LangSmith — closed source с per-trace pricing (self-hosted есть только как дорогой Enterprise add-on). На больших объёмах счёт растёт линейно. Langfuse self-hosted: фиксированные инфра-расходы независимо от объёма трейсов."
       }
     ],
     sources: [
@@ -884,7 +884,7 @@ jobs:
       </ul>
 
       <div class="key-concept">
-        <strong>Мини-кейс «model upgrade сломал JSON parsing»:</strong> команда обновила GPT-4o-2024-08-06 → GPT-4o-2026-01. Внезапно 38% production agent failures = malformed JSON в tool-calls. Анализ показал: новая версия чаще обрамляет JSON в markdown-блоки. Регресс не пойман CI потому что golden dataset не покрывал tool-use сценарии. Урок: golden dataset должен быть репрезентативным к production-распределению.
+        <strong>Мини-кейс «model upgrade сломал JSON parsing»:</strong> команда обновила GPT-4o-2024-08-06 → GPT-4o-2026-01. Внезапно — резкий всплеск production agent failures из-за malformed JSON в tool-calls. Анализ показал: новая версия чаще обрамляет JSON в markdown-блоки. Регресс не пойман CI потому что golden dataset не покрывал tool-use сценарии. Урок: golden dataset должен быть репрезентативным к production-распределению.
       </div>
     `,
     flashcards: [
@@ -920,7 +920,7 @@ jobs:
         explanation: "Regression testing: golden dataset прогоняется через новую версию. Если > 5% примеров ухудшились — PR блокируется. Защита от деградации качества."
       },
       {
-        question: "Команда обновила модель — внезапно 38% agent failures на parsing JSON. Почему CI это не поймал?",
+        question: "Команда обновила модель — внезапно всплеск agent failures на parsing JSON. Почему CI это не поймал?",
         options: [
           "CI отключили",
           "Golden dataset не покрывал tool-use сценарии — был нерепрезентативен production-распределению",
@@ -956,8 +956,7 @@ jobs:
     sources: [
       { title: "LLM Monitoring & Drift Detection Guide (Leanware, 2026)", url: "https://www.leanware.co/insights/llm-monitoring-drift-detection-guide", icon: "📄" },
       { title: "Best Hallucination Detection Tools (Braintrust, 2026)", url: "https://www.braintrust.dev/articles/best-hallucination-detection-tools-2026", icon: "📄" },
-      { title: "LLM Hallucinations in Production (Maxim AI)", url: "https://www.getmaxim.ai/articles/llm-hallucinations-in-production-monitoring-strategies-that-actually-work", icon: "📄" },
-      { title: "The Agent That Burned $4,200 in 63 Hours (Medium)", url: "https://medium.com/@sattyamjain96/the-agent-that-burned-4200-in-63-hours", icon: "📄" }
+      { title: "LLM Hallucinations in Production (Maxim AI)", url: "https://www.getmaxim.ai/articles/llm-hallucinations-in-production-monitoring-strategies-that-actually-work", icon: "📄" }
     ]
   },
   {
@@ -974,7 +973,7 @@ jobs:
       <p>До 2024 года каждая observability-платформа изобретала свои атрибуты: <code>langfuse.input</code>, <code>helicone-prompt</code>, <code>arize.tokens.input</code>. Это создавало vendor lock-in: смена платформы = переписывание инструментации. OpenTelemetry GenAI SemConv решает это — единый словарь атрибутов, понятный всем платформам.</p>
 
       <div class="key-concept">
-        <strong>OTel GenAI SemConv статус 2026:</strong> Status: Development (не Stable), но уже принят Datadog, Phoenix, Langfuse, Helicone, Traceloop. К версии OTel 1.37 покрывает: LLM calls, embeddings, framework spans (LangChain, LlamaIndex), agent spans, multi-modal (image/audio inputs).
+        <strong>OTel GenAI SemConv статус 2026:</strong> спецификация по-прежнему в статусе Development (не Stable): клиентские LLM-спаны — самая зрелая часть, ближе всех к стабилизации, а agent/framework-спаны — самая новая и активно меняющаяся. Несмотря на статус, стандарт уже принят Datadog, Phoenix, Langfuse, Helicone, Traceloop. К версии OTel 1.37 покрывает: LLM calls, embeddings, framework spans (LangChain, LlamaIndex), agent spans, multi-modal (image/audio inputs).
       </div>
 
       <h4>Обязательные атрибуты для LLM Span</h4>
@@ -1018,7 +1017,7 @@ gen_ai.conversation.id   # ID многошаговой сессии</code></pre>
       <ul>
         <li><strong>OpenLLMetry</strong> (Traceloop, Apache 2.0) — 30+ библиотек, эталонная имплементация</li>
         <li><strong>OpenInference</strong> (Arize Phoenix, Apache 2.0) — близко к SemConv с дополнениями для retrieval-spans</li>
-        <li><strong>Nativно в SDK провайдеров:</strong> OpenAI Python SDK с 1.50+ имеет встроенную OTel-инструментацию</li>
+        <li><strong>Contrib-пакеты для SDK провайдеров:</strong> для OpenAI Python SDK (актуальные версии — 2.x) OTel-инструментация поставляется отдельным пакетом <code>opentelemetry-instrumentation-openai-v2</code>, а не встроена в сам SDK</li>
       </ul>
 
       <div class="key-concept">
@@ -1027,13 +1026,13 @@ gen_ai.conversation.id   # ID многошаговой сессии</code></pre>
     `,
     flashcards: [
       { front: "Зачем OTel GenAI SemConv", back: "Единый словарь атрибутов вместо vendor-specific (langfuse.input, helicone-prompt). Смена платформы = смена endpoint, не переписывание инструментации." },
-      { front: "Статус OTel GenAI SemConv 2026", back: "Development (не Stable), но уже принят Datadog, Phoenix, Langfuse, Helicone, Traceloop. Покрывает LLM calls, embeddings, agents, frameworks, multi-modal." },
+      { front: "Статус OTel GenAI SemConv 2026", back: "Development (не Stable): клиентские LLM-спаны — самая зрелая часть, agent-спаны — самая новая и меняющаяся. Уже принят Datadog, Phoenix, Langfuse, Helicone, Traceloop. Покрывает LLM calls, embeddings, agents, frameworks, multi-modal." },
       { front: "Обязательные атрибуты LLM span", back: "gen_ai.request.model, gen_ai.system (провайдер), gen_ai.operation.name (chat/embeddings/etc). Без них не валидный GenAI span." },
       { front: "finish_reasons — почему массив", back: "Модель может завершить по нескольким причинам одновременно (stop + content_filter). Массив отражает это. Атрибут критичен для алертинга на content_filter (compliance issues)." },
       { front: "Agent spans в OTel 1.37+", back: "gen_ai.agent.id/name/description, gen_ai.tool.name/call.id, gen_ai.conversation.id. Стандартизуют то, что раньше делали AgentOps/LangSmith vendor-specific." },
       { front: "Framework spans", back: "gen_ai.framework.name/version для LangChain/LlamaIndex/Pydantic AI. Позволяет фильтровать трейсы по framework и видеть его-специфичную семантику." },
       { front: "OpenLLMetry vs OpenInference", back: "OpenLLMetry (Traceloop, 30+ либ) — широкое покрытие. OpenInference (Phoenix) — лучше abstractions для RAG retrieval. Обе экспортируют через стандартный OTLP." },
-      { front: "Native OTel в OpenAI SDK", back: "OpenAI Python SDK с 1.50+ имеет встроенную OTel-инструментацию — не нужны сторонние авто-инструменты для базовых сценариев. Anthropic SDK добавил аналог в начале 2026." }
+      { front: "OTel-инструментация OpenAI SDK", back: "Встроенной OTel-инструментации в openai-python (актуальные версии — 2.x) нет: используется отдельный contrib-пакет opentelemetry-instrumentation-openai-v2 либо OpenLLMetry/OpenInference. Для Anthropic — аналогичные сторонние пакеты." }
     ],
     quiz: [
       {
@@ -1176,7 +1175,7 @@ Response: «PR #42 создан»</code></pre>
       <h4>Что мониторить кроме обычных метрик</h4>
       <ul>
         <li><strong>Tool selection accuracy</strong> — выбрал ли агент правильный инструмент</li>
-        <li><strong>Tool argument validity</strong> — корректность переданных аргументов (38% prod failures = malformed JSON)</li>
+        <li><strong>Tool argument validity</strong> — корректность переданных аргументов (malformed JSON — одна из частых причин prod failures)</li>
         <li><strong>Memory hit rate</strong> — % сессий, использующих long-term memory</li>
         <li><strong>State transitions</strong> — для state-machine агентов: легитимные ли переходы</li>
       </ul>
@@ -1192,7 +1191,7 @@ Response: «PR #42 создан»</code></pre>
       { front: "Prompt/context snapshot", back: "Снимок того, что реально увидела модель: prompt excerpt, system_prompt_hash, tool_schema_names, context_token_count, model и trace_id. Нужен для воспроизведения багов." },
       { front: "AgentOps — главное преимущество", back: "Native-поддержка 20+ фреймворков (LangChain, CrewAI, AutoGen, OpenAI Agents). Unified trajectory view независимо от стека. Сильнейший в multi-framework debugging." },
       { front: "Loop detection", back: "Паттерн «повтор tool-call с похожими аргументами 5+ раз в сессии». Один из главных agent-антипаттернов: бесконечный цикл, который жжёт деньги. Алерт обязателен." },
-      { front: "Tool argument validity", back: "Корректность переданных в tool аргументов. Главная причина 38% production agent failures — malformed JSON. Метрика первой линии." },
+      { front: "Tool argument validity", back: "Корректность переданных в tool аргументов. Malformed JSON — одна из самых частых причин production agent failures. Метрика первой линии." },
       { front: "Native vs OTel-агентная инструментация", back: "Native (LangSmith для LangGraph) — лучшая визуализация семантики фреймворка. OTel — vendor-agnostic, но потеря части framework-знаний. Trade-off lock-in vs portability." },
       { front: "State transitions для агентов", back: "Для state-machine агентов: были ли переходы между состояниями легитимными? Например: «agent не должен переходить из confirmed → cancelled без user-confirmation»." }
     ],
@@ -1256,12 +1255,12 @@ Response: «PR #42 создан»</code></pre>
         question: "Зачем нужна tool argument validity metric?",
         options: [
           "Для security",
-          "38% production agent failures = malformed JSON в tool-call аргументах. Метрика первой линии диагностики",
+          "Malformed JSON в tool-call аргументах — одна из самых частых причин production agent failures. Метрика первой линии диагностики",
           "Для performance",
           "Это устаревшее"
         ],
         correct: 1,
-        explanation: "Самая частая причина agent-failures — модель генерирует невалидный JSON для tool-args. Метрика «% tool-calls с валидным parsing» — первая линия алертов."
+        explanation: "Одна из самых частых причин agent-failures — модель генерирует невалидный JSON для tool-args. Метрика «% tool-calls с валидным parsing» — первая линия алертов."
       }
     ],
     sources: [
@@ -1303,8 +1302,8 @@ SLO: 95% сессий <50 c</code></pre>
       <h4>Prompt caching: экономика</h4>
       <ul>
         <li><strong>Anthropic:</strong> явный <code>cache_control</code> на блок промпта. Чтение = 10% цены входа. Запись = 125%. 5-минутный TTL.</li>
-        <li><strong>OpenAI:</strong> автоматическое кэширование от 1024 токенов. Чтение = 50% цены входа. Запись = 100%. ~5 минут idle TTL.</li>
-        <li><strong>Google Gemini:</strong> explicit context caching через <code>CachedContent</code> API. Цена = 25% обычного входа за хранение/час + чтение.</li>
+        <li><strong>OpenAI:</strong> автоматическое кэширование от 1024 токенов. Для текущих моделей (GPT-5.6+): чтение = 10% цены входа, запись = 125%, фиксированный TTL 30 минут (у старых моделей чтение = 50%, запись без наценки).</li>
+        <li><strong>Google Gemini:</strong> explicit context caching через <code>CachedContent</code> API (на Gemini 2.5+ включён и implicit). Чтение из кэша = 10% цены входа (скидка 90%) + отдельная почасовая плата за хранение: ~$4.50/1M токенов/час у 2.5 Pro, $1.00 у Flash.</li>
       </ul>
 
       <h4>Hit rate observability</h4>
@@ -1335,7 +1334,7 @@ SLO: 95% сессий <50 c</code></pre>
       { front: "Latency budget", back: "SLO на воспринимаемое время ответа, разбитое на компоненты пайплайна (gateway → proxy → provider → first token). Позволяет точно понимать, где «утекает» время." },
       { front: "Почему P99 важнее средней", back: "P99 ловит KV-cache evictions, batching interference, GC pauses, rate-limit throttling. Средняя их скрывает. Алерт на P99 — обязателен." },
       { front: "Anthropic cache pricing", back: "Cache read = 10% цены входа. Cache write = 125%. TTL ~5 минут. Явный cache_control на блок промпта. ROI: 75% экономии при стабильном префиксе." },
-      { front: "OpenAI cache pricing", back: "Автоматическое кэширование от 1024 токенов. Cache read = 50% цены входа (хуже Anthropic). Без явного контроля — кэш «случается» при стабильном префиксе." },
+      { front: "OpenAI cache pricing", back: "Автоматическое кэширование от 1024 токенов. GPT-5.6+: cache read = 10% цены входа, cache write = 125%, фиксированный TTL 30 минут, появились явные breakpoints. У старых моделей read = 50%, write без наценки." },
       { front: "Cache hit rate целевой диапазон", back: "80-95%. <50% — breakpoint размещён неверно. 0% — кэш не работает (TTL истёк или изменения попадают в кэшируемую часть)." },
       { front: "Где размещать Anthropic breakpoint", back: "После большого статичного контекста: system → cached → docs → cached → history → user. Изменчивые части ПОСЛЕ breakpoint не ломают кэш." },
       { front: "Cost per request — разбивка", back: "Cached vs uncached токены имеют разную цену. Без разбивки cost-dashboard вводит в заблуждение. Считать $$ отдельно для cache_read, cache_write, normal input." },
@@ -1368,12 +1367,12 @@ SLO: 95% сессий <50 c</code></pre>
         question: "Чем OpenAI prompt caching отличается от Anthropic?",
         options: [
           "Это одно и то же",
-          "OpenAI: автоматически от 1024 токенов, cache read = 50%. Anthropic: explicit cache_control, cache read = 10%",
+          "OpenAI: автоматическое кэширование от 1024 токенов, фиксированный TTL 30 минут. Anthropic: явный cache_control, TTL 5 минут (обновляется при чтении)",
           "Только Anthropic поддерживает кэш",
           "OpenAI дешевле"
         ],
         correct: 1,
-        explanation: "Anthropic даёт больший контроль (явный cache_control) и сильнее скидку (10% vs 50%). OpenAI — автоматически, но меньше скидка."
+        explanation: "Главное отличие — механизм контроля: OpenAI кэширует стабильный префикс автоматически, Anthropic требует явный cache_control. Цены у актуальных моделей сопоставимы: чтение = 10% входа, запись = 125%."
       },
       {
         question: "Какой целевой диапазон cache hit rate?",
@@ -1530,7 +1529,7 @@ SLO: 95% сессий <50 c</code></pre>
       { title: "Best Hallucination Detection Tools (Braintrust, 2026)", url: "https://www.braintrust.dev/articles/best-hallucination-detection-tools-2026", icon: "📄" },
       { title: "LLM Hallucinations in Production (Maxim AI)", url: "https://www.getmaxim.ai/articles/llm-hallucinations-in-production-monitoring-strategies-that-actually-work", icon: "📄" },
       { title: "LLM Monitoring & Drift Detection (Leanware, 2026)", url: "https://www.leanware.co/insights/llm-monitoring-drift-detection-guide", icon: "📄" },
-      { title: "RAGAS Faithfulness Metric", url: "https://docs.ragas.io/en/stable/concepts/metrics/faithfulness.html", icon: "🔗" }
+      { title: "RAGAS Faithfulness Metric", url: "https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/faithfulness/", icon: "🔗" }
     ]
   },
   {
@@ -1588,7 +1587,7 @@ SLO: 95% сессий <50 c</code></pre>
       <ul>
         <li><strong>GDPR:</strong> правo на удаление (Article 17), data minimization. LLM-логи должны быть удаляемы по user_id. Retention &lt;6 месяцев — обычная практика.</li>
         <li><strong>HIPAA:</strong> 6 лет retention для PHI; audit log всех access; encryption at rest и in transit.</li>
-        <li><strong>NIST AI RMF (2026):</strong> логировать model version, policy version, redaction action, timestamp. Audit trail для AI-решений.</li>
+        <li><strong>NIST AI RMF 1.0 (2023) + Generative AI Profile (NIST AI 600-1, июль 2024):</strong> логировать model version, policy version, redaction action, timestamp. Audit trail для AI-решений.</li>
         <li><strong>EU AI Act (вступил 2026):</strong> high-risk AI системы обязаны иметь observability и audit trail. Penalties до €35M или 7% global turnover.</li>
       </ul>
 
@@ -1610,7 +1609,7 @@ SLO: 95% сессий <50 c</code></pre>
       { front: "Стратегии redaction", back: "Regex (быстро, только структуры) + NER (Presidio, AWS Comprehend, spaCy — ловит PERSON, LOCATION). Гибрид — рекомендуемый паттерн." },
       { front: "GDPR для LLM-логов", back: "Право на удаление (Article 17) — должно быть возможно удалить логи по user_id. Data minimization — не логировать лишнего. Retention <6 мес обычно." },
       { front: "HIPAA требования", back: "6 лет retention для PHI, audit log всех access, encryption at rest и in transit. Self-hosted сильно упрощает соответствие, чем SaaS." },
-      { front: "NIST AI RMF 2026", back: "Логировать model version, policy version, redaction action, timestamp. Audit trail для AI-решений. Не нормативный, но de-facto стандарт для US-федеральных контрактов." },
+      { front: "NIST AI RMF 1.0 + GenAI Profile", back: "NIST AI RMF 1.0 (2023) и Generative AI Profile NIST AI 600-1 (июль 2024): логировать model version, policy version, redaction action, timestamp. Audit trail для AI-решений. Не нормативный, но de-facto стандарт для US-федеральных контрактов." },
       { front: "EU AI Act observability requirement", back: "High-risk AI системы обязаны иметь observability и audit trail. Penalties до €35M или 7% global turnover. Вступил в силу в 2026." },
       { front: "Self-hosted vs SaaS observability", back: "SaaS быстрее на старте, но передача промптов в чужой облако — compliance issue для regulated industries. Self-hosted: Langfuse MIT, Phoenix Elastic 2.0." }
     ],

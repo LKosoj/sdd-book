@@ -412,7 +412,7 @@ const courseData = [
     ],
     sources: [
       { title: "MMLU (Hendrycks, 2021)", url: "https://arxiv.org/abs/2009.03300", icon: "📄" },
-      { title: "Chatbot Arena (LMSYS)", url: "https://chat.lmsys.org/", icon: "🔗" },
+      { title: "Chatbot Arena (LMArena)", url: "https://lmarena.ai/", icon: "🔗" },
       { title: "Open LLM Leaderboard v2 (HuggingFace)", url: "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard", icon: "🔗" },
       { title: "Artificial Analysis — независимый лидерборд", url: "https://artificialanalysis.ai/", icon: "🔗" }
     ]
@@ -1058,7 +1058,7 @@ jobs:
 
       <div class="metric-card">
         <h5>GPQA Diamond</h5>
-        <p>"Graduate-level Google-Proof Q&amp;A". Вопросы такого уровня, что эксперты PhD с интернетом ошибаются в 60%. На конец 2025 топовые модели достигают ~92%.</p>
+        <p>"Graduate-level Google-Proof Q&amp;A". PhD-эксперты в своей области решают ~65% вопросов, а высококвалифицированные НЕ-эксперты даже с полным доступом в интернет — лишь ~34%. Именно это делает бенчмарк "Google-proof". На конец 2025 топовые модели достигали ~92%, к середине 2026 — уже ~94–95%: бенчмарк приближается к насыщению.</p>
       </div>
 
       <div class="metric-card">
@@ -1078,7 +1078,7 @@ jobs:
 
       <div class="metric-card">
         <h5>Humanity's Last Exam (HLE)</h5>
-        <p>2500 вопросов от Center for AI Safety + Scale AI, экспертный уровень по сотням областей. Прогноз середины 2026 — mid-40s, остаётся одним из самых сложных бенчмарков.</p>
+        <p>2500 вопросов от Center for AI Safety + Scale AI, экспертный уровень по сотням областей. К середине 2026 топ-модели показывают ~53% (Artificial Analysis; на отдельных лидербордах с иной методологией — до ~65%), но HLE остаётся одним из самых сложных бенчмарков.</p>
       </div>
 
       <div class="metric-card">
@@ -1112,11 +1112,11 @@ jobs:
     `,
     flashcards: [
       { front: "MMLU-Pro", back: "Следующее поколение MMLU: 10 вариантов ответа, обязательный CoT, более сложные вопросы. Снижает угадывание и нагрузку на память." },
-      { front: "GPQA Diamond", back: "Graduate-level Google-Proof Q&A. PhD-эксперты с интернетом ошибаются в 60%. Один из главных бенчмарков reasoning 2025–2026." },
+      { front: "GPQA Diamond", back: "Graduate-level Google-Proof Q&A. PhD-эксперты в своей области решают ~65%, а не-эксперты с полным доступом в интернет — лишь ~34% (поэтому \"Google-proof\"). Один из главных бенчмарков reasoning 2025–2026." },
       { front: "SWE-bench Verified", back: "Отфильтрованный набор реальных GitHub-issue → patch задач. Лучший прокси production-кодинга для LLM-агентов." },
       { front: "LiveCodeBench", back: "Кодинг-бенчмарк с date-tagging: каждая задача оценивается только на моделях с cutoff раньше публикации задачи. Защита от data contamination." },
       { front: "FrontierMath", back: "Research-level математика. Модели в 2026 только подходят к ~30%. Используется для оценки frontier reasoning capability." },
-      { front: "Humanity's Last Exam (HLE)", back: "2500 вопросов экспертного уровня от Center for AI Safety + Scale AI. Прогноз mid-40s к середине 2026 — один из самых сложных активных бенчмарков." },
+      { front: "Humanity's Last Exam (HLE)", back: "2500 вопросов экспертного уровня от Center for AI Safety + Scale AI. К середине 2026 топ-модели показывают ~53–65% (зависит от методологии) — один из самых сложных активных бенчмарков." },
       { front: "ARC-AGI-2", back: "Абстрактное визуально-логическое рассуждение. Защищён от training-leakage уникальностью паттернов. Считается тестом general intelligence." },
       { front: "Правило выбора бенчмарка", back: "Под use case: knowledge/reasoning → MMLU-Pro/GPQA; code → SWE-bench; math → AIME/FrontierMath; frontier → HLE/ARC-AGI-2; domain — собственный или domain bench." }
     ],
@@ -1303,7 +1303,7 @@ jobs:
     ],
     sources: [
       { title: "τ²-bench — Sierra Research", url: "https://github.com/sierra-research/tau2-bench", icon: "🔗" },
-      { title: "τ-bench paper (2506.07982)", url: "https://arxiv.org/pdf/2506.07982", icon: "📄" },
+      { title: "τ²-bench paper (2506.07982)", url: "https://arxiv.org/pdf/2506.07982", icon: "📄" },
       { title: "Benchmarking Agents — каталог", url: "https://benchmarkingagents.com/benchmarks-list/", icon: "🔗" },
       { title: "Evidently AI — AI Agent Benchmarks", url: "https://www.evidentlyai.com/blog/ai-agent-benchmarks", icon: "🔗" },
       { title: "Marktechpost — Top agentic benchmarks 2026", url: "https://www.marktechpost.com/2026/04/26/top-7-benchmarks-that-actually-matter-for-agentic-reasoning-in-large-language-models/", icon: "🔗" }
@@ -1607,7 +1607,8 @@ jobs:
         <p>Precision = доля retrieved chunks, реально использованных в ответе. Recall = доля нужных chunks, попавших в retrieval. Требует ground truth.</p>
       </div>
 
-      <h4>Production targets (labelyourdata.com)</h4>
+      <h4>Типичные production-таргеты</h4>
+      <p>Единого стандарта нет — ниже типичные индустриальные ориентиры, которые команды берут как отправную точку и калибруют под свой домен:</p>
       <ul>
         <li>Faithfulness ≥ <strong>0.9</strong></li>
         <li>Answer relevancy ≥ <strong>0.85</strong></li>
@@ -1922,8 +1923,8 @@ jobs:
         <strong>Trade-off динамических бенчмарков:</strong> постоянное обновление усложняет longitudinal-сравнения. "Shifting target makes it difficult to maintain a consistent baseline." Решение: фиксировать "год бенчмарка" в отчётах, держать обе версии (snapshot + live).
       </div>
 
-      <h4>Leaderboard Illusion</h4>
-      <p>Работа "Leaderboard Illusion" (2504.20879) показала: судьи и пользователи систематически штрафуют ethical refusals и предпочитают confident-sounding ответы. Это деформирует ELO в Arena и подобных. Митигация — отдельные refusal/safety evals, не растворённые в общем рейтинге.</p>
+      <h4>Искажения Arena: refusal penalty и Leaderboard Illusion</h4>
+      <p>Исследование Pasch "LLM Content Moderation and User Satisfaction" (2501.03266) показало: пользователи Chatbot Arena систематически штрафуют ethical refusals — такие ответы выигрывают лишь ~8% битв против ~36% у обычных ответов. Отдельная работа "Leaderboard Illusion" (2504.20879) вскрыла другую проблему Arena: асимметрию приватного тестирования — крупные вендоры тестируют множество вариантов модели приватно и публикуют только лучший, что искажает ELO. Митигация — отдельные refusal/safety evals, не растворённые в общем рейтинге, и прозрачные правила лидерборда.</p>
 
       <div class="key-concept">
         <strong>Мини-кейс.</strong> Команда хвалится: "наша модель на 4 п.п. лучше на MMLU и HumanEval". Через 2 месяца независимые тесты на GPQA Pro и SWE-bench Verified показывают противоположный результат. <strong>Причина:</strong> contamination + насыщенность классических бенчмарков. <strong>Правильно:</strong> рапортовать стек 2025–2026 (MMLU-Pro, GPQA, SWE-bench Verified, LiveBench, ARC-AGI-2) и держать собственный domain-eval. <strong>Антипаттерн:</strong> мерить frontier-модели классикой и забывать про contamination check.
@@ -1936,7 +1937,7 @@ jobs:
       { front: "LiveBench", back: "Динамический бенчмарк: обновляется каждые несколько месяцев, math из последних 12 месяцев, ground-truth значения. Защита от contamination." },
       { front: "LiveCodeBench", back: "Date-tagged кодинг-бенчмарк. Каждая задача оценивается только на моделях с cutoff раньше публикации задачи." },
       { front: "AntiLeak-Bench", back: "Бенчмарк, тестирующий знания, появившиеся после cutoff модели. Защита от leakage по дате." },
-      { front: "Refusal penalty (Leaderboard Illusion)", back: "Ethical refusals выигрывают 8% битв vs 36% для normal-ответов. Antithesis: судьи и пользователи штрафуют отказы, искажая Arena ELO." },
+      { front: "Refusal penalty (Pasch, 2501.03266)", back: "Ethical refusals выигрывают ~8% битв vs ~36% для normal-ответов в Chatbot Arena. Пользователи штрафуют отказы, искажая ELO. Leaderboard Illusion — про другое: асимметрию приватного тестирования в Arena." },
       { front: "Data contamination — масштаб проблемы", back: "Документировано до 45% contamination на популярных бенчмарках. Без проверки результаты системно завышены." }
     ],
     quiz: [
@@ -1974,7 +1975,7 @@ jobs:
         explanation: "Outcome-only — один из задокументированных антипаттернов 2026 для agentic eval. Стандарт — multi-dim: success × trajectory × cost × reliability."
       },
       {
-        question: "Что предлагает Leaderboard Illusion как митигацию?",
+        question: "Какая митигация против refusal penalty в Arena-подобных рейтингах?",
         options: [
           "Удалить лидерборды",
           "Отдельные refusal/safety evals, не растворённые в общем рейтинге — иначе judges и пользователи штрафуют ethical refusals",
@@ -1982,7 +1983,7 @@ jobs:
           "Перейти на BLEU"
         ],
         correct: 1,
-        explanation: "В Arena ethical refusals выигрывают 8% битв vs 36% для normal-ответов. Без отдельного refusal eval safety проигрывает в общем рейтинге."
+        explanation: "По данным Pasch (2501.03266), в Arena ethical refusals выигрывают ~8% битв vs ~36% для normal-ответов. Без отдельного refusal eval safety проигрывает в общем рейтинге."
       },
       {
         question: "Чем заменить single-judge для оценки моделей того же семейства?",
@@ -1998,9 +1999,10 @@ jobs:
     ],
     sources: [
       { title: "LiveBench", url: "https://github.com/livebench/livebench", icon: "🔗" },
-      { title: "Contamination survey (2406.19314)", url: "https://arxiv.org/pdf/2406.19314", icon: "📄" },
+      { title: "Benchmark Data Contamination survey (2406.04244)", url: "https://arxiv.org/abs/2406.04244", icon: "📄" },
       { title: "Static → Dynamic survey (2502.17521)", url: "https://arxiv.org/html/2502.17521v2", icon: "📄" },
       { title: "Leaderboard Illusion (2504.20879)", url: "https://arxiv.org/pdf/2504.20879", icon: "📄" },
+      { title: "Pasch — LLM Content Moderation and User Satisfaction (2501.03266)", url: "https://arxiv.org/abs/2501.03266", icon: "📄" },
       { title: "LLM-Stats — Contaminated LLM blog", url: "https://llm-stats.com/blog/research/what-is-a-contaminated-llm", icon: "🔗" }
     ]
   }

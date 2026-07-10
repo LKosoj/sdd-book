@@ -92,7 +92,7 @@ sql = llm.generate(prompt)</code></pre>
       { front: "Когда Text-2-SQL НЕ работает", back: "Write-операции (INSERT/UPDATE/DELETE) — опасно. Сложные window functions, рекурсивные CTE — LLM часто ошибается. Оптимизация query plans — не задача NL2SQL. Золотое правило: только READ." },
       { front: "Rule-based подход (2010–2017)", back: "NLP-парсинг → извлечение сущностей → шаблоны SQL. Достоинства: детерминированность, объяснимость. Недостатки: жёсткий словарь, нет обобщения на новые фразы, огромная ручная работа." },
       { front: "Seq2Seq / Encoder-Decoder (2017–2022)", back: "BART/T5-SQL, RAT-SQL, PICARD — нейросети, fine-tuned на Spider. Хорошо работали на бенчмарке, но хрупко: не обобщают на новые схемы без дообучения. Сейчас вытеснены LLM-based подходами." },
-      { front: "Актуальные бенчмарки 2025–2026", back: "Spider 1.0 — учебный, не production-индикатор (GPT-4 достигает 86.6% — сатурирован). Для оценки 2026 используй Spider 2.0 (~6% у лучших систем — реально сложный) и BIRD-CRITIC (NeurIPS 2025, фокус на критических запросах)." },
+      { front: "Актуальные бенчмарки 2025–2026", back: "Spider 1.0 — учебный, не production-индикатор (GPT-4 достигает 86.6% — сатурирован). Для оценки 2026 используй Spider 2.0 (реальные enterprise-запросы: на запуске в ноябре 2024 baseline на GPT-4o давал ~6%, к 2026 агентные системы на лидерборде достигают 80–96%+) и BIRD-CRITIC (NeurIPS 2025, фокус на критических запросах)." },
       { front: "Три бизнес-применения Text-2-SQL", back: "1) Self-service аналитика — менеджеры без SQL-навыков. 2) Conversational BI — диалоговый интерфейс к корпоративным данным. 3) Автоматизация отчётности — генерация отчётов по текстовым запросам без участия аналитика." },
       { front: "LLM-based подход (2023+)", back: "GPT-4/Claude генерируют SQL через prompt engineering. Ключевые техники: few-shot примеры, schema context в промпте, Chain-of-Thought рассуждение. Гибко обобщает, но требует тщательного промпт-дизайна и schema linking." }
     ],
@@ -128,7 +128,7 @@ sql = llm.generate(prompt)</code></pre>
           "Следует перейти с GPT-4 на более специализированную модель"
         ],
         correct: 1,
-        explanation: "Spider 1.0 сатурирован — лучшие системы достигают 86%+. Spider 2.0 показывает ~6% у тех же систем, BIRD-CRITIC ещё строже. Для production-оценки используйте BIRD или Spider 2.0."
+        explanation: "Spider 1.0 сатурирован — лучшие системы достигают 86%+. Spider 2.0 заметно сложнее: на запуске (ноябрь 2024) baseline-системы давали ~6%, и лишь к 2026 агентные системы вышли на 80%+. Для production-оценки используйте BIRD или Spider 2.0."
       },
       {
         question: "Какой подход к Text-2-SQL первым применил нейронные сети?",
@@ -167,8 +167,8 @@ sql = llm.generate(prompt)</code></pre>
     sources: [
       { title: "Spider Benchmark (Yu et al.)", desc: "Крупнейший бенчмарк Text-2-SQL с 10K+ примеров", url: "https://yale-lily.github.io/spider", icon: "🕷️" },
       { title: "BIRD Benchmark", desc: "Бенчмарк с dirty values и domain knowledge", url: "https://bird-bench.github.io/", icon: "🐦" },
-      { title: "Text-to-SQL Survey (2024)", desc: "Обзор современного состояния области", url: "https://arxiv.org/abs/2405.01465", icon: "📄" },
-      { title: "Spider 2.0", desc: "Обновлённый бенчмарк: реальные enterprise-запросы, ~6% у SOTA 2025", url: "https://spider2-sql.github.io/", icon: "🕷️" }
+      { title: "Text-to-SQL Survey (2024)", desc: "Next-Generation Database Interfaces: обзор LLM-based Text-to-SQL", url: "https://arxiv.org/abs/2406.08426", icon: "📄" },
+      { title: "Spider 2.0", desc: "Бенчмарк с реальными enterprise-запросами: ~6% у baseline на запуске (2024), 80%+ у агентных систем к 2026", url: "https://spider2-sql.github.io/", icon: "🕷️" }
     ]
   },
   {
@@ -802,8 +802,8 @@ def find_join_path(tables: list, schema: dict) -> list:
       }
     ],
     sources: [
-      { title: "Schema-Linking Paper (Lei et al.)", desc: "Zero-shot schema linking with LLMs", url: "https://arxiv.org/abs/2308.15363", icon: "📄" },
-      { title: "C3-SQL: Contextual Schema Linking", desc: "Clear, Concise, Correct schema selection", url: "https://arxiv.org/abs/2307.07306", icon: "📄" },
+      { title: "Schema-Linking Paper (Lei et al.)", desc: "Re-examining the Role of Schema Linking in Text-to-SQL (EMNLP 2020)", url: "https://aclanthology.org/2020.emnlp-main.564/", icon: "📄" },
+      { title: "C3: Zero-shot Text-to-SQL with ChatGPT", desc: "Clear Prompting, Calibration with Hints, Consistent Output — zero-shot pipeline, 82.3% EX на Spider", url: "https://arxiv.org/abs/2307.07306", icon: "📄" },
       { title: "Sentence Transformers", desc: "Мультиязычные эмбеддинги для semantic search", url: "https://www.sbert.net/", icon: "🔧" }
     ]
   },
@@ -1068,7 +1068,7 @@ print(f"\\nResults: {passed}/{len(test_cases)} passed")</code></pre>
     ],
     sources: [
       { title: "Vanna AI", desc: "Open-source Text-2-SQL фреймворк", url: "https://github.com/vanna-ai/vanna", icon: "🔧" },
-      { title: "LangChain SQL Agent", desc: "SQL agent с tool use", url: "https://python.langchain.com/docs/tutorials/sql_qa/", icon: "🦜" },
+      { title: "LangChain SQL Agent", desc: "SQL agent с tool use", url: "https://docs.langchain.com/oss/python/langchain/sql-agent", icon: "🦜" },
       { title: "LlamaIndex SQL Query Engine", desc: "Text-2-SQL в LlamaIndex", url: "https://docs.llamaindex.ai/en/stable/examples/index_structs/struct_indices/SQLIndexDemo/", icon: "🦙" }
     ]
   },
@@ -1094,7 +1094,7 @@ print(f"\\nResults: {passed}/{len(test_cases)} passed")</code></pre>
 <li><strong>Hard:</strong> подзапросы, UNION, EXCEPT</li>
 <li><strong>Extra Hard:</strong> вложенные подзапросы, window functions</li>
 </ul>
-<div class="callout callout-warn"><strong>Важно для 2026:</strong> Spider 1.0 сатурирован — GPT-4 достигает 86.6%. Это учебный бенчмарк, не production-индикатор. Для адекватной оценки используйте Spider 2.0 (~6% у SOTA-систем, реальные enterprise-запросы) и BIRD-CRITIC (NeurIPS 2025, фокус на критических запросах с dirty data). Spider 1.0 полезен для обучения и сравнения baseline-систем, но не отражает реальную production-сложность.</div>
+<div class="callout callout-warn"><strong>Важно для 2026:</strong> Spider 1.0 сатурирован — GPT-4 достигает 86.6%. Это учебный бенчмарк, не production-индикатор. Для адекватной оценки используйте Spider 2.0 (реальные enterprise-запросы: на запуске в ноябре 2024 baseline на GPT-4o решал лишь ~6% задач, к 2026 агентные системы на официальном лидерборде достигают 80–96%+ — бенчмарк тоже начал сатурироваться) и BIRD-CRITIC (NeurIPS 2025, фокус на критических запросах с dirty data). Spider 1.0 полезен для обучения и сравнения baseline-систем, но не отражает реальную production-сложность.</div>
 
 <h3>BIRD</h3>
 <p>12,751 вопрос на 95 БД. Сложнее Spider: dirty data, domain knowledge, внешние знания. Ближе к реальному продакшену.</p>
@@ -1215,12 +1215,12 @@ def evaluate_text2sql(golden_dataset, system_fn):
 <p><strong>Антипаттерн:</strong> Оценивать изменения только по общему EX без error analysis и разбивки по сложности — можно принять regression на hard-запросах, если они компенсируются улучшением на easy.</p>
 </div>`,
     flashcards: [
-      { front: "Spider vs BIRD", back: "Spider 1.0: 10K вопросов, 200 БД, чистые данные — сатурирован (GPT-4 86.6%). BIRD: dirty data + domain knowledge, ближе к production. Spider 2.0: ~6% у SOTA, реальные enterprise запросы. BIRD-CRITIC (NeurIPS 2025) — новый строгий бенчмарк." },
+      { front: "Spider vs BIRD", back: "Spider 1.0: 10K вопросов, 200 БД, чистые данные — сатурирован (GPT-4 86.6%). BIRD: dirty data + domain knowledge, ближе к production. Spider 2.0: реальные enterprise запросы — ~6% у baseline на запуске (2024), 80%+ у агентных систем к 2026. BIRD-CRITIC (NeurIPS 2025) — новый строгий бенчмарк." },
       { front: "Golden Dataset для Text-2-SQL", back: "50-100 пар (вопрос → эталонный SQL + результат). Источники: логи аналитиков, support tickets, ручное создание. Execution Accuracy = результат SQL совпадает. Основа для CI/CD и A/B тестов." },
       { front: "Error Analysis категории", back: "8 типов ошибок: wrong_table, wrong_column, missing_join, wrong_filter, missing_aggregation, wrong_date_format, hallucinated_column, syntax_error. 80% ошибок — 2-3 категории. Фокус на них." },
       { front: "Synthetic augmentation golden dataset", back: "LLM генерирует варианты вопросов из существующих пар: перефразирование, добавление фильтров, изменение агрегации. Позволяет расширить golden dataset с 50 до 200+ примеров. Верифицируйте сгенерированный SQL вручную." },
       { front: "CI/CD для Text-2-SQL", back: "При каждом изменении промпта или схемы — прогнать golden dataset автоматически. Регрессия >3 п.п. на любой категории — блокировать merge. Это единственный способ контролируемо итерировать." },
-      { front: "Spider 1.0 — учебный, не production-индикатор", back: "Spider 1.0 сатурирован (86.6% у GPT-4). Для оценки 2026 используй Spider 2.0 и BIRD-CRITIC. Spider 2.0 показывает ~6% у лучших систем — это реальная сложность enterprise Text-2-SQL." },
+      { front: "Spider 1.0 — учебный, не production-индикатор", back: "Spider 1.0 сатурирован (86.6% у GPT-4). Для оценки 2026 используй Spider 2.0 и BIRD-CRITIC. Spider 2.0 отражает реальную сложность enterprise Text-2-SQL: на запуске (2024) baseline давал ~6%, к 2026 агентные системы вышли на 80%+." },
       { front: "Execution Accuracy false positives", back: "EX может быть ложно высоким: пустые таблицы совпадают (оба запроса вернули 0 строк), случайное совпадение числа строк, разный порядок без ORDER BY. LLM-as-judge помогает верифицировать спорные совпадения." },
       { front: "Регрессионное тестирование Text-2-SQL", back: "Тестировать не только overall EX, но и по категориям: revenue, hr, logistics. Улучшение в одной категории не должно компенсировать регрессию в другой. Отдельные метрики по таблицам выявляют слабые места." }
     ],
@@ -1256,7 +1256,7 @@ def evaluate_text2sql(golden_dataset, system_fn):
           "Spider 1.0 только для академических целей"
         ],
         correct: 1,
-        explanation: "Spider 1.0 сатурирован: лучшие системы достигают 86%+, различия между ними незначительны. Spider 2.0 (~6% у SOTA) и BIRD-CRITIC дают реальную дифференциацию и отражают enterprise-сложность."
+        explanation: "Spider 1.0 сатурирован: лучшие системы достигают 86%+, различия между ними незначительны. Spider 2.0 (на запуске 2024 — ~6% у baseline, к 2026 — 80%+ у агентных систем) и BIRD-CRITIC дают реальную дифференциацию и отражают enterprise-сложность."
       },
       {
         question: "Golden dataset из 50 вопросов — этого достаточно для CI/CD?",
@@ -1295,8 +1295,8 @@ def evaluate_text2sql(golden_dataset, system_fn):
     sources: [
       { title: "Spider Benchmark", desc: "10K+ вопросов, 200 БД, лидерборд", url: "https://yale-lily.github.io/spider", icon: "🕷️" },
       { title: "BIRD Benchmark", desc: "Dirty data + domain knowledge benchmark", url: "https://bird-bench.github.io/", icon: "🐦" },
-      { title: "Test-suite Accuracy Paper", desc: "Почему Execution Accuracy > Exact Match", url: "https://arxiv.org/abs/2405.01465", icon: "📄" },
-      { title: "Spider 2.0", desc: "Enterprise-уровень: ~6% у SOTA, реальные сложные запросы", url: "https://spider2-sql.github.io/", icon: "🕷️" }
+      { title: "Test-suite Accuracy Paper", desc: "Semantic Evaluation for Text-to-SQL with Distilled Test Suites (Zhong, Yu, Klein)", url: "https://arxiv.org/abs/2010.02840", icon: "📄" },
+      { title: "Spider 2.0", desc: "Enterprise-уровень: реальные сложные запросы, лидерборд агентных систем", url: "https://spider2-sql.github.io/", icon: "🕷️" }
     ]
   },
   {
@@ -1849,8 +1849,8 @@ WHERE r.rank = 1;
     ],
     sources: [
       { title: "MAC-SQL: Multi-Agent Collaboration", desc: "Selector + Decomposer + Refiner agents", url: "https://arxiv.org/abs/2312.11242", icon: "📄" },
-      { title: "CHESS: Contextual Heuristic Search", desc: "Self-correction pipeline для Text-2-SQL", url: "https://arxiv.org/abs/2405.16755", icon: "📄" },
-      { title: "DPO for Text-2-SQL", desc: "Fine-tuning на corrections для self-improvement", url: "https://arxiv.org/abs/2404.08880", icon: "📄" },
+      { title: "CHESS: Contextual Harnessing for Efficient SQL Synthesis", desc: "Multi-agent pipeline с self-correction для Text-2-SQL", url: "https://arxiv.org/abs/2405.16755", icon: "📄" },
+      { title: "DPO for Text-2-SQL", desc: "DPO с Chain-of-Thought для Text-2-SQL: fine-tuning на предпочтениях", url: "https://arxiv.org/abs/2502.11656", icon: "📄" },
       { title: "sqlglot Documentation", desc: "SQL parsing, transpilation, optimization", url: "https://sqlglot.com/", icon: "🔧" }
     ]
   },
@@ -1921,7 +1921,7 @@ semantic_models:
 <div class="callout callout-tip"><strong>dbt MetricFlow</strong> автоматически генерирует JOIN-граф на основе entities. «Выручка по клиентам» → MetricFlow строит JOIN orders→customers, применяет фильтр status='paid'.</div>
 
 <h2>Snowflake Cortex Analyst</h2>
-<p>Reference-внедрение от Snowflake (GA 2024): LLM поверх semantic YAML-файла. Пользователь задаёт вопрос → Cortex Analyst маппит на метрику + dimensions → генерирует SQL → выполняет на Snowflake.</p>
+<p>Reference-внедрение от Snowflake (Preview с августа 2024): LLM поверх семантической модели. Пользователь задаёт вопрос → Cortex Analyst маппит на метрику + dimensions → генерирует SQL → выполняет на Snowflake. Сегодня основной способ описания семантики — Semantic Views (нативные объекты Snowflake с RBAC и governance, GA в 2025), а YAML-файлы на stage поддерживаются как legacy-вариант.</p>
 
 <pre><code># semantic_model.yaml для Cortex Analyst
 name: sales_model
@@ -1945,7 +1945,7 @@ tables:
         expr: created_at
         data_type: timestamp</code></pre>
 
-<div class="callout callout-tip"><strong>Cortex Analyst</strong> использует synonyms для маппинга: «выручка» → total_revenue, «регион» → region. LLM не генерирует SQL напрямую — она лишь выбирает нужные measures и dimensions из YAML.</div>
+<div class="callout callout-tip"><strong>Cortex Analyst</strong> использует synonyms для маппинга: «выручка» → total_revenue, «регион» → region. LLM не генерирует SQL напрямую — она лишь выбирает нужные measures и dimensions из семантической модели. Те же концепции (measures, dimensions, synonyms) действуют и в Semantic Views — рекомендуемом сейчас формате.</div>
 
 <h2>Databricks Genie</h2>
 <p>Аналогичный подход от Databricks: semantic layer поверх Unity Catalog + LLM. Genie Spaces — набор таблиц + инструкций (Instructions) + примеров SQL. Модель делает то же: вопрос → семантический маппинг → SQL на Delta Lake.</p>
@@ -1963,7 +1963,7 @@ tables:
     flashcards: [
       { front: "Semantic Layer", back: "Абстракция поверх БД: определяет метрики (measures) и разрезы (dimensions) один раз. LLM маппит вопрос → {measure, dimensions}, а не генерирует SQL напрямую. Детерминирует JOIN-пути и формулы агрегаций." },
       { front: "dbt MetricFlow", back: "YAML-определение бизнес-метрик: measures (SUM, COUNT, AVG с фильтрами), dimensions (categorical, time), entities (FK-связи). Автоматически строит JOIN-граф. Интегрирован в dbt Core и dbt Cloud." },
-      { front: "Snowflake Cortex Analyst", back: "Reference-внедрение Text-2-SQL от Snowflake: LLM поверх semantic YAML. Маппит вопрос → measure + dimensions через synonyms. SQL генерируется из семантической модели, не из вопроса напрямую. Документация: docs.snowflake.com/cortex-analyst." },
+      { front: "Snowflake Cortex Analyst", back: "Reference-внедрение Text-2-SQL от Snowflake (Preview с августа 2024): LLM поверх семантической модели. Маппит вопрос → measure + dimensions через synonyms. SQL генерируется из семантической модели, не из вопроса напрямую. Основной формат сейчас — Semantic Views, YAML-файлы — legacy." },
       { front: "Databricks Genie", back: "Аналог Cortex Analyst от Databricks: Genie Spaces = таблицы + Instructions + примеры SQL. Работает поверх Unity Catalog и Delta Lake. LLM маппит вопрос на семантику, не генерирует свободный SQL." },
       { front: "Measure vs Dimension", back: "Measure (метрика) = агрегация: SUM(amount), COUNT(DISTINCT customer_id). Dimension (измерение) = разрез: регион, период, канал, статус. 'Выручка (measure) по регионам (dimension) за Q1 (dimension)' — типичный запрос." },
       { front: "Synonyms в semantic YAML", back: "Cortex Analyst использует synonyms: revenue: ['выручка', 'доход', 'продажи']. Позволяет русскоязычному вопросу маппиться на английскую метрику. Критично для мультиязычных систем." },
@@ -2339,9 +2339,9 @@ prompt = f"Схема: {all_200_tables_ddl}\nВопрос: {question}"
 
 <h2>Паттерны: APEX-SQL, RAISE, ReFoRCE</h2>
 <ul>
-<li><strong>APEX-SQL</strong>: Adaptive Prompting + tool exploration. Модель решает, какие инструменты вызывать, адаптируясь к сложности вопроса.</li>
+<li><strong>APEX-SQL</strong>: Agentic Exploration. Модель активно исследует реальные данные БД через циклы «гипотеза → проверка», прежде чем сгенерировать финальный SQL.</li>
 <li><strong>RAISE</strong>: Reflection + Action + Intermediate Steps. Явные шаги рефлексии между tool calls.</li>
-<li><strong>ReFoRCE</strong>: Refinement through Feedback. Tool results используются для итеративного уточнения SQL.</li>
+<li><strong>ReFoRCE</strong>: Self-Refinement + Consensus Enforcement + Column Exploration. Итеративное уточнение SQL с исследованием колонок и голосованием между кандидатами.</li>
 </ul>
 
 <h2>Преимущества и ограничения</h2>
@@ -2370,7 +2370,7 @@ prompt = f"Схема: {all_200_tables_ddl}\nВопрос: {question}"
       { front: "list_tables tool", back: "Поиск таблиц по ключевому слову в имени или описании. Возвращает список имён + краткое описание. Первый шаг в агентном цикле: найти кандидаты для дальнейшего исследования." },
       { front: "get_distinct_values tool", back: "Возвращает уникальные значения колонки: get_distinct_values('orders', 'status') → ['pending', 'paid', 'refunded']. Критично для правильных WHERE-фильтров без галлюцинаций." },
       { front: "Агентный цикл Text-2-SQL", back: "1) Вопрос → LLM решает, какие инструменты вызвать. 2) Tool calls (3–7 итераций). 3) Tool results → обновление контекста. 4) Финальная генерация SQL с реальными данными о схеме. Max steps = 10." },
-      { front: "APEX-SQL паттерн", back: "Adaptive Prompting + tool exploration. Модель адаптирует количество и тип tool calls к сложности вопроса. Простой вопрос: 2–3 вызова. Сложный multi-table: 5–7 вызовов." },
+      { front: "APEX-SQL паттерн", back: "Agentic Exploration: модель активно исследует реальные данные БД через циклы «гипотеза → проверка» вместо пассивной трансляции по статической схеме. Количество и тип tool calls адаптируются к сложности вопроса." },
       { front: "Latency trade-off tool-use", back: "Tool-use: 3–7 LLM-вызовов = 5–15 сек latency. Static schema: 1 вызов = 1–3 сек. Trade-off: для 200+ таблиц latency оправдана качеством. Для малых схем — статический подход быстрее." },
       { front: "describe_table tool", back: "Полное DDL таблицы: колонки, типы, NOT NULL, FK, COMMENT ON. Модель вызывает после list_tables. Видит реальные колонки → не галлюцинирует несуществующие. Sample rows опционально." },
       { front: "Function calling API", back: "OpenAI / Anthropic tool_use — нативный механизм для агентного SQL. Модель возвращает tool_calls JSON → приложение выполняет → результат передаётся обратно. Цикл продолжается до finish_reason='stop'." }
@@ -2444,9 +2444,9 @@ prompt = f"Схема: {all_200_tables_ddl}\nВопрос: {question}"
       }
     ],
     sources: [
-      { title: "APEX-SQL", desc: "Агентный подход к Text-2-SQL с tool exploration", url: "https://arxiv.org/abs/2408.06693", icon: "📄" },
+      { title: "APEX-SQL", desc: "Агентное исследование данных (agentic exploration) для Text-2-SQL, KDD 2026", url: "https://arxiv.org/abs/2602.16720", icon: "📄" },
       { title: "OpenAI Function Calling", desc: "Документация по tool use / function calling", url: "https://platform.openai.com/docs/guides/function-calling", icon: "🔧" },
-      { title: "ReFoRCE", desc: "Refinement through Feedback для сложных схем", url: "https://arxiv.org/abs/2410.01943", icon: "📄" },
+      { title: "ReFoRCE", desc: "Snowflake: Self-Refinement, Consensus Enforcement, Column Exploration для сложных схем", url: "https://arxiv.org/abs/2502.00675", icon: "📄" },
       { title: "Anthropic Tool Use", desc: "Документация Anthropic по tool use API", url: "https://docs.anthropic.com/en/docs/tool-use", icon: "🔧" }
     ]
   },
@@ -2460,7 +2460,7 @@ prompt = f"Схема: {all_200_tables_ddl}\nВопрос: {question}"
       "Учитывать известные bias LLM-судей"
     ],
     body: `<h2>Проблема: Execution Accuracy недостаточна</h2>
-<p>BIRD-bench исследование (2023) показало: strict execution accuracy совпадает с human-judgement только в 62% случаев. Причины:</p>
+<p>Исследование FLEX (NAACL 2025), переоценившее BIRD-bench, показало: strict execution accuracy совпадает с human-judgement только в 62% случаев (каппа Коэна). Причины:</p>
 
 <ul>
 <li><strong>False positives:</strong> пустые таблицы — оба запроса вернули 0 строк, EX=1, но SQL неверный</li>
@@ -2559,7 +2559,7 @@ SQL B: {sql_b}
 <p><strong>Антипаттерн:</strong> Считать EX единственной метрикой качества и не проводить ручной review расхождений между EX и пользовательским feedback — накапливаются систематические ошибки, невидимые в метриках.</p>
 </div>`,
     flashcards: [
-      { front: "Ограничения Execution Accuracy", back: "EX совпадает с human-judgement только в 62% (BIRD-bench). False positives: пустые таблицы, случайные совпадения чисел. False negatives: разный порядок строк без ORDER BY. LLM-judge как дополнительный слой." },
+      { front: "Ограничения Execution Accuracy", back: "EX совпадает с human-judgement только в 62% (FLEX, NAACL 2025 — переоценка BIRD-bench). False positives: пустые таблицы, случайные совпадения чисел. False negatives: разный порядок строк без ORDER BY. LLM-judge как дополнительный слой." },
       { front: "LLM-as-judge для SQL", back: "Судья-LLM оценивает: корректность (отвечает на вопрос?), полноту (все данные?), эффективность (нет лишних JOIN?). Вердикт: CORRECT / PARTIALLY_CORRECT / INCORRECT. Дополняет EX, не заменяет." },
       { front: "Pointwise vs Pairwise judge", back: "Pointwise: оценка одного SQL по шкале (1–5). Pairwise: сравнение двух SQL (A vs B). Pairwise надёжнее для relative улучшений — используется в multi-candidate selector. Pointwise масштабируется лучше." },
       { front: "Позиционный bias LLM-судьи", back: "Судья предпочитает первый вариант в pairwise сравнении (positional bias). Решение: рандомизировать порядок A/B или запрашивать оба варианта (A vs B и B vs A) и усреднять." },
@@ -2637,7 +2637,8 @@ SQL B: {sql_b}
       }
     ],
     sources: [
-      { title: "BIRD-bench Paper", desc: "Анализ ограничений Execution Accuracy vs human judgment", url: "https://arxiv.org/abs/2305.03111", icon: "📄" },
+      { title: "BIRD-bench Paper", desc: "Бенчмарк BIRD: dirty data + domain knowledge (NeurIPS 2023)", url: "https://arxiv.org/abs/2305.03111", icon: "📄" },
+      { title: "FLEX (NAACL 2025)", desc: "Переоценка BIRD: EX совпадает с human judgement лишь в 62% случаев", url: "https://arxiv.org/abs/2409.19014", icon: "📄" },
       { title: "LLM-as-judge Survey", desc: "Обзор подходов к оценке через LLM", url: "https://arxiv.org/abs/2306.05685", icon: "📄" },
       { title: "Arize Phoenix", desc: "Open-source LLMOps с SQL evaluation шаблонами", url: "https://phoenix.arize.com/", icon: "🔧" },
       { title: "DeepEval", desc: "LLM evaluation framework с поддержкой custom judges", url: "https://github.com/confident-ai/deepeval", icon: "🔧" }
@@ -2656,6 +2657,8 @@ SQL B: {sql_b}
 <p>Vanna (MIT лицензия) — open-source Text-2-SQL фреймворк, реализующий RAG over DDL + документация + примеры SQL. Поддерживает: Snowflake, PostgreSQL, BigQuery, Redshift, ClickHouse, MS SQL Server.</p>
 
 <p>Принцип: <strong>обучи на DDL + документации + примерах SQL → задавай вопросы</strong>.</p>
+
+<div class="callout callout-tip"><strong>Vanna 2.0:</strong> актуальная версия — переписанный с нуля агентный фреймворк с Tool Memory (агент запоминает успешные вызовы инструментов и учится на них). Описанный ниже стек (ChromaDB + OpenAI, vn.train) относится к классической Vanna 0.x — она по-прежнему работает, но для новых проектов ориентируйтесь на документацию Vanna 2.0.</div>
 
 <h2>Архитектура Vanna</h2>
 <pre><code>Training Set (векторная БД):
@@ -2832,7 +2835,7 @@ Semantic layer    | Нет            | Интегрируется
       { title: "Vanna AI GitHub", desc: "MIT open-source Text-2-SQL фреймворк", url: "https://github.com/vanna-ai/vanna", icon: "🔧" },
       { title: "Vanna Docs", desc: "Документация и quickstart", url: "https://vanna.ai/docs/", icon: "📄" },
       { title: "ChromaDB", desc: "Встроенная векторная БД для RAG", url: "https://www.trychroma.com/", icon: "🔧" },
-      { title: "Vanna Supported DBs", desc: "Список поддерживаемых баз данных", url: "https://vanna.ai/docs/databases.html", icon: "📄" }
+      { title: "Vanna: подключение к БД", desc: "Настройка подключения и поддерживаемые базы данных", url: "https://vanna.ai/docs/configure", icon: "📄" }
     ]
   },
   {
@@ -3050,7 +3053,7 @@ Multi-candidate 5:  $0.13/запрос (5 gen + selector)
     sources: [
       { title: "Anthropic Prompt Caching", desc: "Документация по cache_control и экономии токенов", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching", icon: "🔧" },
       { title: "OpenAI Prompt Caching", desc: "Автоматическое кэширование prefix для gpt-4o", url: "https://platform.openai.com/docs/guides/prompt-caching", icon: "🔧" },
-      { title: "Model Routing Patterns", desc: "Паттерны routing запросов между моделями", url: "https://arxiv.org/abs/2405.01465", icon: "📄" },
+      { title: "RouteLLM", desc: "Роутинг запросов между сильной и дешёвой моделью на основе preference data", url: "https://arxiv.org/abs/2406.18665", icon: "📄" },
       { title: "LLM Cost Calculator", desc: "Калькулятор стоимости LLM вызовов", url: "https://openai.com/api/pricing/", icon: "💰" }
     ]
   },
@@ -3079,14 +3082,14 @@ Multi-candidate 5:  $0.13/запрос (5 gen + selector)
 <h2>Spider 1.0: учебный бенчмарк, не production-индикатор</h2>
 <p>Spider 1.0 (<a href="https://yale-lily.github.io/spider">yale-lily.github.io/spider</a>) сатурирован:</p>
 <ul>
-<li>GPT-4: 86.6% Execution Accuracy (2024)</li>
+<li>86.6% Execution Accuracy — результат DAIL-SQL (few-shot промпт-инжиниринг поверх GPT-4), а не zero-shot GPT-4</li>
 <li>Лучшие системы: 87–88% — плато, бенчмарк не различает хорошие системы</li>
 <li>Синтетические БД, чистые данные — не отражает enterprise реальность</li>
 </ul>
 
 <p><strong>Для оценки 2026 используйте:</strong></p>
 <ul>
-<li><strong>Spider 2.0</strong> — ~6% у SOTA, реальные enterprise запросы, multi-step reasoning</li>
+<li><strong>Spider 2.0</strong> — реальные enterprise запросы, multi-step reasoning. На запуске (ноябрь 2024) baseline давал ~6%, к 2026 агентные системы на лидерборде достигают 80–96%+ — бенчмарк тоже начал сатурироваться</li>
 <li><strong>BIRD-CRITIC</strong> (NeurIPS 2025) — фокус на критических запросах, dirty data, внешние знания</li>
 <li><strong>Ваш golden dataset</strong> — 100–200 пар из реальных пользовательских запросов</li>
 </ul>
@@ -3122,7 +3125,7 @@ CREATE POLICY view_own ON salaries USING (department = current_setting('app.user
 <p><strong>Правильно: schema linking → топ 5–15 релевантных таблиц.</strong></p>
 
 <h2>Полагаться только на Execution Accuracy</h2>
-<p>EX совпадает с human-judgement только в 62% случаев (BIRD-bench 2023). Устаревший паттерн — считать EX единственной метрикой:</p>
+<p>EX совпадает с human-judgement только в 62% случаев (FLEX, NAACL 2025 — переоценка BIRD-bench). Устаревший паттерн — считать EX единственной метрикой:</p>
 <ul>
 <li>False positives на пустых таблицах</li>
 <li>Случайные совпадения в COUNT-запросах</li>
@@ -3150,12 +3153,12 @@ Single-shot генерация    | Multi-candidate + selector
 </div>`,
     flashcards: [
       { front: "Почему seq2seq устарел как основной путь", back: "BART/T5-SQL, RAT-SQL, PICARD: fine-tuning на каждую схему, хрупкость (новая таблица = переобучение), нет generalization. GPT-4 zero-shot превзошёл PICARD на Spider в 2023 без дообучения." },
-      { front: "Spider 1.0: учебный, не production", back: "GPT-4 достигает 86.6% на Spider 1.0 — сатурирован. Синтетические БД, чистые данные, не отражает enterprise. Для оценки 2026: Spider 2.0 (~6% у SOTA) и BIRD-CRITIC (NeurIPS 2025)." },
+      { front: "Spider 1.0: учебный, не production", back: "DAIL-SQL (few-shot поверх GPT-4) достигает 86.6% на Spider 1.0 — сатурирован. Синтетические БД, чистые данные, не отражает enterprise. Для оценки 2026: Spider 2.0 (реально сложные enterprise-запросы) и BIRD-CRITIC (NeurIPS 2025)." },
       { front: "Prompt-only guardrails — иллюзия", back: "«Никогда не генерируй DELETE» в промпте не защищает: LLM может не послушаться. Реальная защита: read-only DB user (физически невозможно DELETE), AST валидация, Row-Level Security." },
       { front: "«Вся схема в промпт» антипаттерн", back: "100+ таблиц = 10–20K токенов. Lost-in-the-middle: LLM хуже использует середину длинного контекста. Галлюцинации растут. Правильно: schema linking → топ 5–15 релевантных таблиц." },
       { front: "Row-Level Security (RLS)", back: "PostgreSQL RLS: ALTER TABLE salaries ENABLE ROW LEVEL SECURITY. Пользователь видит только свои данные даже с правами SELECT. Лучше prompt-ограничений: работает на уровне СУБД, не зависит от LLM." },
-      { front: "SQLCoder / DeFog", back: "Специализированные open-source LLM для SQL (fine-tuned на StarCoder). Для on-premise: данные не уходят в OpenAI. Компромисс между seq2seq и GPT-4. 70–75% на Spider vs 86% у GPT-4." },
-      { front: "Spider 2.0 vs Spider 1.0", back: "Spider 2.0: реальные enterprise-запросы, multi-step reasoning, nested SQL, ~6% у SOTA. Spider 1.0: синтетические, сатурирован (86%+). Spider 2.0 — объективный индикатор production-качества." },
+      { front: "SQLCoder / DeFog", back: "Специализированные open-source LLM для SQL (fine-tuned на StarCoder). Для on-premise: данные не уходят в OpenAI. Компромисс между seq2seq и GPT-4. 70–75% на Spider vs 86.6% у DAIL-SQL (few-shot поверх GPT-4)." },
+      { front: "Spider 2.0 vs Spider 1.0", back: "Spider 2.0: реальные enterprise-запросы, multi-step reasoning, nested SQL — на запуске (2024) baseline давал ~6%, к 2026 агентные системы достигают 80–96%+. Spider 1.0: синтетические, сатурирован (86%+). Spider 2.0 реалистичнее, но тоже начал сатурироваться." },
       { front: "Актуальный стек 2026", back: "LLM + prompt engineering → schema linking → semantic layer для метрик → multi-candidate + selector для критических запросов → EX + LLM-judge evaluation. Tool-use для 200+ таблиц. Vanna как быстрый старт." }
     ],
     quiz: [
@@ -3190,7 +3193,7 @@ Single-shot генерация    | Multi-candidate + selector
           "Да, если это лучший результат на рынке"
         ],
         correct: 1,
-        explanation: "Spider 1.0 сатурирован: GPT-4 даёт 86.6% из коробки. 85% на Spider не означает 85% на реальных enterprise запросах. Проверяйте на golden dataset из реальных запросов и Spider 2.0 (там те же системы дают ~6%)."
+        explanation: "Spider 1.0 сатурирован: ещё в 2023–2024 DAIL-SQL на GPT-4 давал 86.6%. 85% на Spider не означает 85% на реальных enterprise запросах. Проверяйте на golden dataset из реальных запросов и Spider 2.0 (на его запуске baseline-системы давали лишь ~6%)."
       },
       {
         question: "Row-Level Security лучше чем prompt-ограничения для защиты чувствительных данных. Почему?",
@@ -3227,7 +3230,7 @@ Single-shot генерация    | Multi-candidate + selector
       }
     ],
     sources: [
-      { title: "Spider 2.0", desc: "Enterprise-уровень Text-2-SQL: ~6% у SOTA 2025", url: "https://spider2-sql.github.io/", icon: "🕷️" },
+      { title: "Spider 2.0", desc: "Enterprise-уровень Text-2-SQL: лидерборд агентных систем (80–96%+ к 2026)", url: "https://spider2-sql.github.io/", icon: "🕷️" },
       { title: "BIRD-CRITIC (NeurIPS 2025)", desc: "Критические запросы с dirty data и domain knowledge", url: "https://bird-bench.github.io/", icon: "🐦" },
       { title: "SQLCoder (DeFog)", desc: "Open-source специализированная модель для on-premise", url: "https://github.com/defog-ai/sqlcoder", icon: "🔧" },
       { title: "PostgreSQL Row-Level Security", desc: "Документация RLS для защиты чувствительных данных", url: "https://www.postgresql.org/docs/current/ddl-rowsecurity.html", icon: "🐘" }

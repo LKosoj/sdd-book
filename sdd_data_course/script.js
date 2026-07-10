@@ -26,7 +26,7 @@ const COURSE = {
         { type: "p", text: "В классическом data-проекте код быстро становится источником истины: SQL-модель, PySpark job, DAG, ручной README. В SDD источник истины переносится в спецификацию: data contract, ODPS YAML, dbt model contract, model spec или ADR. Код становится build output, который можно сгенерировать, проверить и пересобрать." },
         { type: "p", text: "Для data engineering это особенно важно: ошибка в схеме, freshness, grain или nullable-семантике редко ломает только один файл. Она проходит через bronze, silver, gold, BI views, ML features, downstream jobs и отчеты. Поэтому спецификация должна быть машиночитаемой и проверяемой до merge." },
         { type: "h3", text: "Почему Qwen Code здесь уместен" },
-        { type: "p", text: "Qwen Code - терминальный агент для разработки, оптимизированный под Qwen Coder-модели. Он умеет читать репозиторий, выполнять команды, использовать slash-команды, project skills, subagents, hooks и MCP. В SDD-режиме эти возможности не заменяют процесс, а исполняют его." },
+        { type: "p", text: "Qwen Code - терминальный агент для разработки, изначально оптимизированный под Qwen Coder-модели, но multi-protocol: он работает и с OpenAI/Anthropic/Gemini-совместимыми API. Он умеет читать репозиторий, выполнять команды, использовать slash-команды, project skills, subagents, hooks и MCP. В SDD-режиме эти возможности не заменяют процесс, а исполняют его." },
         { type: "h3", text: "Три уровня зрелости" },
         { type: "ol", items: [
           "Spec-first: команда пишет YAML/Markdown-спецификацию до кода, а Qwen Code реализует строго по ней.",
@@ -67,7 +67,7 @@ const COURSE = {
       sources: [
         { title: "Qwen Code overview", url: "https://qwenlm.github.io/qwen-code-docs/en/users/overview/", meta: "Qwen docs", desc: "Официальный обзор Qwen Code как терминального agentic coding tool." },
         { title: "GitHub Spec Kit", url: "https://github.com/github/spec-kit", meta: "GitHub", desc: "Шаблоны и CLI-подход к Specification-Driven Development." },
-        { title: "Automating the Entire Data Engineering Lifecycle with AI", url: "https://medium.com/@nayan.j.paul/automating-the-entire-data-engineering-lifecycle-with-ai-an-ai-first-approach-to-tdlc-sdlc-and-cf0f5c9510d4", meta: "Nayan Paul · 2026", desc: "Источник паттерна stage-driven data pipeline, адаптированный в курсе под Qwen Code." }
+        { title: "Automating the Entire Data Engineering Lifecycle with AI", url: "https://medium.com/@nayan.j.paul/automating-the-entire-data-engineering-lifecycle-with-ai-an-ai-first-approach-to-tdlc-sdlc-and-cf0f5c9510d4", meta: "Nayan Paul · 2026", desc: "Источник паттерна stage-driven data pipeline. Оригинал описывает этот паттерн на Claude Code; в курсе он адаптирован под Qwen Code." }
       ]
     },
     {
@@ -255,7 +255,7 @@ const COURSE = {
       ],
       body: [
         { type: "h3", text: "Зачем нужен manifest" },
-        { type: "p", text: "Сырой источник редко сразу превращается в хороший контракт. JDBC table, CSV, Kafka payload или REST response дают факты: field names, inferred types, null rates, cardinality, min/max, examples. Но contract требует решений: business key, grain, classifications, allowed ranges, SLA, DQ severity. Schema Manifest отделяет наблюдение от решения." },
+        { type: "p", text: "Сырой источник редко сразу превращается в хороший контракт. JDBC table, CSV, Kafka payload или REST response дают факты: field names, inferred types, null rates, cardinality, min/max, examples. Но contract требует решений: business key, grain, classifications, allowed ranges, SLA, DQ severity. Schema Manifest (авторская конвенция этого курса, а не встроенный механизм Qwen Code) отделяет наблюдение от решения." },
         { type: "h3", text: "Минимальная структура" },
         { type: "pre", text: "schema_manifest:\n  source: crm.orders\n  observed_at: 2026-06-24T09:00:00Z\n  fields:\n    - name: order_id\n      inferred_type: string\n      null_rate: 0\n      cardinality: high\n      candidate_role: primary_key\n    - name: email\n      inferred_type: string\n      null_rate: 0.03\n      classification_candidate: pii\n      quality_risks: [invalid_format, mixed_case]\n  candidate_grain: one row per order event\n  open_questions:\n    - Is order_id stable across source replays?\n    - Should email be exposed downstream or hashed?" },
         { type: "h3", text: "Subagent prompt" },
@@ -492,7 +492,7 @@ const COURSE = {
         { type: "p", text: "В Qwen Code stage-driven workflow удобно оформлять как project commands. Каждая команда - Markdown prompt с optional frontmatter. Она читает state, задает недостающие вопросы, вызывает подходящий skill/subagent и записывает следующий артефакт." },
         { type: "pre", text: ".qwen/commands/sdd/init.md       -> /sdd:init\n.qwen/commands/sdd/profile.md    -> /sdd:profile\n.qwen/commands/sdd/contract.md   -> /sdd:contract\n.qwen/commands/sdd/build.md      -> /sdd:build\n.qwen/commands/sdd/verify.md     -> /sdd:verify\n.qwen/commands/sdd/release.md    -> /sdd:release" },
         { type: "h3", text: "state.json" },
-        { type: "p", text: ".sdd/state.json хранит решения, которые уже приняты: source type, approved grain, keys, DQ policy, output port, generated files, last verification result. Команды должны читать state перед вопросами и не заставлять пользователя повторять известное." },
+        { type: "p", text: ".sdd/state.json (конвенция этого курса, а не встроенный механизм Qwen Code) хранит решения, которые уже приняты: source type, approved grain, keys, DQ policy, output port, generated files, last verification result. Команды должны читать state перед вопросами и не заставлять пользователя повторять известное." },
         { type: "h3", text: "Шаблон команды" },
         { type: "pre", text: "---\ndescription: Generate or update the ODCS contract from approved profiling state.\n---\n\nRead AGENTS.md, .sdd/state.json, specs/schema_manifest.yaml, and any existing ODCS file.\nAsk only for missing semantic decisions.\nWrite the smallest contract update.\nRun datacontract lint.\nReport changed contract fields, checks run, and unresolved approvals." },
         { type: "h3", text: "Не все нужно автоматизировать" },
@@ -726,7 +726,7 @@ const COURSE = {
       ],
       body: [
         { type: "h3", text: "Почему обычный hotfix опасен" },
-        { type: "p", text: "Если пайплайн упал из-за drift источника, Qwen Code может быстро предложить кодовый фикс. Но такой фикс часто маскирует несовместимость: поле удалено, тип изменился, SLA невыполним, bad-row policy не определена. В SDD сначала описывается PatchSpec." },
+        { type: "p", text: "Если пайплайн упал из-за drift источника, Qwen Code может быстро предложить кодовый фикс. Но такой фикс часто маскирует несовместимость: поле удалено, тип изменился, SLA невыполним, bad-row policy не определена. В SDD сначала описывается PatchSpec (авторская конвенция этого курса, а не стандарт или встроенная фича Qwen Code)." },
         { type: "h3", text: "PatchSpec" },
         { type: "pre", text: "patch_spec:\n  incident: orders_ingest_failed_2026_06_24\n  observed_failure: missing column customer_email\n  contract_impact:\n    odcs_field: orders.customer_email\n    breaking_change: true\n  proposed_options:\n    - keep_contract_and_quarantine_rows\n    - version_contract_to_v2\n  required_approvals:\n    - data_product_owner\n    - privacy_reviewer\n  verification:\n    - datacontract lint\n    - datacontract test staging\n    - dbt build --select fct_orders+\n    - data diff on last 7 days" },
         { type: "h3", text: "Qwen workflow" },

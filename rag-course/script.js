@@ -364,7 +364,7 @@ cosine_similarity(первый, третий) = 0.12 ← далеко</code></pr
 <ul>
 <li><strong>OpenAI text-embedding-3-large</strong> — 3072 dim, ~$0.13/1M токенов. Качество top-tier, но дорогое при больших объёмах.</li>
 <li><strong>Cohere embed-v4</strong> — мультиязычная, хорошо работает с русским. Поддерживает binary quantization для экономии.</li>
-<li><strong>Voyage AI</strong> — специализированные модели для кода, финансов, медицины.</li>
+<li><strong>Voyage AI</strong> — специализированные модели для кода, финансов, права (voyage-code-3, voyage-finance-2, voyage-law-2).</li>
 </ul>
 
 <h3>Open-source (self-hosted)</h3>
@@ -685,7 +685,7 @@ retriever = MultiQueryRetriever.from_llm(
       }
     ],
     sources: [
-      { title: "Cohere Rerank v3.5", desc: "State-of-the-art re-ranker с API", url: "https://cohere.com/blog/rerank-v3-5", icon: "🔀" },
+      { title: "Cohere Rerank 3.5", desc: "State-of-the-art re-ranker с API", url: "https://cohere.com/blog/rerank-3pt5", icon: "🔀" },
       { title: "HyDE Paper (Gao et al.)", desc: "Precise Zero-Shot Dense Retrieval without Relevance Labels", url: "https://arxiv.org/abs/2212.10496", icon: "📄" },
       { title: "BM25 Retriever", desc: "Классический sparse retrieval в LangChain", url: "https://python.langchain.com/docs/how_to/ensemble_retriever/", icon: "🔍" }
     ]
@@ -701,6 +701,8 @@ retriever = MultiQueryRetriever.from_llm(
     ],
     body: `<h2>Цель: от нуля до работающих ответов за 1 час</h2>
 <p>Прототип — не про идеальное качество. Это про то, чтобы быстро проверить гипотезу: «Может ли RAG вообще работать на наших данных?»</p>
+
+<div class="callout callout-tip"><strong>О моделях в примерах:</strong> gpt-4o / gpt-4o-mini здесь и далее — референс поколения 2024–2025; это семейство уже заменено более новыми моделями (GPT-4.1, GPT-5). Код не меняется — подставьте актуальное имя модели, а цены проверяйте на момент чтения.</div>
 
 <h2>Вариант A: LlamaIndex (50 строк)</h2>
 <pre><code>from llama_index.core import (
@@ -1889,7 +1891,7 @@ def late_chunking(doc_text, chunk_boundaries):
       "Использовать матрицу решений для выбора архитектуры"
     ],
     body: `<h2>Контекстные окна выросли на порядки</h2>
-<p>В 2023 «длинный контекст» — это 32K токенов. В 2025: Gemini 2.0 — 2M токенов, Claude — 1M токенов, Llama 4 Scout — до 10M токенов. Это меняет вопрос не «как сделать RAG», а «нужен ли RAG вообще».</p>
+<p>В 2023 «длинный контекст» — это 32K токенов. В 2026: Gemini 2.5 Pro / 3 Pro — 1M токенов, Claude — 1M токенов, Llama 4 Scout — до 10M токенов. Это меняет вопрос не «как сделать RAG», а «нужен ли RAG вообще».</p>
 
 <h2>Правило большого пальца Anthropic</h2>
 <div class="callout callout-tip"><strong>Если knowledge base < 200K токенов — положи всё в контекст с prompt caching. RAG не нужен.</strong> Это официальная рекомендация Anthropic для Claude.</div>
@@ -1985,7 +1987,7 @@ total_per_day_rag = 1000 * rag_context  # $15/day
       {
         question: "Корпус 5M токенов, 10 000 запросов в день. Что правильно?",
         options: [
-          "Full-context — Gemini 2.0 поддерживает 2M токенов",
+          "Full-context — Gemini 3 Pro поддерживает 1M токенов",
           "RAG — full-context при таком объёме и трафике слишком дорог",
           "Fine-tuning",
           "Разбить на 25 отдельных баз по 200K"
@@ -2019,7 +2021,7 @@ total_per_day_rag = 1000 * rag_context  # $15/day
     sources: [
       { title: "Anthropic — When to use RAG vs long context", desc: "Официальные рекомендации Anthropic", url: "https://www.anthropic.com/news/contextual-retrieval", icon: "📗" },
       { title: "Lost in the Middle (Liu et al., 2023)", desc: "Исследование деградации качества в середине контекста", url: "https://arxiv.org/abs/2307.03172", icon: "📄" },
-      { title: "Gemini 2.0 — 2M Context", desc: "Google DeepMind — long context capabilities", url: "https://deepmind.google/technologies/gemini/", icon: "🔮" }
+      { title: "Gemini 2.5/3 Pro — 1M Context", desc: "Google DeepMind — long context capabilities", url: "https://deepmind.google/technologies/gemini/", icon: "🔮" }
     ]
   },
   {
@@ -2212,7 +2214,7 @@ LIMIT 10;</code></pre>
       }
     ],
     sources: [
-      { title: "Jason Liu — Improving RAG (Tweet/Blog)", desc: "Оригинальная цитата и контекст boring wins", url: "https://jxnl.github.io/blog/writing/2024/01/07/why-rag-is-hard/", icon: "✍️" },
+      { title: "Jason Liu — Levels of Complexity: RAG Applications", desc: "Оригинальная цитата и контекст boring wins", url: "https://jxnl.co/writing/2024/02/28/levels-of-complexity-rag-applications/", icon: "✍️" },
       { title: "Qdrant Filtering", desc: "Документация по payload filters в Qdrant", url: "https://qdrant.tech/documentation/concepts/filtering/", icon: "📗" },
       { title: "pgvector JSONB фильтрация", desc: "PostgreSQL JSONB operators для metadata", url: "https://www.postgresql.org/docs/current/functions-json.html", icon: "🐘" }
     ]
@@ -2259,7 +2261,7 @@ def search(query, all_page_embeddings, top_k=5):
     return scores.topk(top_k)</code></pre>
 
 <h2>ColQwen2 — улучшенная версия</h2>
-<p>ColQwen2 использует Qwen2-VL вместо PaliGemma — более мощный VLM, лучше работает с таблицами и схемами. Занял первое место на ViDoRe (Visual Document Retrieval) бенчмарке.</p>
+<p>ColQwen2 использует Qwen2-VL вместо PaliGemma — более мощный VLM, лучше работает с таблицами и схемами. Занял первое место на ViDoRe (Visual Document Retrieval) бенчмарке в 2024 году. К 2026 лидерство на ViDoRe V3 перешло к более новым моделям (например, Nemotron ColEmbed V2), но именно ColPali/ColQwen2 заложили основу этого подхода.</p>
 
 <h2>Альтернативы для production</h2>
 <ul>
@@ -2281,7 +2283,7 @@ def search(query, all_page_embeddings, top_k=5):
 <ul>
 <li><strong>Latency:</strong> индексирование страницы ~500ms vs ~50ms для текстового чанка</li>
 <li><strong>Storage:</strong> patch embeddings в 50-100x больше по объёму</li>
-<li><strong>Стоимость Voyage-multimodal-3:</strong> $0.006 per 1000 image tokens (vs $0.00013 text)</li>
+<li><strong>Стоимость Voyage-multimodal-3:</strong> изображения тарифицируются по пикселям — $0.60 за 1 млрд пикселей, т.е. от $0.00003 (минимум 50K пикселей) до $0.0012 (максимум 2M пикселей) за изображение; текст — $0.12/1M токенов</li>
 </ul>
 
 <h4>🎯 Мини-кейс</h4>
@@ -2295,12 +2297,12 @@ def search(query, all_page_embeddings, top_k=5):
 <p><strong>Антипаттерн:</strong> применять ColPali ко всем документам без разбора — огромный storage overhead для текстовых страниц, которые отлично обрабатываются standard text RAG.</p>
 </div>`,
     flashcards: [
-      { front: "ColPali — ключевая идея", back: "Страница PDF эмбеддируется как изображение через VLM (PaliGemma). Нет OCR. Late interaction (MaxSim) позволяет искать по patch-токенам страницы. Лидер ViDoRe бенчмарка." },
+      { front: "ColPali — ключевая идея", back: "Страница PDF эмбеддируется как изображение через VLM (PaliGemma). Нет OCR. Late interaction (MaxSim) позволяет искать по patch-токенам страницы. Основоположник подхода, лидер ViDoRe на 2024." },
       { front: "Late interaction (MaxSim)", back: "Метрика для multimodal retrieval: для каждого query-токена находим максимальное сходство с любым patch-токеном страницы, суммируем. MaxSim(q, d) = Σ max_j(q_i · d_j). Точнее простого cosine similarity." },
-      { front: "ColQwen2 vs ColPali", back: "ColQwen2 использует Qwen2-VL (более мощный VLM). Лучше на таблицах и схемах. Занял 1 место на ViDoRe. ColPali — оригинальная версия на PaliGemma, проще запустить." },
-      { front: "Voyage-multimodal-3", back: "API-based unified embedding model для текста и изображений в одном векторном пространстве. Проще интеграции чем ColPali (нет self-hosted inference), но дороже ($0.006/1000 image tokens)." },
+      { front: "ColQwen2 vs ColPali", back: "ColQwen2 использует Qwen2-VL (более мощный VLM). Лучше на таблицах и схемах. Занял 1 место на ViDoRe в 2024 (к 2026 лидеры — более новые модели). ColPali — оригинальная версия на PaliGemma, проще запустить." },
+      { front: "Voyage-multimodal-3", back: "API-based unified embedding model для текста и изображений в одном векторном пространстве. Проще интеграции чем ColPali (нет self-hosted inference), но дороже: изображения оплачиваются по пикселям — $0.60/1 млрд пикселей, до $0.0012 за изображение." },
       { front: "Когда НЕ нужен Multimodal RAG?", back: "Когда документы хорошо структурированы и OCR работает корректно (plain text PDF, Markdown, HTML). Multimodal RAG — overhead по storage (50-100x) и latency (10x) оправдан только при реальной визуальной информации." },
-      { front: "ViDoRe бенчмарк", back: "Visual Document Retrieval benchmark — стандарт для оценки multimodal document retrieval. ColQwen2 и ColPali лидируют. Показывает реальные результаты на сканах, таблицах, схемах." }
+      { front: "ViDoRe бенчмарк", back: "Visual Document Retrieval benchmark — стандарт для оценки multimodal document retrieval. ColQwen2 и ColPali лидировали в 2024; на ViDoRe V3 (2026) впереди более новые модели (Nemotron ColEmbed V2). Показывает реальные результаты на сканах, таблицах, схемах." }
     ],
     quiz: [
       {
@@ -2356,12 +2358,12 @@ def search(query, all_page_embeddings, top_k=5):
           "Voyage дороже в 100 раз"
         ],
         correct: 1,
-        explanation: "Voyager: API endpoint, нет GPU, $0.006/1K img tokens. ColPali: самостоятельный деплой GPU-модели, нет per-token cost, полный контроль над данными. Voyage — быстрый старт, ColPali — при больших объёмах и privacy requirements."
+        explanation: "Voyage: API endpoint, нет GPU, оплата изображений по пикселям ($0.60/1 млрд пикселей). ColPali: самостоятельный деплой GPU-модели, нет per-request cost, полный контроль над данными. Voyage — быстрый старт, ColPali — при больших объёмах и privacy requirements."
       }
     ],
     sources: [
       { title: "ColPali Paper (Faysse et al.)", desc: "Efficient Document Retrieval with Vision Language Models", url: "https://arxiv.org/abs/2407.01449", icon: "📄" },
-      { title: "ColQwen2 — ViDoRe SOTA", desc: "Лидер Visual Document Retrieval бенчмарка", url: "https://huggingface.co/vidore/colqwen2-v1.0", icon: "🤗" },
+      { title: "ColQwen2 — ViDoRe SOTA (2024)", desc: "Лидер Visual Document Retrieval бенчмарка на 2024", url: "https://huggingface.co/vidore/colqwen2-v1.0", icon: "🤗" },
       { title: "Voyage-multimodal-3", desc: "Unified multimodal embeddings API", url: "https://docs.voyageai.com/docs/multimodal-embeddings", icon: "🚀" },
       { title: "Cohere Embed v4", desc: "Мультимодальные unified embeddings", url: "https://cohere.com/blog/embed-4", icon: "🔵" }
     ]
@@ -2403,13 +2405,13 @@ def search(query, all_page_embeddings, top_k=5):
 </ul>
 
 <h2>Экономика: Pinecone serverless vs pgvector</h2>
-<pre><code># Pinecone serverless (2025 цены)
-# Модель: $0.33 per 1M read units + $2/GB storage
+<pre><code># Pinecone serverless (2026 цены, план Standard)
+# Модель: ~$16 per 1M read units + $0.33/GB/мес storage
 
-# 1M запросов/месяц × 5 reads per query:
-pinecone_reads = 1_000_000 * 5 * 0.00000033  # $1.65
-pinecone_storage = 10 * 2                      # $20 (10GB)
-pinecone_total = pinecone_reads + pinecone_storage  # ~$21.65/мес
+# 1M запросов/месяц × 5 read units per query:
+pinecone_reads = 1_000_000 * 5 * 0.000016  # $80
+pinecone_storage = 10 * 0.33                # $3.3 (10GB)
+pinecone_total = pinecone_reads + pinecone_storage  # ~$83/мес
 
 # pgvector self-hosted (AWS RDS r6g.large)
 # $0.26/hour ≈ $187/месяц + $115/TB storage
@@ -2417,8 +2419,9 @@ pgvector_compute = 0.26 * 24 * 30  # $187.2
 pgvector_storage = 0.115 * 0.01    # $1.15 (10GB)
 pgvector_total = pgvector_compute + pgvector_storage  # ~$188/мес
 
-# Вывод: Pinecone выгоден при ПЕРЕМЕННОЙ нагрузке (&lt;1M req/мес)
-# pgvector выгоден при ПОСТОЯННОЙ нагрузке (&gt;5M req/мес)
+# Вывод: break-even ≈ 2.3M запросов/мес (при 5 read units/запрос)
+# Pinecone выгоден при ПЕРЕМЕННОЙ нагрузке (&lt;2M req/мес)
+# pgvector выгоден при ПОСТОЯННОЙ нагрузке (&gt;2.5M req/мес)
 </code></pre>
 
 <h2>Semantic cache: экономия 30-50%</h2>
@@ -2469,7 +2472,7 @@ standard_cost = 10_000_000 * 0.00000002  # $0.20 (уже дёшево)
 </div>`,
     flashcards: [
       { front: "Главные источники latency в RAG", back: "Re-ranker: 200-600ms (p95). LLM generation: 1-3s. Итого 85-90% времени. Embedding (50ms) и vector search (30ms) — маргинальны. Оптимизируй reranker и LLM, а не поиск." },
-      { front: "Pinecone serverless vs pgvector — когда что?", back: "Pinecone serverless: переменная нагрузка (<1M req/мес), нет DevOps, pay-per-use. pgvector: постоянная нагрузка (>5M req/мес), уже есть PostgreSQL, предсказуемые расходы." },
+      { front: "Pinecone serverless vs pgvector — когда что?", back: "Pinecone serverless: переменная нагрузка (<2M req/мес), нет DevOps, pay-per-use. pgvector: постоянная нагрузка (>2.5M req/мес), уже есть PostgreSQL, предсказуемые расходы. Break-even ≈ 2.3M запросов/мес." },
       { front: "Semantic cache ROI", back: "30-50% запросов — повторяющиеся. Semantic cache (threshold 0.95) экономит: latency (cache hit <10ms vs 1.5s) + стоимость (0 LLM calls). Внедрение: 1-2 дня. Один из лучших ROI в RAG-оптимизации." },
       { front: "Batch API для оффлайн-задач", back: "OpenAI/Anthropic batch API: 50% скидка на LLM-вызовы. Для contextual retrieval generation при индексации: вместо real-time вызовов — batch-задача за ночь. Применимо только для не-real-time обработки." },
       { front: "p50/p95/p99 в RAG", back: "p50 — медиана (типичный запрос). p95 — 95% запросов быстрее этого (хвост распределения). p99 — самые медленные 1%. Для SLA важны p95/p99. Reranker сильно влияет на p95/p99 из-за сетевых задержек API." },
@@ -2496,7 +2499,7 @@ standard_cost = 10_000_000 * 0.00000002  # $0.20 (уже дёшево)
           "При объёме данных >1TB"
         ],
         correct: 1,
-        explanation: "Pinecone serverless: $0.33/1M reads. pgvector RDS: ~$200/мес фиксированно. Break-even: ~600K запросов/мес. При переменной нагрузке (пики и провалы) Pinecone pay-per-use экономичнее, чем оплачивать простаивающий сервер."
+        explanation: "Pinecone serverless: ~$16/1M read units (≈$0.00008/запрос при 5 read units). pgvector RDS: ~$200/мес фиксированно. Break-even: ~2.3M запросов/мес. При переменной нагрузке (пики и провалы) Pinecone pay-per-use экономичнее, чем оплачивать простаивающий сервер."
       },
       {
         question: "Semantic cache показывает hit rate 20%, хотя анализ запросов показал 45% повторяемости. Почему?",
@@ -2902,7 +2905,7 @@ approved = human_select(front)</code></pre>
     sources: [
       { title: "MTEB Leaderboard", desc: "Бенчмарк embedding-моделей — изучай методику, а не только цифры", url: "https://huggingface.co/spaces/mteb/leaderboard", icon: "🏆" },
       { title: "text-embedding-3 Migration Guide", desc: "Официальный гайд OpenAI по миграции с ada-002", url: "https://platform.openai.com/docs/guides/embeddings", icon: "🔧" },
-      { title: "Jason Liu — RAG is hard", desc: "Почему простые улучшения важнее архитектурных", url: "https://jxnl.github.io/blog/writing/2024/01/07/why-rag-is-hard/", icon: "✍️" }
+      { title: "Jason Liu — Levels of Complexity: RAG Applications", desc: "Почему простые улучшения важнее архитектурных", url: "https://jxnl.co/writing/2024/02/28/levels-of-complexity-rag-applications/", icon: "✍️" }
     ]
   }
 ];

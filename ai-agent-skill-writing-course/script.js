@@ -75,7 +75,7 @@ const COURSE_DATA = {
       "flashcards": [
         [
           "Обязательные поля большинства форматов?",
-          "name и description."
+          "name и description. Нюанс: они обязательны в стандарте Agent Skills / API Claude, но в Claude Code все поля frontmatter опциональны — description лишь рекомендуется, а name по умолчанию берётся из имени папки."
         ],
         [
           "Что важнее всего в frontmatter?",
@@ -474,7 +474,7 @@ const COURSE_DATA = {
     {
       "title": "Augment Code: AGENTS.md guide",
       "url": "https://www.augmentcode.com/guides/how-to-build-agents-md",
-      "note": "Разделение always-loaded project context и on-demand skills."
+      "note": "Принципы написания AGENTS.md; ключевая идея — не писать то, что агент может вывести сам."
     },
     {
       "title": "LangSmith: trajectory evals",
@@ -489,7 +489,7 @@ const COURSE_DATA = {
     {
       "title": "MLflow: Agent evaluation frameworks",
       "url": "https://mlflow.org/top-5-agent-evaluation-frameworks/",
-      "note": "Сравнение современных стеков оценки агентов."
+      "note": "Сравнение современных стеков оценки агентов; вендорский обзор от MLflow — сравнение с понятной предвзятостью."
     },
     {
       "title": "SkillsBench paper",
@@ -1755,7 +1755,7 @@ description: Use when drafting release notes, changelog entries, migration notes
     <p>Skill ломается не только из-за плохого текста. Меняются API, интерфейсы, структура репозитория, команды установки, политика безопасности. Поэтому maintenance должен быть частью жизненного цикла. Каждая реальная ошибка превращается в маленький патч и regression query.</p>
 
     <h4>Самообучающийся skill</h4>
-    <p>Maintenance можно частично автоматизировать через паттерн непрерывного обучения: когда агент находит что-то нетривиальное — рабочий обход бага, неочевидную команду, проектную особенность, — он сохраняет находку как новый skill, который в следующий раз подгрузится автоматически по описанию. Реализуют это на хуке конца сессии (Stop), а не на каждом сообщении: проверка после каждого запроса (UserPromptSubmit) добавляла бы задержку к каждому ходу, тогда как Stop срабатывает один раз в конце и не замедляет работу во время сессии.</p>
+    <p>Maintenance можно частично автоматизировать через паттерн непрерывного обучения: когда агент находит что-то нетривиальное — рабочий обход бага, неочевидную команду, проектную особенность, — он сохраняет находку как новый skill, который в следующий раз подгрузится автоматически по описанию. Реализуют это на хуке конца сессии (Stop), а не на каждом сообщении: проверка после каждого запроса (UserPromptSubmit) добавляла бы задержку к каждому ходу, тогда как Stop срабатывает один раз в конце и не замедляет работу во время сессии. Отметим: сами хуки Stop и UserPromptSubmit — реальные механизмы Claude Code, но паттерн «самообучающийся skill» на их основе — авторская рекомендация курса, а не документированный паттерн Anthropic.</p>
 
     <div class="key-concept">
       <p><strong>Диагностический порядок:</strong> activation → scope → workflow clarity → tool availability → verification → regression coverage.</p>

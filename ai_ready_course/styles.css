@@ -148,6 +148,8 @@ body {
 
 .btn-review:hover:not(:disabled) { background: rgba(255,255,255,0.14); }
 
+.btn-workbook { margin-bottom: 10px; text-decoration: none; }
+
 .btn-reset {
   width: 100%;
   margin-top: 10px;
